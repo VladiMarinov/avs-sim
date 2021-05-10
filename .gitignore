@@ -27,6 +27,7 @@
 *.lib
 
 # Executables
+avs-sim
 *.exe
 *.out
 *.app
