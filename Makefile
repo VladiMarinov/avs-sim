@@ -23,6 +23,6 @@ remove:
 
 run:
 	@make -s
-	@./avs-sim
+	@./avs-sim examples/example1.avs
 
 
