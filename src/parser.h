@@ -20,6 +20,6 @@ public:
   Component parse_three_terminal();
   Component parse_four_terminal();
   
-  std::string parse_next_word();
+  std::string parse_next_token();
   std::string parse_value();
 };

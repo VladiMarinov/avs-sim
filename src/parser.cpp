@@ -70,9 +70,9 @@ Component Parser::parse_component()
 Component Parser::parse_two_terminal()
 {
   Component component;
-  component.designator = parse_next_word(); 
-  component.node1 = parse_next_word(); 
-  component.node2 = parse_next_word(); 
+  component.designator = parse_next_token(); 
+  component.node1 = parse_next_token(); 
+  component.node2 = parse_next_token(); 
   component.value = parse_value(); 
   return component;
 }
@@ -80,10 +80,10 @@ Component Parser::parse_two_terminal()
 Component Parser::parse_three_terminal()
 {
   Component component;
-  component.designator = parse_next_word(); 
-  component.node1 = parse_next_word(); 
-  component.node2 = parse_next_word(); 
-  component.node3 = parse_next_word(); 
+  component.designator = parse_next_token(); 
+  component.node1 = parse_next_token(); 
+  component.node2 = parse_next_token(); 
+  component.node3 = parse_next_token(); 
   component.value = parse_value(); 
   return component;
 }
@@ -91,27 +91,25 @@ Component Parser::parse_three_terminal()
 Component Parser::parse_four_terminal()
 {
   Component component;
-  component.designator = parse_next_word(); 
-  component.node1 = parse_next_word(); 
-  component.node2 = parse_next_word(); 
-  component.node3 = parse_next_word(); 
-  component.node4 = parse_next_word(); 
+  component.designator = parse_next_token(); 
+  component.node1 = parse_next_token(); 
+  component.node2 = parse_next_token(); 
+  component.node3 = parse_next_token(); 
+  component.node4 = parse_next_token(); 
   component.value = parse_value(); 
-
-  std::cout << parse_next_word() << std::endl;
   return component;
 }
 
-std::string Parser::parse_next_word()
+std::string Parser::parse_next_token()
 {
-  std::string word = "";
+  std::string token = "";
   while(current_line[curr_pos] != ' ' && current_line[curr_pos] != '\t' )
   {
-    word += current_line[curr_pos];
+    token += current_line[curr_pos];
     curr_pos++;
   }
   skip_whitespace();
-  return word;
+  return token;
 }
 
 std::string Parser::parse_value()
