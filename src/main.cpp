@@ -1,5 +1,5 @@
 #include <iostream>
-#include <math.h>
+#include "parser.h" 
 
 int main(int argc, char** argv)
 {
@@ -8,6 +8,9 @@ int main(int argc, char** argv)
       std::cout << "No input file given..." << std::endl;
       return EXIT_FAILURE;
     }
+    
+    Parser* parser = new Parser(argv[1]);
+    parser->parse();
 
     return 0;
 }
