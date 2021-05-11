@@ -4,7 +4,7 @@
 
 class Component
 {
-  public:
+public:
   ComponentType type; 
   std::string designator;
   std::string node1;

@@ -31,6 +31,7 @@ void Parser::parse()
     std::getline(input_file_stream, current_line);
     curr_pos = 0;
     std::cout << current_line << std::endl;
+    parse_line();
   }
 
   input_file_stream.close();
@@ -38,7 +39,9 @@ void Parser::parse()
 
 void Parser::parse_line()
 {
-  if(current_line[0] != '*' || current_line[0] != '.')
+  skip_whitespace();
+
+  if(current_line[curr_pos] != '*' && current_line[curr_pos] != '.')
   {
     components.push_back(parse_component()); // TODO: check if emplace_back is better here? 
   }
@@ -61,20 +64,65 @@ Component Parser::parse_component()
   if(current_line[curr_pos] == 'G' )  return parse_four_terminal();
 
   std::cout << "Component Designator Letter not recognized..." << std::endl;
+  return Component();
+  //exit(EXIT_FAILURE);
 }
 
 Component Parser::parse_two_terminal()
 {
-
+  Component component;
+  component.designator = parse_next_word(); 
+  component.node1 = parse_next_word(); 
+  component.node2 = parse_next_word(); 
+  component.value = parse_value(); 
+  return component;
 }
 
 Component Parser::parse_three_terminal()
 {
-
+  Component component;
+  component.designator = parse_next_word(); 
+  component.node1 = parse_next_word(); 
+  component.node2 = parse_next_word(); 
+  component.node3 = parse_next_word(); 
+  component.value = parse_value(); 
+  return component;
 }
 
 Component Parser::parse_four_terminal()
 {
+  Component component;
+  component.designator = parse_next_word(); 
+  component.node1 = parse_next_word(); 
+  component.node2 = parse_next_word(); 
+  component.node3 = parse_next_word(); 
+  component.node4 = parse_next_word(); 
+  component.value = parse_value(); 
 
+  std::cout << parse_next_word() << std::endl;
+  return component;
 }
 
+std::string Parser::parse_next_word()
+{
+  std::string word = "";
+  while(current_line[curr_pos] != ' ' && current_line[curr_pos] != '\t' )
+  {
+    word += current_line[curr_pos];
+    curr_pos++;
+  }
+  skip_whitespace();
+  return word;
+}
+
+std::string Parser::parse_value()
+{
+  std::string val = "";
+  int len = current_line.length();
+  while(curr_pos < len)
+  {
+    val += current_line[curr_pos];
+    curr_pos++;
+  }
+  return val;
+}
