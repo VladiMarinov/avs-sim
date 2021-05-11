@@ -41,7 +41,7 @@ void Parser::parse_line()
 {
   skip_whitespace();
 
-  if(current_line[curr_pos] != '*' && current_line[curr_pos] != '.')
+  if(current_line[curr_pos] != '*' && current_line[curr_pos] != '.'  && !current_line.empty())
   {
     components.push_back(parse_component()); // TODO: check if emplace_back is better here? 
   }
@@ -64,8 +64,7 @@ Component Parser::parse_component()
   if(current_line[curr_pos] == 'G' )  return parse_four_terminal();
 
   std::cout << "Component Designator Letter not recognized..." << std::endl;
-  return Component();
-  //exit(EXIT_FAILURE);
+  exit(EXIT_FAILURE);
 }
 
 Component Parser::parse_two_terminal()
