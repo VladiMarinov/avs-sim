@@ -12,6 +12,16 @@ void printComponent(Component c)
   std::cout << c.value << std::endl;
   std::cout <<"----------------------------\n";
 }
+void printACdir(AC_Directive dir)
+{
+  std::cout <<"----------------------------\n";
+  std::cout << dir.sweep_type << std::endl;
+  std::cout << dir.points_per_dec << std::endl;
+  std::cout << dir.start_freq << std::endl;
+  std::cout << dir.stop_freq << std::endl;
+  std::cout <<"----------------------------\n";
+}
+
 
 int main(int argc, char** argv)
 {
@@ -27,6 +37,7 @@ int main(int argc, char** argv)
     {
       printComponent(c);
     }
+    printACdir(parser->ac_dir);
 
     return 0;
 }

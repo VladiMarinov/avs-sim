@@ -26,7 +26,7 @@ void Parser::parse()
     exit(EXIT_FAILURE);
   }
 
-  while(input_file_stream)
+  while(!endFound && input_file_stream)
   {
     std::getline(input_file_stream, current_line);
     curr_pos = 0;
@@ -35,15 +35,29 @@ void Parser::parse()
   }
 
   input_file_stream.close();
+
+  if(!directiveFound)
+  {
+    std::cout << "ERROR: No AC directive found...." << std::endl;
+    exit(EXIT_FAILURE);
+  }
+
 }
 
 void Parser::parse_line()
 {
-  skip_whitespace();
-
-  if(current_line[curr_pos] != '*' && current_line[curr_pos] != '.'  && !current_line.empty())
+  if(!current_line.empty())
   {
-    components.push_back(parse_component()); // TODO: check if emplace_back is better here? 
+    skip_whitespace();
+
+    if(current_line[curr_pos] != '*' && current_line[curr_pos] != '.')
+    {
+      components.push_back(parse_component()); // TODO: check if emplace_back is better here? 
+    }
+    if(current_line[curr_pos] == '.')
+    {
+      parse_directive();
+    }
   }
 }
 
@@ -103,7 +117,7 @@ Component Parser::parse_four_terminal()
 std::string Parser::parse_next_token()
 {
   std::string token = "";
-  while(current_line[curr_pos] != ' ' && current_line[curr_pos] != '\t' )
+  while(current_line[curr_pos] != ' ' && current_line[curr_pos] != '\t' && curr_pos < current_line.length())
   {
     token += current_line[curr_pos];
     curr_pos++;
@@ -122,4 +136,30 @@ std::string Parser::parse_value()
     curr_pos++;
   }
   return val;
+}
+
+void Parser::parse_directive()
+{
+  std::string next_token = parse_next_token();
+  std::cout << "PARSING DIRECTIVE : " << next_token << std::endl;
+  if(next_token == ".end")
+  {
+    endFound = true;
+  }
+  if(next_token == ".ac")
+  {
+    if(!directiveFound)
+    {
+      ac_dir.sweep_type = parse_next_token(); 
+      ac_dir.points_per_dec = parse_next_token(); 
+      ac_dir.start_freq = parse_next_token(); 
+      ac_dir.stop_freq = parse_next_token(); 
+      directiveFound = true;  
+    }
+    else
+    {
+      std::cout << "ERROR: Multiple AC directives found..." << std::endl;
+      exit(EXIT_FAILURE);
+    }
+  }
 }
