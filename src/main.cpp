@@ -1,9 +1,24 @@
 #include <iostream>
+#include <vector>
+#include <string>
 #include "parser.h" 
 
 void printComponent(Component c)
 {
+  std::vector<std::string> componentType = {
+    "RESISTOR",       //0   R
+    "INDUCTOR",       //1   L
+    "CAPACITOR",      //2   C
+    "VOLTAGE_SOURCE", //3   V
+    "CURRENT_SOURCE", //4   I
+    "DIODE",          //5   D
+    "BJT",            //6   Q
+    "MOSFET",         //7   M
+    "VCCS"            //8   G
+  };
+
   std::cout <<"----------------------------\n";
+  std::cout << componentType[c.type] << " with enum " << c.type << std::endl;
   std::cout << c.designator << std::endl;
   std::cout << c.node1 << std::endl;
   std::cout << c.node2 << std::endl;
