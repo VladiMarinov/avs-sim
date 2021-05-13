@@ -12,4 +12,7 @@ public:
   std::string node3;
   std::string node4;
   std::string value;
+
+  void findType();
+  ComponentType parse_type();
 };
