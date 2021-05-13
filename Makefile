@@ -2,7 +2,7 @@ exec = avs-sim
 sources = $(wildcard src/*.cpp)
 objects = $(sources:.cpp=.o)
 CC = g++
-flags = -g
+flags = -g -Wall
 
 $(exec): $(objects)
 	$(CC) $(objects) $(flags) -o $(exec)
@@ -22,7 +22,7 @@ remove:
 	-rm src/*.o
 
 run:
-	@make -s
+	@make -s 
 	@./avs-sim examples/example1.avs
 
 
