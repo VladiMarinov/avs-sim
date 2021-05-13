@@ -65,10 +65,10 @@ int main(int argc, char** argv)
     std::cout <<"\n----------------------------\n";
 
     Circuit circuit(parser->components);
-    for(Node node : circuit.nodes)
-    {
-      node.printNode();
-    }
+    // for(Node node : circuit.nodes)
+    // {
+    //   node.printNode();
+    // }
 
     return 0;
 }
