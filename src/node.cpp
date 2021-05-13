@@ -1,4 +1,5 @@
 #include "node.h"
+#include <iostream>
 
 Node::Node(std::string iname) 
 {
@@ -8,14 +9,31 @@ Node::Node(std::string iname)
 
 int Node::toNumber(std::string name)
 {
-  name.erase(name.begin());
-  return std::stoi(name);
+  if(name == "0")
+  {
+    return 0;
+  }
+  else
+  {
+    name.erase(name.begin());
+    return std::stoi(name);
+  }
 }
 
-void Node::add(Component c)
+void Node::addComponent(Component c)
 {
   components.push_back(c); // TODO: Check if emplace_back is better here...
 }
 
+void Node::printNode()
+{
+  std::cout << name;
+  std::cout<< " " << components.size();
+  for(Component c : components)
+  {
+    std::cout << "- " << c.designator;
+  }
+  std::cout << std::endl;
+}
 
 

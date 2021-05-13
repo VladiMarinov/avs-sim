@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "parser.h" 
+#include "circuit.h"
 
 std::vector<std::string> componentType = {
     "RESISTOR",       //0   R
@@ -36,6 +37,14 @@ void printACdir(AC_Directive dir)
   std::cout <<"----------------------------\n";
 }
 
+// void printNode(Node node){
+//   std::cout << node.name;
+//   for(Component c : node.components)
+//   {
+//     std::cout << "- " << c.designator;
+//   }
+//   std::cout << std::endl;
+// }
 
 int main(int argc, char** argv)
 {
@@ -52,6 +61,14 @@ int main(int argc, char** argv)
       printComponent(c);
     }
     printACdir(parser->ac_dir);
+
+    std::cout <<"\n----------------------------\n";
+
+    Circuit circuit(parser->components);
+    for(Node node : circuit.nodes)
+    {
+      node.printNode();
+    }
 
     return 0;
 }

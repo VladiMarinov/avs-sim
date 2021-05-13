@@ -146,7 +146,6 @@ std::string Parser::parse_value()
 void Parser::parse_directive()
 {
   std::string next_token = parse_next_token();
-  std::cout << "PARSING DIRECTIVE : " << next_token << std::endl;
   if (next_token == ".end")
   {
     endFound = true;

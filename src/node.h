@@ -6,14 +6,14 @@
 
 class Node
 {
-private:
+public:
   int number;
   std::string name;
   std::vector<Component> components;
-
-public:
+  
   Node(std::string iname);
   int toNumber(std::string name);
 
-  void add(Component c);
+  void addComponent(Component c);
+  void printNode();
 };
