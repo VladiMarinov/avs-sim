@@ -2,12 +2,12 @@ exec = avs-sim
 sources = $(wildcard src/*.cpp)
 objects = $(sources:.cpp=.o)
 CC = g++
-flags = -g -Wall
+flags = -g -Wall -Wpedantic -Wextra
 
 $(exec): $(objects)
 	$(CC) $(objects) $(flags) -o $(exec)
 
-%.o: %.c include/%.h
+%.o: %.cpp %.h
 	$(CC) -c $(flags) $< -o $@
 
 clean:
