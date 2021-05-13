@@ -145,46 +145,20 @@ std::string Parser::parse_value()
 
 ComponentType Parser::parse_componentType(Component component)
 {
-  ComponentType type;
+  switch(component.designator[0])
+  {
+    case 'R': return RESISTOR;
+    case 'L': return INDUCTOR;
+    case 'C': return CAPACITOR;
+    case 'V': return VOLTAGE_SOURCE;
+    case 'I': return CURRENT_SOURCE;
+    case 'D': return DIODE;
+    case 'Q': return BJT;
+    case 'M': return MOSFET;
+    case 'G': return VCCS;
 
-  if (component.designator[0] == 'R')
-  {
-    type = RESISTOR;
+    default : return UNKNOWN;
   }
-  else if (component.designator[0] == 'L')
-  {
-    type = INDUCTOR;
-  }
-  else if (component.designator[0] == 'C')
-  {
-    type = CAPACITOR;
-  }
-  else if (component.designator[0] == 'V')
-  {
-    type = VOLTAGE_SOURCE;
-  }
-  else if (component.designator[0] == 'I')
-  {
-    type = CURRENT_SOURCE;
-  }
-  else if (component.designator[0] == 'D')
-  {
-    type = DIODE;
-  }
-  else if (component.designator[0] == 'Q')
-  {
-    type = BJT;
-  }
-  else if (component.designator[0] == 'M')
-  {
-    type = MOSFET;
-  }
-  else if (component.designator[0] == 'G')
-  {
-    type = VCCS;
-  }
-
-  return type;
 }
 
 void Parser::parse_directive()

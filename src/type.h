@@ -10,5 +10,6 @@ enum ComponentType      //enum is giving numbers some names
   DIODE,          //5   D
   BJT,            //6   Q
   MOSFET,         //7   M
-  VCCS            //8   G
+  VCCS,            //8   G
+  UNKNOWN
 };
