@@ -10,6 +10,7 @@ Circuit::Circuit(std::vector<Component> parsed_components)
       if(!node_exists(node_id))
       {
         nodes.push_back(Node(node_id));
+        std::cout<< "Creating node: " << node_id << std::endl;
       }
       add_component(node_id, c);
     }
@@ -34,7 +35,7 @@ void Circuit::add_component(std::string node_id, Component component)
   {
     if(n.name == node_id)
     {
-      std::cout << "Trying to add component to node..." << std::endl;
+      //std::cout << "Trying to add component to node..." << std::endl;
       n.addComponent(component); 
     }
   }

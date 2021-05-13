@@ -22,16 +22,17 @@ int Node::toNumber(std::string name)
 
 void Node::addComponent(Component c)
 {
-  components.push_back(c); // TODO: Check if emplace_back is better here...
+  components.push_back(c);
+  printNode(); // TODO: Check if emplace_back is better here...
 }
 
 void Node::printNode()
 {
   std::cout << name;
-  std::cout<< " " << components.size();
+  std::cout<< " size: " << components.size();
   for(Component c : components)
   {
-    std::cout << "- " << c.designator;
+    std::cout << " - " << c.designator;
   }
   std::cout << std::endl;
 }
