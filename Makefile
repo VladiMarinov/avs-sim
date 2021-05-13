@@ -25,4 +25,7 @@ run:
 	@make -s 
 	@./avs-sim examples/example1.avs
 
+rv:
+	make clean 
+	@./avs-sim examples/example1.avs
 
