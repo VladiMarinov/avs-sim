@@ -20,11 +20,10 @@ void printComponent(Component c)
   std::cout <<"----------------------------\n";
   std::cout << componentType[c.type] << " with enum " << c.type << std::endl;
   std::cout << c.designator << std::endl;
-  std::cout << c.node1 << std::endl;
-  std::cout << c.node2 << std::endl;
-  std::cout << c.node3 << std::endl;
-  std::cout << c.node4 << std::endl;
-  std::cout << c.value << std::endl;
+  for(std::string n : c.nodes)
+  {
+    std::cout << n << std::endl;
+  }
   std::cout <<"----------------------------\n";
 }
 void printACdir(AC_Directive dir)

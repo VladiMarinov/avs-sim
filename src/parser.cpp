@@ -88,8 +88,8 @@ Component Parser::parse_two_terminal()
   Component component;
   component.designator = parse_next_token();
   component.findType();
-  component.node1 = parse_next_token();
-  component.node2 = parse_next_token();
+  component.nodes.push_back(parse_next_token());
+  component.nodes.push_back(parse_next_token());
   component.value = parse_value();
   return component;
 }
@@ -99,9 +99,9 @@ Component Parser::parse_three_terminal()
   Component component;
   component.designator = parse_next_token();
   component.findType();
-  component.node1 = parse_next_token();
-  component.node2 = parse_next_token();
-  component.node3 = parse_next_token();
+  component.nodes.push_back(parse_next_token());
+  component.nodes.push_back(parse_next_token());
+  component.nodes.push_back(parse_next_token());
   component.value = parse_value();
   return component;
 }
@@ -111,10 +111,10 @@ Component Parser::parse_four_terminal()
   Component component;
   component.designator = parse_next_token();
   component.findType();
-  component.node1 = parse_next_token();
-  component.node2 = parse_next_token();
-  component.node3 = parse_next_token();
-  component.node4 = parse_next_token();
+  component.nodes.push_back(parse_next_token());
+  component.nodes.push_back(parse_next_token());
+  component.nodes.push_back(parse_next_token());
+  component.nodes.push_back(parse_next_token());
   component.value = parse_value();
   return component;
 }
