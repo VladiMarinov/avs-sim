@@ -135,7 +135,7 @@ std::string Parser::parse_value()
 {
   std::string val = "";
   int len = current_line.length();
-  while (curr_pos < len)
+  while (curr_pos < len) // TODO: This should be a for loop, what the hell was I thinking?!?
   {
     val += current_line[curr_pos];
     curr_pos++;
