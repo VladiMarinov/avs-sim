@@ -15,5 +15,4 @@ public:
   int toNumber(std::string name);
 
   void addComponent(Component c);
-  void printNode();
 };
