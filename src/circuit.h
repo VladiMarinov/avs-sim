@@ -4,12 +4,24 @@
 #include "component.h"
 #include "node.h"
 
+/// Represents a circuit, consisting of a vector of nodes.
 class Circuit
 {
 public:
+  /// The nodes that consist the circuit. Each node contains all the components connected to it.
   std::vector<Node> nodes;
+
+  /// Create a new circuit, given the vector of parsed components.
+  /// @param parsed_components A vector of all components that make up the circuit. Those are expected to be read from the input file by the parser.
   Circuit(std::vector<Component> parsed_components);
 
+  /// Checks if a node with a given ID has already been created and added to the vector of nodes.
+  /// @param node_id The node ID to check
+  /// @returns Does the node with the given ID exist in the vector.
   bool node_exists(std::string node_id);
+
+  /// Add a component to a node in the vector of nodes.
+  /// @param node_id The ID of the node to which the component should be added.
+  /// @param component The component to add.
   void add_component(std::string node_id, Component component);
 };
