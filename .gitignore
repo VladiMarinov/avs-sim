@@ -33,3 +33,4 @@ avs-sim
 *.app
 
 .vscode/
+.DS_Store
