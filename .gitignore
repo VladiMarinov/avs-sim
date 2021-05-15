@@ -32,5 +32,9 @@ avs-sim
 *.out
 *.app
 
+#Other
 .vscode/
 .DS_Store
+
+#Docs
+/doc
