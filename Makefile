@@ -40,4 +40,8 @@ rv:
 	@./avs-sim examples/example1.avs
 
 compiler_info:
-	@echo "Makefile autodetected OS as " $(uname_S)"... Using " $(CC) 
+	@echo "Makefile autodetected environment as " $(uname_S)"... Using " $(CC) 
+
+doc:
+	@doxygen Doxyfile
+	@echo "Docs generated successfully under /doc.."
