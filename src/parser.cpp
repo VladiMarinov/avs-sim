@@ -131,17 +131,19 @@ std::string Parser::parse_next_token()
   return token;
 }
 
-std::string Parser::parse_value()
+
+
+std::string Parser::parse_value() //TODO : proofread
 {
   std::string val = "";
   int len = current_line.length();
-  while (curr_pos < len) // TODO: This should be a for loop, what the hell was I thinking?!?
+  for(; curr_pos < len; curr_pos++)
   {
     val += current_line[curr_pos];
-    curr_pos++;
   }
   return val;
 }
+
 
 void Parser::parse_directive()
 {
@@ -150,9 +152,9 @@ void Parser::parse_directive()
   {
     endFound = true;
   }
-  if (next_token == ".ac")
+  else if (next_token == ".ac")
   {
-    if (!directiveFound)
+    if (!directiveFound) //if directive not yet found ; set member data ac_dir
     {
       ac_dir.sweep_type = parse_next_token();
       ac_dir.points_per_dec = parse_next_token();
@@ -160,10 +162,16 @@ void Parser::parse_directive()
       ac_dir.stop_freq = parse_next_token();
       directiveFound = true;
     }
-    else
+    else //Implied we have . and first token!= "".end" and so we have more than one directive
     {
       std::cout << "ERROR: Multiple AC directives found..." << std::endl;
       exit(EXIT_FAILURE);
     }
+    //Note : this code ignores extra directives like .TEMP as EXIT_FAILURE else is nested in if (next_token == ".ac")
+  }
+  else
+  {
+    std::cout << "Warning : unknown directives found, they will be ignored" << std::endl;
   }
 }
+

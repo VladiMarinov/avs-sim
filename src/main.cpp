@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     parser->parse();
     for(Component c : parser->components)
     {
-      //printComponent(c);
+      printComponent(c); // to be commented
     }
     printACdir(parser->ac_dir);
 
