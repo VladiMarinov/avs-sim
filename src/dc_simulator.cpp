@@ -52,7 +52,8 @@ void DC_Simulator::generate_current_vector()
 void DC_Simulator::solve()
 {
   std::cout<< "Voltage vector:" << std::endl;
-  (*voltage_vector) = conductance_matrix->colPivHouseholderQr().solve(*current_vector);
-  std::cout<< "Trying..." << std::endl;
-  std::cout << *voltage_vector << std::endl;
+  //(*voltage_vector) = (*conductance_matrix).lu().solve(*current_vector);
+  //Eigen::VectorXf sol = (*conductance_matrix).lu().solve(*current_vector);
+  voltage_vector = (*conductance_matrix).lu().solve(*current_vector);
+  std::cout << voltage_vector  << std::endl;
 }
