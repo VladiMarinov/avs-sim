@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "parser.h" 
+#include "dc_simulator.h" 
 #include "circuit.h"
  
 void printComponent(Component c)
@@ -56,6 +57,9 @@ int main(int argc, char** argv)
     {
       printNode(node);
     }
+
+    DC_Simulator sim(circuit);
+    sim.generate_conductance_matrix();
 
     return 0;
 }

@@ -11,6 +11,8 @@ public:
   /// The nodes that consist the circuit. Each node contains all the components connected to it.
   std::vector<Node> nodes;
 
+  Circuit();
+
   /// Create a new circuit, given the vector of parsed components.
   /// @param parsed_components A vector of all components that make up the circuit. Those are expected to be read from the input file by the parser.
   Circuit(std::vector<Component> parsed_components);
@@ -24,4 +26,10 @@ public:
   /// @param node_id The ID of the node to which the component should be added.
   /// @param component The component to add.
   void add_component(std::string node_id, Component component);
+
+  float total_conductance_into_node(Node node);
+  
+  float total_conductance_between_nodes(Node node1, Node node2);
+
+  bool is_component_connected_to(Component component, Node node);
 };
