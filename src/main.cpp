@@ -13,6 +13,7 @@ void printComponent(Component c)
   {
     std::cout << n << std::endl;
   }
+  std::cout << c.value <<std::endl;
   std::cout <<"----------------------------\n";
 }
 void printACdir(AC_Directive dir)
@@ -46,7 +47,7 @@ int main(int argc, char** argv)
     parser->parse();
     for(Component c : parser->components)
     {
-      //printComponent(c);
+      printComponent(c);
     }
     printACdir(parser->ac_dir);
 
@@ -60,6 +61,8 @@ int main(int argc, char** argv)
 
     DC_Simulator sim(circuit);
     sim.generate_conductance_matrix();
+    sim.generate_current_vector();
+    sim.solve();
 
     return 0;
 }

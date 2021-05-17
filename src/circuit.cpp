@@ -44,6 +44,20 @@ void Circuit::add_component(std::string node_id, Component component)
   }
 }
 
+Circuit Circuit::remove_ground()
+{
+  Circuit no_ground_circuit = *this;
+  for(int n = 0; n < no_ground_circuit.nodes.size(); n++)
+  {
+    if(no_ground_circuit.nodes[n].name == "0")
+    {
+      no_ground_circuit.nodes.erase(no_ground_circuit.nodes.begin() + n);
+    }
+  }
+
+  return no_ground_circuit;
+}
+
 float Circuit::total_conductance_into_node(Node node)
 {
   float total_conductance = 0;
@@ -85,5 +99,27 @@ bool Circuit::is_component_connected_to(Component component, Node node)
     if(current_node_ID == target_node_ID) return true; 
   }
   return false;
+}
+
+float Circuit::total_current_into_node(Node node)
+{
+  float total_current = 0;
+  for(Component component : node.components)
+  {
+    if(component.type == CURRENT_SOURCE)
+    {
+      if(component.nodes[0] == node.name)
+      {
+        //current going out
+        total_current -= std::stof(component.value);
+      }
+      else
+      {
+        //current going in
+        total_current += std::stof(component.value);
+      }
+    }
+  }
+  return total_current;
 }
 

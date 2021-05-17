@@ -27,9 +27,13 @@ public:
   /// @param component The component to add.
   void add_component(std::string node_id, Component component);
 
+  Circuit remove_ground();
+
   float total_conductance_into_node(Node node);
   
   float total_conductance_between_nodes(Node node1, Node node2);
 
   bool is_component_connected_to(Component component, Node node);
+
+  float total_current_into_node(Node node);
 };
