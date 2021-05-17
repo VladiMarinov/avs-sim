@@ -9,6 +9,7 @@ DC_Simulator::DC_Simulator(Circuit input_circuit)
   std::cout << "Matrix size will be " << matrix_size << std::endl;
   conductance_matrix = new Eigen::MatrixXf (matrix_size, matrix_size);
   current_vector = new Eigen::VectorXf (matrix_size);
+  voltage_vector = new Eigen::VectorXf (matrix_size);
 
 }
 
@@ -52,8 +53,6 @@ void DC_Simulator::generate_current_vector()
 void DC_Simulator::solve()
 {
   std::cout<< "Voltage vector:" << std::endl;
-  //(*voltage_vector) = (*conductance_matrix).lu().solve(*current_vector);
-  //Eigen::VectorXf sol = (*conductance_matrix).lu().solve(*current_vector);
-  voltage_vector = (*conductance_matrix).lu().solve(*current_vector);
-  std::cout << voltage_vector  << std::endl;
+  (*voltage_vector) = (*conductance_matrix).lu().solve(*current_vector);
+  std::cout << *voltage_vector  << std::endl;
 }

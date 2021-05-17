@@ -9,7 +9,7 @@ public:
   Circuit circuit;
   Eigen::MatrixXf *conductance_matrix;
   Eigen::VectorXf *current_vector;
-  Eigen::VectorXf voltage_vector;
+  Eigen::VectorXf* voltage_vector;
 
   DC_Simulator(Circuit input_circuit);
 
