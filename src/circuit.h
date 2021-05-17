@@ -27,13 +27,18 @@ public:
   /// @param component The component to add.
   void add_component(std::string node_id, Component component);
 
+  /// Returns a copy of the circuit, with the ground node removed from the nodes vector.
   Circuit remove_ground();
 
+  /// Calculates the total conductance directly connected to a given node. 
   float total_conductance_into_node(Node node);
   
+  /// Calculates the total conductance that directly connects two given nodes. This is used when calculating the main diagonal entries of the conductance matrix.
   float total_conductance_between_nodes(Node node1, Node node2);
 
+  /// Returns whether the given component has any terminal connected to the given node.
   bool is_component_connected_to(Component component, Node node);
 
+  /// Calculates the total current coming into the given node from **current sources only**. This is used when calculating the non main-diagonal entries of the conductance matrix.
   float total_current_into_node(Node node);
 };
