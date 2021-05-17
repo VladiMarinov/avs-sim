@@ -171,7 +171,7 @@ void Parser::parse_directive()
   }
   else
   {
-    std::cout << "Warning : unknown directives found, they will be ignored" << std::endl;
+    std::cout << "Warning : unknown directive(s) found, they will be ignored" << std::endl;
   }
 }
 
