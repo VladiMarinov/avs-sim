@@ -11,11 +11,13 @@ public:
   Circuit circuit;
   Eigen::MatrixXf *conductance_matrix;
   Eigen::VectorXf *current_vector;
-  Eigen::VectorXf *voltage_vector;
+  Eigen::VectorXf *unknown_vector;
   Eigen::MatrixXf *B_matrix;
   Eigen::MatrixXf *C_matrix;
   Eigen::MatrixXf *D_matrix;
   Eigen::MatrixXf *A_matrix;
+  Eigen::VectorXf *e_vector;
+  Eigen::VectorXf *z_vector;
 
   /// Create a DC Simulator to simulate the given circuit.
   DC_Simulator(Circuit input_circuit);
@@ -37,6 +39,11 @@ public:
 
   /// Generates the current vector for the given circuit.
   void generate_current_vector();
+
+  void generate_e_vector();
+
+  void generate_z_vector();
+
 
   /// Solves the circuit for the voltage vector, and assigns the solution to voltage_vector.
   void solve();
