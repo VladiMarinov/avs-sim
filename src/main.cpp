@@ -60,9 +60,10 @@ int main(int argc, char** argv)
     }
 
     DC_Simulator sim(circuit);
-    sim.generate_conductance_matrix();
-    sim.generate_current_vector();
-    sim.solve();
+    // sim.generate_conductance_matrix();
+    // sim.generate_current_vector();
+    // sim.solve();
+    // 
 
     return 0;
 }

@@ -10,6 +10,8 @@ class Circuit
 public:
   /// The nodes that consist the circuit. Each node contains all the components connected to it.
   std::vector<Node> nodes;
+  int num_voltage_sources;
+  std::vector<Component> voltage_sources;
 
   Circuit();
 

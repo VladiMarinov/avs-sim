@@ -2,14 +2,21 @@
 #include "type.h"
 #include <iostream>
 
+
 Circuit::Circuit()
 {
 }
 
 Circuit::Circuit(std::vector<Component> parsed_components)
 {
+  num_voltage_sources =0;
   for(Component c : parsed_components)
   {
+    if (c.type == VOLTAGE_SOURCE)
+    {
+      num_voltage_sources++; 
+      voltage_sources.push_back(c);
+    }
     for(std::string node_id : c.nodes)
     {
       if(!node_exists(node_id))
