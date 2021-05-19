@@ -3,7 +3,8 @@
 #include "Eigen/LU"
 #include "Eigen/Dense"
 
-/// Solves for the DC Steady-state solution of a given circuit (Transients are ignored!)
+/// Solves for the DC Steady-state solution of a given circuit (Transients are ignored!).
+/// For the notational conventions used for naming the vectors and matrices, check README.md
 class DC_Simulator
 {
 public:
@@ -22,14 +23,17 @@ public:
   /// Generates the conductance matrix for the given circuit.
   void generate_conductance_matrix();
 
+  /// Generates the B matrix for the given circuit. 
   void generate_B_matrix();
 
+  /// Generates the C matrix for the given circuit.
   void generate_C_matrix();
 
+  /// Generates the D matrix for the given circuit.
   void generate_D_matrix();
 
+  /// Generates the A matrix, by appropriately combining the G,B,C, and D matrices.
   void generate_A_matrix();
-
 
   /// Generates the current vector for the given circuit.
   void generate_current_vector();
