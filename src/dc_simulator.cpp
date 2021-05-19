@@ -43,11 +43,13 @@ void DC_Simulator::generate_conductance_matrix()
     }
   }
 
-  std::cout<< "Conductance matrix:" << std::endl;
-  std::cout << *conductance_matrix << std::endl;
+//  std::cout<< "Conductance matrix:" << std::endl;
+ // std::cout << *conductance_matrix << std::endl;
 }
 void DC_Simulator::generate_B_matrix()
 {
+  //*B_matrix = Eigen::MatrixXf::Zero(circuit.nodes.size(), circuit.num_voltage_sources);
+
   for (int col = 0; col < circuit.num_voltage_sources; col ++)
   {
     for (int row = 0 ; row < circuit.nodes.size() ; row++)
@@ -66,6 +68,10 @@ void DC_Simulator::generate_B_matrix()
         {
           (*B_matrix)(row, col ) = 0;
         }
+      }
+      else
+      {
+        (*B_matrix)(row, col) = 0;
       }
     }
   }
