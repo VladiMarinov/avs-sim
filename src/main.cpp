@@ -59,7 +59,8 @@ int main(int argc, char** argv)
       printNode(node);
     }
 
-    DC_Simulator sim(circuit);
+    Circuit DC_Circuit = circuit.get_DC_Equivalent_Circuit().remove_ground();
+    DC_Simulator sim(DC_Circuit);
     // sim.generate_conductance_matrix();
     // sim.generate_current_vector();
     // sim.solve();
