@@ -8,6 +8,10 @@
 class Circuit
 {
 public:
+
+
+  std::vector<Component> circuit_components;
+
   /// The nodes that consist the circuit. Each node contains all the components connected to it.
   std::vector<Node> nodes;
   uint32_t num_voltage_sources;
@@ -31,6 +35,10 @@ public:
 
   /// Returns a copy of the circuit, with the ground node removed from the nodes vector.
   Circuit remove_ground();
+
+  Circuit get_DC_Equivalent_Circuit();
+
+  std::vector<Component> get_DC_Equivalent_Components();
 
   /// Calculates the total conductance directly connected to a given node. 
   float total_conductance_into_node(Node node);

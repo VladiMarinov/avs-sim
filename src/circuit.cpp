@@ -2,15 +2,17 @@
 #include "type.h"
 #include <iostream>
 
-
+// TODO: figure out why this is neccessary and how to get rid of it...
 Circuit::Circuit()
 {
 }
 
-Circuit::Circuit(std::vector<Component> parsed_components)
+Circuit::Circuit(std::vector<Component> input_components)
 {
+  circuit_components = input_components;
+
   num_voltage_sources =0;
-  for(Component c : parsed_components)
+  for(Component c : input_components)
   {
     if (c.type == VOLTAGE_SOURCE)
     {
@@ -64,6 +66,37 @@ Circuit Circuit::remove_ground()
 
   return no_ground_circuit;
 }
+
+Circuit Circuit::get_DC_Equivalent_Circuit()
+{
+  return Circuit(get_DC_Equivalent_Components());
+}
+
+std::vector<Component> Circuit::get_DC_Equivalent_Components()
+{
+  std::vector<Component> dc_equivalent_components;
+  for (Component c: circuit_components)
+  {
+    if (c.type == INDUCTOR)
+    {
+      Component equiv;
+      equiv.type  = VOLTAGE_SOURCE;
+      equiv.designator = c.designator;
+      equiv.nodes = c.nodes;
+      equiv.value = "0";
+
+      dc_equivalent_components.push_back(equiv);
+    }
+    else if (c.type != CAPACITOR  )
+    {
+      dc_equivalent_components.push_back(c);
+    }
+    // CAPACITOR IS IGNORED
+  }
+  return dc_equivalent_components;
+}
+
+
 
 float Circuit::total_conductance_into_node(Node node)
 {
