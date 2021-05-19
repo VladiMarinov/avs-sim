@@ -4,7 +4,8 @@
 #include "Eigen/Dense"
 
 /// Solves for the DC Steady-state solution of a given circuit (Transients are ignored!).
-/// For the notational conventions used for naming the vectors and matrices, check README.md
+/// @note For the notational conventions used for naming the vectors and matrices, check <https://lpsa.swarthmore.edu/Systems/Electrical/mna/MNA3.html> 
+/// @warning The circuit that is passed to the constructor **must** not contain a ground node.
 class DC_Simulator
 {
 public:
@@ -20,6 +21,7 @@ public:
   Eigen::VectorXf *z_vector;
 
   /// Create a DC Simulator to simulate the given circuit.
+  /// @warning The circuit that is passed to the constructor **must** not contain a ground node.
   DC_Simulator(Circuit input_circuit);
 
   /// Generates the conductance matrix for the given circuit.
@@ -40,11 +42,12 @@ public:
   /// Generates the current vector for the given circuit.
   void generate_current_vector();
 
+  /// Generates the e vecot for the given circuit.
   void generate_e_vector();
 
+  /// Generates the z vector, by appropriately combining the current and e vector.
   void generate_z_vector();
 
-
-  /// Solves the circuit for the voltage vector, and assigns the solution to voltage_vector.
+  /// Solves the circuit for the unknown vector.
   void solve();
 };

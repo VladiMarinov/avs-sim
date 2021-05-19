@@ -33,11 +33,20 @@ public:
   /// @param component The component to add.
   void add_component(std::string node_id, Component component);
 
-  /// Returns a copy of the circuit, with the ground node removed from the nodes vector.
+  /// Returns a copy of this circuit, with the ground node removed from the nodes vector.
+  /// @note Both the AC_Simulator and DC_Simulator expect no ground node in the circuit they are passed.
   Circuit remove_ground();
 
+  /// Returns the Steady-state DC equivalent of the circuit.
+  /// Capacitors are discarded - they are open circuits in Steady-state DC.
+  /// Inductors are modeled as 0V voltage sources - this is the easiest way to model a short circuit.
+  /// Resistors, Voltage sources, and Current sources are left as is.
+  /// @note Non-linear components aren't supported yet - they will be left as is.
   Circuit get_DC_Equivalent_Circuit();
 
+  /// Returns the Steady-state DC equivalent components for this circuit.
+  /// Those are then used to construct a DC equivalent circuit.
+  /// @see get_DC_Equivalent_Circuit()
   std::vector<Component> get_DC_Equivalent_Components();
 
   /// Calculates the total conductance directly connected to a given node. 
