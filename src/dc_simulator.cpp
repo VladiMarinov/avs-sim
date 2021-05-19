@@ -64,10 +64,6 @@ void DC_Simulator::generate_B_matrix()
         {
           (*B_matrix)(row, col ) = -1;
         }
-        else 
-        {
-          (*B_matrix)(row, col ) = 0;
-        }
       }
       else
       {
