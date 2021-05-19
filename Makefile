@@ -46,3 +46,7 @@ compiler_info:
 docs:
 	@doxygen Doxyfile
 	@echo "Docs generated successfully under /doc.."
+
+.PHONY: cloc
+cloc:
+	@cloc . --exclude-dir='Eigen','doc'
