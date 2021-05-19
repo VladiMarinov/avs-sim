@@ -54,7 +54,7 @@ void Circuit::add_component(std::string node_id, Component component)
 Circuit Circuit::remove_ground()
 {
   Circuit no_ground_circuit = *this;
-  for(int n = 0; n < no_ground_circuit.nodes.size(); n++)
+  for(uint32_t n = 0; n < no_ground_circuit.nodes.size(); n++)
   {
     if(no_ground_circuit.nodes[n].name == "0")
     {

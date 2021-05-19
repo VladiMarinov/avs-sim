@@ -10,7 +10,7 @@ class Parser
 private:
   std::string input_file;
   std::string current_line;
-  int curr_pos;
+  uint32_t curr_pos;
   bool directiveFound = false;
   bool endFound = false;
 public:

@@ -24,9 +24,9 @@ DC_Simulator::DC_Simulator(Circuit input_circuit)
 
 void DC_Simulator::generate_conductance_matrix()
 {
-  for(int col = 0; col < circuit.nodes.size(); col++)
+  for(uint32_t col = 0; col < circuit.nodes.size(); col++)
   {
-    for(int row = 0; row <= col; row++ )
+    for(uint32_t row = 0; row <= col; row++ )
     {
       std::cout << "Row/Col: " << row << " " << col <<std::endl;
       std::cout << "Row/Col node: " << circuit.nodes[row].name << " " << circuit.nodes[col].name <<std::endl;
@@ -50,9 +50,9 @@ void DC_Simulator::generate_B_matrix()
 {
   //*B_matrix = Eigen::MatrixXf::Zero(circuit.nodes.size(), circuit.num_voltage_sources);
 
-  for (int col = 0; col < circuit.num_voltage_sources; col ++)
+  for (uint32_t col = 0; col < circuit.num_voltage_sources; col ++)
   {
-    for (int row = 0 ; row < circuit.nodes.size() ; row++)
+    for (uint32_t row = 0 ; row < circuit.nodes.size() ; row++)
     {
       if (circuit.is_component_connected_to(circuit.voltage_sources[col], circuit.nodes[row]))
       {
@@ -91,7 +91,7 @@ void DC_Simulator::generate_A_matrix()
 
 void DC_Simulator::generate_current_vector()
 {
-  for(int i = 0; i < circuit.nodes.size(); i++)
+  for(uint32_t i = 0; i < circuit.nodes.size(); i++)
   {
     (*current_vector)(i) = circuit.total_current_into_node(circuit.nodes[i]);
   }
