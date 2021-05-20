@@ -3,6 +3,7 @@
 #include <vector>
 #include "component.h"
 #include "ac_directive.h"
+#include "const_value.h"
 
 /// The Parser class parses a SPICE-based Nelist file into a vector of components and directives containing the simulation details.
 class Parser

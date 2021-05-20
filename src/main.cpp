@@ -14,6 +14,7 @@ void printComponent(Component c)
     std::cout << n << std::endl;
   }
   std::cout << c.value <<std::endl;
+  std::cout << c.const_value->numeric_value <<std::endl;
   std::cout <<"----------------------------\n";
 }
 void printACdir(AC_Directive dir)

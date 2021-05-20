@@ -1,9 +1,13 @@
 #include "const_value.h"
+#include <iostream>
 
 Const_value::Const_value(std::string input_str_value)
 {
     str_value = input_str_value;
-    numeric_value = str_to_numeric(input_str_value);
+    if (str_value != "D")
+    {
+      numeric_value = str_to_numeric(input_str_value);
+    }
 }
 
 float Const_value::str_to_numeric(std::string str_value)
@@ -11,7 +15,7 @@ float Const_value::str_to_numeric(std::string str_value)
     std::string str_significand; 
     bool has_found_decimal_point = false;
     std::string multiplier; 
-    for(uint32_t i =0 ; i < str_value.length(); i++)
+    for(uint32_t i = 0 ; i < str_value.length(); i++)
     {
         char c = tolower(str_value[i]);
         if (std::isdigit(c))

@@ -91,6 +91,7 @@ Component Parser::parse_two_terminal()
   component.nodes.push_back(parse_next_token());
   component.nodes.push_back(parse_next_token());
   component.value = parse_value();
+  component.const_value = new Const_value(component.value);
   return component;
 }
 
