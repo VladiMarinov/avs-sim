@@ -10,8 +10,12 @@ class DC_Simulator
 {
 public:
   Circuit circuit;
+  
+  /// In MNA this is commonly reffered to as the G matrix
   Eigen::MatrixXf *conductance_matrix;
+  /// In MNA this is commonly reffered to as the i vector
   Eigen::VectorXf *current_vector;
+  /// In MNA this is commonly reffered to as the x vector.
   Eigen::VectorXf *unknown_vector;
   Eigen::MatrixXf *B_matrix;
   Eigen::MatrixXf *C_matrix;
