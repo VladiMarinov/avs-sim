@@ -84,7 +84,7 @@ void DC_Simulator::generate_C_matrix()
 }
 void DC_Simulator::generate_D_matrix()
 {
-  *D_matrix = Eigen::MatrixXf::Zero(circuit.num_voltage_sources, circuit.num_voltage_sources);
+  *D_matrix = Eigen::MatrixXd::Zero(circuit.num_voltage_sources, circuit.num_voltage_sources);
 }
 
 void DC_Simulator::generate_A_matrix()
