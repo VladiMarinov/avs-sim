@@ -12,17 +12,17 @@ public:
   Circuit circuit;
   
   /// In MNA this is commonly reffered to as the G matrix
-  Eigen::MatrixXf *conductance_matrix;
+  Eigen::MatrixXd *conductance_matrix;
   /// In MNA this is commonly reffered to as the i vector
-  Eigen::VectorXf *current_vector;
+  Eigen::VectorXd *current_vector;
   /// In MNA this is commonly reffered to as the x vector.
-  Eigen::VectorXf *unknown_vector;
-  Eigen::MatrixXf *B_matrix;
-  Eigen::MatrixXf *C_matrix;
-  Eigen::MatrixXf *D_matrix;
-  Eigen::MatrixXf *A_matrix;
-  Eigen::VectorXf *e_vector;
-  Eigen::VectorXf *z_vector;
+  Eigen::VectorXd *unknown_vector;
+  Eigen::MatrixXd *B_matrix;
+  Eigen::MatrixXd *C_matrix;
+  Eigen::MatrixXd *D_matrix;
+  Eigen::MatrixXd *A_matrix;
+  Eigen::VectorXd *e_vector;
+  Eigen::VectorXd *z_vector;
 
   /// Create a DC Simulator to simulate the given circuit.
   /// @warning The circuit that is passed to the constructor **must** not contain a ground node.

@@ -98,9 +98,9 @@ std::vector<Component> Circuit::get_DC_Equivalent_Components()
 
 
 
-float Circuit::total_conductance_into_node(Node node)
+double Circuit::total_conductance_into_node(Node node)
 {
-  float total_conductance = 0;
+  double total_conductance = 0.0;
   for(Component component: node.components)
   {
     if(component.type == RESISTOR)
@@ -113,9 +113,9 @@ float Circuit::total_conductance_into_node(Node node)
   return total_conductance;
 }
 
-float Circuit::total_conductance_between_nodes(Node node1, Node node2)
+double Circuit::total_conductance_between_nodes(Node node1, Node node2)
 {
-  float total_conductance = 0;
+  double total_conductance = 0.0;
   for(Component component: node1.components)
   {
     if (is_component_connected_to(component, node2))
@@ -141,9 +141,9 @@ bool Circuit::is_component_connected_to(Component component, Node node)
   return false;
 }
 
-float Circuit::total_current_into_node(Node node)
+double Circuit::total_current_into_node(Node node)
 {
-  float total_current = 0;
+  double total_current = 0.0;
   for(Component component : node.components)
   {
     if(component.type == CURRENT_SOURCE)

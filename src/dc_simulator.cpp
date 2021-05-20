@@ -7,15 +7,15 @@ DC_Simulator::DC_Simulator(Circuit input_circuit)
 
   uint32_t matrix_size = circuit.nodes.size();
   std::cout << "Matrix size will be " << matrix_size << std::endl;
-  conductance_matrix = new Eigen::MatrixXf (matrix_size, matrix_size);
-  current_vector = new Eigen::VectorXf (matrix_size);
-  unknown_vector = new Eigen::VectorXf (circuit.num_voltage_sources + matrix_size);
-  B_matrix = new Eigen::MatrixXf(matrix_size, circuit.num_voltage_sources);
-  C_matrix = new Eigen::MatrixXf(circuit.num_voltage_sources, matrix_size);
-  D_matrix = new Eigen::MatrixXf(circuit.num_voltage_sources, circuit.num_voltage_sources);
-  A_matrix = new Eigen::MatrixXf(circuit.num_voltage_sources + matrix_size, circuit.num_voltage_sources + matrix_size);
-  e_vector = new Eigen::VectorXf (circuit.num_voltage_sources);
-  z_vector = new Eigen::VectorXf(circuit.num_voltage_sources + matrix_size);
+  conductance_matrix = new Eigen::MatrixXd (matrix_size, matrix_size);
+  current_vector = new Eigen::VectorXd (matrix_size);
+  unknown_vector = new Eigen::VectorXd (circuit.num_voltage_sources + matrix_size);
+  B_matrix = new Eigen::MatrixXd(matrix_size, circuit.num_voltage_sources);
+  C_matrix = new Eigen::MatrixXd(circuit.num_voltage_sources, matrix_size);
+  D_matrix = new Eigen::MatrixXd(circuit.num_voltage_sources, circuit.num_voltage_sources);
+  A_matrix = new Eigen::MatrixXd(circuit.num_voltage_sources + matrix_size, circuit.num_voltage_sources + matrix_size);
+  e_vector = new Eigen::VectorXd (circuit.num_voltage_sources);
+  z_vector = new Eigen::VectorXd(circuit.num_voltage_sources + matrix_size);
   generate_conductance_matrix();
   generate_B_matrix();
   generate_C_matrix();

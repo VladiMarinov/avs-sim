@@ -10,7 +10,7 @@ Const_value::Const_value(std::string input_str_value)
     }
 }
 
-float Const_value::str_to_numeric(std::string str_value)
+double Const_value::str_to_numeric(std::string str_value)
 {
     std::string str_significand; 
     bool has_found_decimal_point = false;
@@ -65,15 +65,15 @@ bool Const_value::is_single_character_multipler(char c)
     return false;
 }
 
-float Const_value::str_to_multiplier(std::string multiplier)
+double Const_value::str_to_multiplier(std::string multiplier)
 {
-  if (multiplier == "p")   return 0.000000000001f;
-  if (multiplier == "n")   return 0.000000001f;
-  if (multiplier == "u")   return 0.000001f;
-  if (multiplier == "m")   return 0.001f;
-  if (multiplier == "k")   return 1000.0f; 
-  if (multiplier == "Meg") return 1000000.0f;
-  if (multiplier == "g")   return 1000000000.0f;
-  if (multiplier == "t")   return 1000000000000.0f;
-  return 1.0f;
+  if (multiplier == "p")   return 0.000000000001;
+  if (multiplier == "n")   return 0.000000001;
+  if (multiplier == "u")   return 0.000001;
+  if (multiplier == "m")   return 0.001;
+  if (multiplier == "k")   return 1000.0; 
+  if (multiplier == "Meg") return 1000000.0;
+  if (multiplier == "g")   return 1000000000.0;
+  if (multiplier == "t")   return 1000000000000.0;
+  return 1.0;
 }
