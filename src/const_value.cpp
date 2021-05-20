@@ -1,6 +1,4 @@
-
 #include "const_value.h"
-
 
 Const_value::Const_value(std::string input_str_value)
 {
@@ -53,7 +51,7 @@ float Const_value::str_to_numeric(std::string str_value)
             }
         }
     }  
-    
+    return std::stof(str_significand) * str_to_multiplier(multiplier); 
 }
 
 bool Const_value::is_single_character_multipler(char c)
@@ -65,16 +63,13 @@ bool Const_value::is_single_character_multipler(char c)
 
 float Const_value::str_to_multiplier(std::string multiplier)
 {
-    switch(multiplier)
-    {
-        case "p" : return 0.000000000001;
-        case "n" : return 0.000000001;
-        case "u" : return 0.000001;
-        case "m" : return 0.001;
-        case "k" : return 1000;
-        case "Meg" : return 1000000;
-        case "G" : return 1000000000;
-        case "t" : return 1000000000000;
-        case "k" : return 1000;
-    }
+  if (multiplier == "p")   return 0.000000000001f;
+  if (multiplier == "n")   return 0.000000001f;
+  if (multiplier == "u")   return 0.000001f;
+  if (multiplier == "m")   return 0.001f;
+  if (multiplier == "k")   return 1000.0f; 
+  if (multiplier == "Meg") return 1000000.0f;
+  if (multiplier == "g")   return 1000000000.0f;
+  if (multiplier == "t")   return 1000000000000.0f;
+  return 1.0f;
 }
