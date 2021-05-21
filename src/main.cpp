@@ -14,6 +14,7 @@ void printComponent(Component c)
     std::cout << n << std::endl;
   }
   if (c.value_type == CONSTANT_VAL) std::cout << c.const_value->numeric_value <<std::endl;
+  if (c.value_type == MODEL_VAL) std::cout << c.model_value->model_name <<std::endl;
   if (c.value_type == FUNCTION_VAL){
     std::cout << c.function_value->amplitude->numeric_value <<std::endl;
     std::cout << c.function_value->phase->numeric_value <<std::endl;
