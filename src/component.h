@@ -4,6 +4,7 @@
 #include "type.h" 
 #include "const_value.h" 
 #include "function_value.h" 
+#include "value_type.h" 
 
 /// The Component class describes a single component parsed from the Netlist.
 class Component
@@ -20,6 +21,8 @@ public:
 
   /// The value of the component. Can be numeric,a model number, or a function for AC sources.
   std::string value;
+
+  ValueType value_type;
 
   /// Constant Value of component. Might be empty if component has function/model value
   Const_value *const_value;
