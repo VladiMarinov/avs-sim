@@ -53,7 +53,7 @@ public:
 
   /// Parses the value of a component, by assigning everything from the current position till the end of the line into a string.
   /// returns The value of the component in a given line.
-  std::string parse_value();
+  void parse_value(Component &c);
 
   /// Parses a directive (any line beginning with a '.') . If the directive is an '.ac' directive it is assigned to the ac_dir member object.
   void parse_directive();

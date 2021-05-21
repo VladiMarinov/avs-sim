@@ -55,6 +55,11 @@ double Const_value::str_to_numeric(std::string str_value)
             }
         }
     }  
+    if (str_significand.empty())
+    {
+      std::cout << "Unexpected value found ->  " << str_value << std::endl;
+      exit(EXIT_FAILURE);
+    }
     return std::stod(str_significand) * str_to_multiplier(multiplier); 
 }
 
@@ -77,3 +82,4 @@ double Const_value::str_to_multiplier(std::string multiplier)
   if (multiplier == "t")   return 1000000000000.0;
   return 1.0;
 }
+

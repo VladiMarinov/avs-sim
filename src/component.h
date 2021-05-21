@@ -3,6 +3,7 @@
 #include <vector>
 #include "type.h" 
 #include "const_value.h" 
+#include "function_value.h" 
 
 /// The Component class describes a single component parsed from the Netlist.
 class Component
@@ -22,6 +23,11 @@ public:
 
   /// Constant Value of component. Might be empty if component has function/model value
   Const_value *const_value;
+  
+  Function_value *function_value;
+
+  // TODO
+  // Model_name model_value;
 
   /// Sets the type of the component, by looking at the first letter of the designator.
   void findType();

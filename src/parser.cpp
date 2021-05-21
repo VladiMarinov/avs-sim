@@ -1,5 +1,6 @@
 #include "parser.h"
 #include <iostream>
+#include <cctype>
 #include <fstream>
 
 Parser::Parser(std::string i)
@@ -9,7 +10,8 @@ Parser::Parser(std::string i)
 
 void Parser::skip_whitespace()
 {
-  while (current_line[curr_pos] == ' ' || current_line[curr_pos] == '\t')
+  while (current_line[curr_pos] == ' ' || current_line[curr_pos] == '\t'
+      || current_line[curr_pos] != '(' || current_line[curr_pos] != ')') 
   {
     curr_pos++;
   }
@@ -90,8 +92,7 @@ Component Parser::parse_two_terminal()
   component.findType();
   component.nodes.push_back(parse_next_token());
   component.nodes.push_back(parse_next_token());
-  component.value = parse_value();
-  component.const_value = new Const_value(component.value);
+  parse_value(component);
   return component;
 }
 
@@ -103,7 +104,7 @@ Component Parser::parse_three_terminal()
   component.nodes.push_back(parse_next_token());
   component.nodes.push_back(parse_next_token());
   component.nodes.push_back(parse_next_token());
-  component.value = parse_value();
+  parse_value(component);
   return component;
 }
 
@@ -116,32 +117,57 @@ Component Parser::parse_four_terminal()
   component.nodes.push_back(parse_next_token());
   component.nodes.push_back(parse_next_token());
   component.nodes.push_back(parse_next_token());
-  component.value = parse_value();
+  parse_value(component);
   return component;
 }
 
 std::string Parser::parse_next_token()
 {
   std::string token = "";
-  while (current_line[curr_pos] != ' ' && current_line[curr_pos] != '\t' && curr_pos < current_line.length())
+  while (current_line[curr_pos] != ' ' && current_line[curr_pos] != '\t'
+      && current_line[curr_pos] != '(' && current_line[curr_pos] != ')' 
+      && curr_pos < current_line.length())
   {
     token += current_line[curr_pos];
     curr_pos++;
   }
+
   skip_whitespace();
   return token;
 }
 
-std::string Parser::parse_value()
+void Parser::parse_value(Component &c)
 {
-  std::string val = "";
-  uint32_t len = current_line.length();
-  while (curr_pos < len) // TODO: This should be a for loop, what the hell was I thinking?!?
+  skip_whitespace();
+  if (!std::isdigit(current_line[curr_pos]))
   {
-    val += current_line[curr_pos];
-    curr_pos++;
+    if (c.type == RESISTOR || c.type == INDUCTOR || c.type == CAPACITOR || c.type == VCCS)
+    {
+      std::cout << "ERROR at line: \n";
+      std::cout << current_line << std::endl;
+      std::cout << "Component of this type must have a constant numeric value - function/model is not possible...\n";
+      exit(EXIT_FAILURE);
+    }
+    if (c.type == VOLTAGE_SOURCE || c.type == CURRENT_SOURCE)
+    {
+      std::string type = parse_next_token();
+      std::string amplitude = parse_next_token();
+      std::string phase = parse_next_token();
+      c.function_value = new Function_value(type, amplitude, phase);
+    }
+  } 
+  else
+  {
+    if (c.type == DIODE || c.type == MOSFET || c.type == BJT)
+    {
+      std::cout << "ERROR at line: \n";
+      std::cout << current_line << std::endl;
+      std::cout << "Component of this type must have a model value - function/constant is not possible...\n";
+      exit(EXIT_FAILURE);
+    }
+    c.const_value = new Const_value(parse_next_token());
+
   }
-  return val;
 }
 
 void Parser::parse_directive()
