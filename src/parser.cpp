@@ -53,9 +53,7 @@ void Parser::parse_line()
 
     if (current_line[curr_pos] != '*' && current_line[curr_pos] != '.')
     {
-      std::cout << "DEBUG starting pushback\n";
       components.push_back(parse_component()); // TODO: check if emplace_back is better here?
-      std::cout << "DEBUG finished pushback\n";
     }
     if (current_line[curr_pos] == '.')
     {
@@ -152,13 +150,16 @@ void Parser::parse_value(Component &c)
     }
     if (c.type == VOLTAGE_SOURCE || c.type == CURRENT_SOURCE)
     {
-      std::cout << "DEBUG: trying to alloc func value" << std::endl;
       std::string type = parse_next_token();
       std::string amplitude = parse_next_token();
       std::string phase = parse_next_token();
       c.function_value = new Function_value(type, amplitude, phase);
       c.value_type = FUNCTION_VAL;
-      std::cout << "DEBUG: succesfully alloc'd func value" << std::endl;
+    }
+    if (c.type == DIODE || c.type == MOSFET || c.type == BJT)
+    {
+      c.model_value = new Model_value(parse_next_token());
+      c.value_type = MODEL_VAL;
     }
   } 
   else
@@ -171,9 +172,7 @@ void Parser::parse_value(Component &c)
       exit(EXIT_FAILURE);
     }
     std::string nt = parse_next_token();
-    std::cout << "DEBUG: trying to create const_value with token: " << nt << std::endl;
     c.const_value = new Const_value(nt);
-    std::cout << "DEBUG: new component alloc'd" << std::endl;
     c.value_type = CONSTANT_VAL;
 
   }

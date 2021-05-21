@@ -4,6 +4,7 @@
 #include "type.h" 
 #include "const_value.h" 
 #include "function_value.h" 
+#include "model_value.h" 
 #include "value_type.h" 
 
 /// The Component class describes a single component parsed from the Netlist.
@@ -19,9 +20,6 @@ public:
   /// The IDs (e.g. N001, 0, N120) of the nodes that the component is connected to. The number of nodes, depenend on how many terminals the component has.
   std::vector<std::string> nodes;
 
-  /// The value of the component. Can be numeric,a model number, or a function for AC sources.
-  std::string value;
-
   ValueType value_type;
 
   /// Constant Value of component. Might be empty if component has function/model value
@@ -29,8 +27,7 @@ public:
   
   Function_value *function_value;
 
-  // TODO
-  // Model_name model_value;
+  Model_value *model_value;
 
   /// Sets the type of the component, by looking at the first letter of the designator.
   void findType();

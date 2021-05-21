@@ -83,7 +83,7 @@ std::vector<Component> Circuit::get_DC_Equivalent_Components()
       equiv.type  = VOLTAGE_SOURCE;
       equiv.designator = c.designator;
       equiv.nodes = c.nodes;
-      equiv.value = "0";
+      equiv.const_value = new Const_value("0");
 
       dc_equivalent_components.push_back(equiv);
     }
@@ -106,7 +106,7 @@ double Circuit::total_conductance_into_node(Node node)
     if(component.type == RESISTOR)
     {
       // TODO: make getComponnentValue function that reads value modifiers as well
-      total_conductance += 1/stof(component.value);
+      total_conductance += 1.0/component.const_value->numeric_value;
     }
   }
 
@@ -123,7 +123,7 @@ double Circuit::total_conductance_between_nodes(Node node1, Node node2)
       if(component.type == RESISTOR)
       {
         // TODO: make getComponnentValue function that reads value modifiers as well
-        total_conductance += 1/stof(component.value);
+        total_conductance += 1.0/component.const_value->numeric_value;
       }
     }
   }
@@ -151,12 +151,12 @@ double Circuit::total_current_into_node(Node node)
       if(component.nodes[0] == node.name)
       {
         //current going out
-        total_current -= std::stof(component.value);
+        total_current -= component.const_value->numeric_value;
       }
       else
       {
         //current going in
-        total_current += std::stof(component.value);
+        total_current += component.const_value->numeric_value;
       }
     }
   }

@@ -105,7 +105,7 @@ void DC_Simulator::generate_e_vector()
 {
   for (uint32_t i = 0; i < circuit.num_voltage_sources ; i++)
   {
-    (*e_vector)(i) = stof(circuit.voltage_sources[i].value);
+    (*e_vector)(i) = circuit.voltage_sources[i].const_value->numeric_value;
   }
 }
 
