@@ -105,8 +105,11 @@ double Circuit::total_conductance_into_node(Node node)
   {
     if(component.type == RESISTOR)
     {
-      // TODO: make getComponnentValue function that reads value modifiers as well
       total_conductance += 1.0/component.const_value->numeric_value;
+    }
+    if(component.type == VCCS)
+    {
+      total_conductance += conductance_between_nodes_from_VCCS(component, node, node);
     }
   }
 
@@ -122,13 +125,27 @@ double Circuit::total_conductance_between_nodes(Node node1, Node node2)
     {
       if(component.type == RESISTOR)
       {
-        // TODO: make getComponnentValue function that reads value modifiers as well
         total_conductance += 1.0/component.const_value->numeric_value;
+      }
+      if(component.type == VCCS)
+      {
+        total_conductance += -conductance_between_nodes_from_VCCS(component, node1, node2);
       }
     }
   }
 
   return total_conductance;
+}
+
+double Circuit::conductance_between_nodes_from_VCCS(Component vccs, Node node1, Node node2)
+{
+  // VCCS node order: 0 N+ | 1 N-| 2 NC+ | 3 NC- |
+  if (node1.name == vccs.nodes[0] && node2.name == vccs.nodes[2]) return vccs.const_value->numeric_value;
+  if (node1.name == vccs.nodes[1] && node2.name == vccs.nodes[3]) return vccs.const_value->numeric_value;
+  if (node1.name == vccs.nodes[0] && node2.name == vccs.nodes[3]) return -vccs.const_value->numeric_value;
+  if (node1.name == vccs.nodes[1] && node2.name == vccs.nodes[2]) return -vccs.const_value->numeric_value;
+
+  return 0.0;
 }
 
 bool Circuit::is_component_connected_to(Component component, Node node)

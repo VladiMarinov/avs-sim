@@ -31,7 +31,7 @@ void DC_Simulator::generate_conductance_matrix()
 {
   for(uint32_t col = 0; col < circuit.nodes.size(); col++)
   {
-    for(uint32_t row = 0; row <= col; row++ )
+    for(uint32_t row = 0; row < circuit.nodes.size(); row++ )
     {
       std::cout << "Row/Col: " << row << " " << col <<std::endl;
       std::cout << "Row/Col node: " << circuit.nodes[row].name << " " << circuit.nodes[col].name <<std::endl;
@@ -43,7 +43,6 @@ void DC_Simulator::generate_conductance_matrix()
       else
       {
         (*conductance_matrix)(row,col) = -circuit.total_conductance_between_nodes(circuit.nodes[row],circuit.nodes[col]);
-        (*conductance_matrix)(col,row) = -circuit.total_conductance_between_nodes(circuit.nodes[row],circuit.nodes[col]);
       }
     }
   }

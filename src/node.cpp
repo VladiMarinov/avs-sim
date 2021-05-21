@@ -22,6 +22,11 @@ int Node::toNumber(std::string name)
 
 void Node::addComponent(Component c)
 {
-  components.push_back(c); // TODO: Check if emplace_back is better here...
+  bool alreadyExists = false;
+  for (Component check_c : components)
+  {
+    if (check_c.designator == c.designator) alreadyExists = true;
+  }
+  if (!alreadyExists) components.push_back(c); // TODO: Check if emplace_back is better here...
 }
 
