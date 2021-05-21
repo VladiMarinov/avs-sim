@@ -55,7 +55,7 @@ double Const_value::str_to_numeric(std::string str_value)
             }
         }
     }  
-    return std::stof(str_significand) * str_to_multiplier(multiplier); 
+    return std::stod(str_significand) * str_to_multiplier(multiplier); 
 }
 
 bool Const_value::is_single_character_multipler(char c)
