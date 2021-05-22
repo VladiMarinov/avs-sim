@@ -20,13 +20,19 @@ public:
   /// The IDs (e.g. N001, 0, N120) of the nodes that the component is connected to. The number of nodes, depenend on how many terminals the component has.
   std::vector<std::string> nodes;
 
+  /// The type of value of the given component - might be one of either CONSTANT_VAL, FUNCTION_VAL, or MODEL_VAL
   ValueType value_type;
 
-  /// Constant Value of component. Might be empty if component has function/model value
+  /// Constant Value of component. 
+  /// @note Might be null/random if the value type of this component is Function or Model.
   Const_value *const_value;
   
+  /// Function value of component.
+  /// @note Might be null/random if the value type of this component is Constant or Model.
   Function_value *function_value;
 
+  /// Model Value of component. 
+  /// @note Might be null/random if the value type of this component is Constant or Function.
   Model_value *model_value;
 
   /// Sets the type of the component, by looking at the first letter of the designator.

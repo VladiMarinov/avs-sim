@@ -27,5 +27,6 @@ public:
 
   /// Add a Component object into the vector of components connected to the node.
   /// @param c The component to add to the vector.
+  /// @warning The function checks whether a component with the given designator already exists in the vector, and does not add a second copy if one already exists.
   void addComponent(Component c);
 };

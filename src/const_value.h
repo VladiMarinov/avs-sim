@@ -3,8 +3,7 @@
 #include <string>
 #include <cctype>
 
-/// Contains a constant value literal, and its corresponding numeric value. 
-/// For example 10k -> 10,000 & 1m -> 0.001
+/// Contains a constant value literal, and its corresponding numeric value - e.g.  10k -> 10,000 
 class Const_value
 {
 public: 
