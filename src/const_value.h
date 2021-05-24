@@ -13,6 +13,9 @@ public:
     /// The numeric value of constant -> e.g. "10k" is 10000
     double numeric_value;
     
+    /// Construct a constant value from given double.
+    Const_value(double input_value);
+
     /// Construct a constant value from the given literal. 
     Const_value(std::string input_str_value);
 

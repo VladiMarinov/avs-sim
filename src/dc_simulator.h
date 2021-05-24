@@ -1,7 +1,10 @@
+#pragma once
+
 #include "circuit.h"
 #include "Eigen/Core"
 #include "Eigen/LU"
 #include "Eigen/Dense"
+#include <vector>
 
 /// Solves for the DC Steady-state solution of a given circuit (Transients are ignored!).
 /// @note For the notational conventions used for naming the vectors and matrices, check <https://lpsa.swarthmore.edu/Systems/Electrical/mna/MNA3.html> 
@@ -23,6 +26,9 @@ public:
   Eigen::MatrixXd *A_matrix;
   Eigen::VectorXd *e_vector;
   Eigen::VectorXd *z_vector;
+
+  /// Default DC Sim constructor.
+  DC_Simulator();
 
   /// Create a DC Simulator to simulate the given circuit.
   /// @warning The circuit that is passed to the constructor **must** not contain a ground node.
@@ -54,4 +60,6 @@ public:
 
   /// Solves the circuit for the unknown vector.
   void solve();
+
+  std::vector<double> get_voltage_vector();
 };

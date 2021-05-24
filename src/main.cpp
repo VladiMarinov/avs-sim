@@ -4,6 +4,7 @@
 #include "parser.h" 
 #include "dc_simulator.h" 
 #include "circuit.h"
+#include "op_point_solver.h"
  
 void printComponent(Component c)
 {
@@ -64,12 +65,15 @@ int main(int argc, char** argv)
       printNode(node);
     }
 
-    Circuit DC_Circuit = circuit.get_DC_Equivalent_Circuit().remove_ground();
-    DC_Simulator sim(DC_Circuit);
-    // sim.generate_conductance_matrix();
-    // sim.generate_current_vector();
-    // sim.solve();
-    // 
+    //Circuit DC_Circuit = circuit.get_DC_Equivalent_Circuit().remove_ground();
+    //DC_Simulator sim(DC_Circuit);
+
+    OP_Point_Solver op_point_solver(circuit);
+    op_point_solver.create_initial_lin_circuit();
+    for (Component c : op_point_solver.lin_circuit.circuit_components)
+    {
+      printComponent(c);
+    }
 
     return 0;
 }

@@ -96,8 +96,6 @@ std::vector<Component> Circuit::get_DC_Equivalent_Components()
   return dc_equivalent_components;
 }
 
-
-
 double Circuit::total_conductance_into_node(Node node)
 {
   double total_conductance = 0.0;

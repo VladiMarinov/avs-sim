@@ -1,13 +1,16 @@
 #include "const_value.h"
 #include <iostream>
 
+Const_value::Const_value(double input_value)
+{
+    str_value = "";
+    numeric_value = input_value;
+}
+
 Const_value::Const_value(std::string input_str_value)
 {
     str_value = input_str_value;
-    if (str_value != "D")
-    {
-      numeric_value = str_to_numeric(input_str_value);
-    }
+    numeric_value = str_to_numeric(input_str_value);
 }
 
 double Const_value::str_to_numeric(std::string str_value)

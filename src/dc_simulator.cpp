@@ -1,6 +1,11 @@
 #include "dc_simulator.h"
 #include <iostream> 
 
+DC_Simulator::DC_Simulator()
+{
+
+}
+
 DC_Simulator::DC_Simulator(Circuit input_circuit)
 {
   circuit = input_circuit.remove_ground();
@@ -93,7 +98,6 @@ void DC_Simulator::generate_A_matrix()
   std::cout << *A_matrix <<std::endl;
 }
 
-
 void DC_Simulator::generate_current_vector()
 {
   for(uint32_t i = 0; i < circuit.nodes.size(); i++)
@@ -101,6 +105,7 @@ void DC_Simulator::generate_current_vector()
     (*current_vector)(i) = circuit.total_current_into_node(circuit.nodes[i]);
   }
 }
+
 void DC_Simulator::generate_e_vector()
 {
   for (uint32_t i = 0; i < circuit.num_voltage_sources ; i++)
@@ -121,4 +126,14 @@ void DC_Simulator::solve()
   std::cout<< "unknown vector:" << std::endl;
   (*unknown_vector) = (*A_matrix).lu().solve(*z_vector);
   std::cout << *unknown_vector  << std::endl;
+}
+
+std::vector<double> DC_Simulator::get_voltage_vector()
+{
+  std::vector<double> voltage_vector;
+  for (uint32_t i = 0; i < circuit.nodes.size(); i++) //TODO: solve segmentation fault
+  {
+    voltage_vector.push_back((*unknown_vector)(i));
+  }
+  return voltage_vector;
 }
