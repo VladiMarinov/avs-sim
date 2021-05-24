@@ -35,6 +35,11 @@ run:
 	@make -s 
 	@./avs-sim examples/example1.avs
 
+.PHONY: mem_check
+mem_check:
+	@make
+	@valgrind ./avs-sim examples/Complex_MNA.avs
+
 rv:
 	make clean 
 	@./avs-sim examples/example1.avs
