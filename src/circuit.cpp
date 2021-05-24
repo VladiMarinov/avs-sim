@@ -83,7 +83,7 @@ std::vector<Component> Circuit::get_DC_Equivalent_Components()
       equiv.type  = VOLTAGE_SOURCE;
       equiv.designator = c.designator;
       equiv.nodes = c.nodes;
-      equiv.const_value = new Const_value("0");
+      equiv.const_value = std::make_shared<Const_value>("0");
 
       dc_equivalent_components.push_back(equiv);
     }

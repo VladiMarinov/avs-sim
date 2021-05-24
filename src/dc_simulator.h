@@ -5,6 +5,7 @@
 #include "Eigen/LU"
 #include "Eigen/Dense"
 #include <vector>
+#include <memory>
 
 /// Solves for the DC Steady-state solution of a given circuit (Transients are ignored!).
 /// @note For the notational conventions used for naming the vectors and matrices, check <https://lpsa.swarthmore.edu/Systems/Electrical/mna/MNA3.html> 
@@ -15,17 +16,17 @@ public:
   Circuit circuit;
   
   /// In MNA this is commonly reffered to as the G matrix
-  Eigen::MatrixXd *conductance_matrix;
+  std::unique_ptr<Eigen::MatrixXd> conductance_matrix;
   /// In MNA this is commonly reffered to as the i vector
-  Eigen::VectorXd *current_vector;
+  std::unique_ptr<Eigen::VectorXd> current_vector;
   /// In MNA this is commonly reffered to as the x vector.
-  Eigen::VectorXd *unknown_vector;
-  Eigen::MatrixXd *B_matrix;
-  Eigen::MatrixXd *C_matrix;
-  Eigen::MatrixXd *D_matrix;
-  Eigen::MatrixXd *A_matrix;
-  Eigen::VectorXd *e_vector;
-  Eigen::VectorXd *z_vector;
+  std::unique_ptr<Eigen::VectorXd> unknown_vector;
+  std::unique_ptr<Eigen::MatrixXd> B_matrix;
+  std::unique_ptr<Eigen::MatrixXd> C_matrix;
+  std::unique_ptr<Eigen::MatrixXd> D_matrix;
+  std::unique_ptr<Eigen::MatrixXd> A_matrix;
+  std::unique_ptr<Eigen::VectorXd> e_vector;
+  std::unique_ptr<Eigen::VectorXd> z_vector;
 
   /// Default DC Sim constructor.
   DC_Simulator();

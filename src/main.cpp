@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <memory>
 #include <string>
 #include "parser.h" 
 #include "dc_simulator.h" 
@@ -17,8 +18,8 @@ void printComponent(Component c)
   if (c.value_type == CONSTANT_VAL) std::cout << c.const_value->numeric_value <<std::endl;
   if (c.value_type == MODEL_VAL) std::cout << c.model_value->model_name <<std::endl;
   if (c.value_type == FUNCTION_VAL){
-    std::cout << c.function_value->amplitude->numeric_value <<std::endl;
-    std::cout << c.function_value->phase->numeric_value <<std::endl;
+    std::cout << c.function_value->amplitude.numeric_value <<std::endl;
+    std::cout << c.function_value->phase.numeric_value <<std::endl;
   }
   std::cout <<"----------------------------\n";
 }
@@ -49,7 +50,7 @@ int main(int argc, char** argv)
       return EXIT_FAILURE;
     }
     
-    Parser* parser = new Parser(argv[1]);
+    std::unique_ptr<Parser> parser = std::make_unique<Parser>(argv[1]);
     parser->parse();
     for(Component c : parser->components)
     {
@@ -65,16 +66,16 @@ int main(int argc, char** argv)
       printNode(node);
     }
 
-    //Circuit DC_Circuit = circuit.get_DC_Equivalent_Circuit().remove_ground();
-    //DC_Simulator sim(DC_Circuit);
+    Circuit DC_Circuit = circuit.get_DC_Equivalent_Circuit().remove_ground();
+    DC_Simulator sim(DC_Circuit);
 
-    OP_Point_Solver op_point_solver(circuit);
-    op_point_solver.create_initial_lin_circuit();
-    op_point_solver.solve(); 
-    for (Component c : op_point_solver.lin_circuit.circuit_components)
-    {
-      printComponent(c);
-    }
+    // OP_Point_Solver op_point_solver(circuit);
+    // op_point_solver.create_initial_lin_circuit();
+    // op_point_solver.solve();
+    // for (Component c : op_point_solver.lin_circuit.circuit_components)
+    // {
+      // printComponent(c);
+    // }
 
     return 0;
 }

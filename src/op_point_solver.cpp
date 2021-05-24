@@ -37,7 +37,7 @@ std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component dio
     R_equiv.designator = "R" + diode.designator;
     R_equiv.nodes = diode.nodes;
     R_equiv.value_type = CONSTANT_VAL;
-    R_equiv.const_value = new Const_value(1/GD);
+    R_equiv.const_value = std::make_shared<Const_value>(1/GD);
     equiv.push_back(R_equiv);
 
     Component I_equiv;
@@ -45,7 +45,7 @@ std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component dio
     I_equiv.designator = "I" + diode.designator;
     I_equiv.nodes = diode.nodes;
     I_equiv.value_type = CONSTANT_VAL;
-    I_equiv.const_value = new Const_value(IEQ);
+    I_equiv.const_value = std::make_shared<Const_value>(IEQ);
     equiv.push_back(I_equiv);
 
     return equiv;

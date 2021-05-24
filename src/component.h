@@ -7,6 +7,8 @@
 #include "model_value.h" 
 #include "value_type.h" 
 
+#include<memory>
+
 /// The Component class describes a single component parsed from the Netlist.
 class Component
 {
@@ -25,15 +27,15 @@ public:
 
   /// Constant Value of component. 
   /// @note Might be null/random if the value type of this component is Function or Model.
-  Const_value *const_value;
+  std::shared_ptr<Const_value> const_value;
   
   /// Function value of component.
   /// @note Might be null/random if the value type of this component is Constant or Model.
-  Function_value *function_value;
+  std::shared_ptr<Function_value> function_value;
 
   /// Model Value of component. 
   /// @note Might be null/random if the value type of this component is Constant or Function.
-  Model_value *model_value;
+  std::shared_ptr<Model_value> model_value;
 
   /// Sets the type of the component, by looking at the first letter of the designator.
   void findType();

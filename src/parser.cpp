@@ -153,12 +153,12 @@ void Parser::parse_value(Component &c)
       std::string type = parse_next_token();
       std::string amplitude = parse_next_token();
       std::string phase = parse_next_token();
-      c.function_value = new Function_value(type, amplitude, phase);
+      c.function_value = std::make_shared<Function_value>(type, amplitude, phase);
       c.value_type = FUNCTION_VAL;
     }
     if (c.type == DIODE || c.type == MOSFET || c.type == BJT)
     {
-      c.model_value = new Model_value(parse_next_token());
+      c.model_value = std::make_shared<Model_value>(parse_next_token());
       c.value_type = MODEL_VAL;
     }
   } 
@@ -172,7 +172,7 @@ void Parser::parse_value(Component &c)
       exit(EXIT_FAILURE);
     }
     std::string nt = parse_next_token();
-    c.const_value = new Const_value(nt);
+    c.const_value = std::make_shared<Const_value>(nt);
     c.value_type = CONSTANT_VAL;
 
   }
