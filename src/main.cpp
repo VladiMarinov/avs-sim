@@ -70,6 +70,7 @@ int main(int argc, char** argv)
 
     OP_Point_Solver op_point_solver(circuit);
     op_point_solver.create_initial_lin_circuit();
+    op_point_solver.solve(); 
     for (Component c : op_point_solver.lin_circuit.circuit_components)
     {
       printComponent(c);

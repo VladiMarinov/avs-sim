@@ -54,6 +54,7 @@ std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component dio
 void OP_Point_Solver::solve()
 {
     dc_sim = new DC_Simulator(lin_circuit);
+    std::cout << "solving..." << std::endl;
     for (double voltage : dc_sim->get_voltage_vector())
     {
         std::cout << voltage << std::endl;
