@@ -11,10 +11,10 @@ public:
   std::string function_type;
 
   /// The constant value of the amplitude.
-  Const_value *amplitude;
+  Const_value amplitude;
 
   /// The constant value of the phase.
-  Const_value *phase;
+  Const_value phase;
 
   /// Create a new function value with the given type, amplitude, and phase.
   Function_value(std::string itype, std::string iamp, std::string iphase);
