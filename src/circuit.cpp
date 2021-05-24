@@ -87,7 +87,7 @@ std::vector<Component> Circuit::get_DC_Equivalent_Components()
 
       dc_equivalent_components.push_back(equiv);
     }
-    else if (c.type != CAPACITOR  )
+    else if (c.type != CAPACITOR)
     {
       dc_equivalent_components.push_back(c);
     }

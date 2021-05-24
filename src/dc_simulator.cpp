@@ -81,6 +81,7 @@ void DC_Simulator::generate_C_matrix()
 {
   *C_matrix = B_matrix->transpose();
 }
+
 void DC_Simulator::generate_D_matrix()
 {
   *D_matrix = Eigen::MatrixXd::Zero(circuit.num_voltage_sources, circuit.num_voltage_sources);
