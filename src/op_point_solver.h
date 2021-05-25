@@ -11,12 +11,8 @@ public:
     Circuit circuit;
     Circuit lin_circuit;
     std::unique_ptr<DC_Simulator> dc_sim;
-    const int MAX_ITERATIONS = 500;
-    const double ABS_VTOL = 1e-12;
-    const double IS = 1e-14;
-    // const double IS = 2.52e-9;
-    const double VT = 0.026;
-    const double initial_V_guess = 0.7;
+    const int MAX_ITERATIONS = 1000;
+    const double ABS_VTOL = 1e-6;
 
     std::vector<double> prev_voltages;
     std::vector<double> curr_voltages;
@@ -26,6 +22,7 @@ public:
     void create_initial_lin_circuit();
     void update_lin_circuit();
     std::vector<Component> linearize_diode(double VD, Component diode);
+    std::vector<Component> linearize_NPN(double Vbe, double Vbc, Component npn);
     void solve();
 
     bool hasConverged();

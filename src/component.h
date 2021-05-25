@@ -37,6 +37,14 @@ public:
   /// @note Might be null/random if the value type of this component is Constant or Function.
   std::shared_ptr<Model_value> model_value;
 
+  Component();
+
+  /// 2-terminal constructor
+  Component(ComponentType type_, std::string designator_, std::string n1_, std::string n2_, double val_);
+  
+  /// 4-terminal constructor
+  Component(ComponentType type_, std::string designator_, std::string n1_, std::string n2_, std::string n3_, std::string n4_, double val_);
+
   /// Sets the type of the component, by looking at the first letter of the designator.
   void findType();
 

@@ -1,5 +1,7 @@
 #include "op_point_solver.h"
 #include "util.h"
+#include "models.h"
+#include <cmath>
 
 #include <iomanip>
 
@@ -15,9 +17,17 @@ void OP_Point_Solver::create_initial_lin_circuit()
     {
         if(component.type == DIODE)
         {
-            std::vector<Component> equiv_components = linearize_diode(initial_V_guess, component);
+            std::vector<Component> equiv_components = linearize_diode(models::D().initial_V_guess, component);
             lin_components.push_back(equiv_components[0]);
             lin_components.push_back(equiv_components[1]);
+        }
+        if (component.type == BJT)
+        {
+            std::vector<Component> equiv_components = linearize_NPN(models::NPN().initial_Vbe_guess, models::NPN().initial_Vbc_guess, component);
+            for (Component c : equiv_components)
+            {
+              lin_components.push_back(c);
+            }
         }
         else
         {
@@ -41,6 +51,17 @@ void OP_Point_Solver::update_lin_circuit()
             lin_components.push_back(equiv_components[0]);
             lin_components.push_back(equiv_components[1]);
         }
+        if (component.type == BJT)
+        {
+            double Vbe = util::voltage_between_nodes(circuit, component.nodes[1], component.nodes[2], curr_voltages);
+            double Vbc = util::voltage_between_nodes(circuit, component.nodes[1], component.nodes[0], curr_voltages);
+            std::cout << "DEBUG: Current Vbe guess : " << Vbe << " Vbc : " << Vbc << std::endl;
+            std::vector<Component> equiv_components = linearize_NPN(Vbe, Vbc, component);
+            for (Component c : equiv_components)
+            {
+              lin_components.push_back(c);
+            }
+        }
         else
         {
             lin_components.push_back(component);
@@ -53,7 +74,13 @@ void OP_Point_Solver::update_lin_circuit()
 std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component diode)
 {
     std::vector<Component> equiv;
+
+    models::D D_;
+    double IS = D_.IS;
+    double VT = D_.VT;
+
     double ID = IS * (std::exp(VD/VT) - 1);
+
     double GD = IS * std::exp(VD/VT) / VT;
     double IEQ = ID - (VD * GD);
 
@@ -74,6 +101,54 @@ std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component dio
     equiv.push_back(I_equiv);
 
     return equiv;
+}
+
+std::vector<Component> OP_Point_Solver::linearize_NPN(double Vbe, double Vbc, Component npn)
+{
+  std::vector<Component> equiv;
+
+  models::NPN model_npn;
+
+  std::string collector = npn.nodes[0];
+  std::string base = npn.nodes[1];
+  std::string emmiter = npn.nodes[2];
+
+  double IES = model_npn.IES;
+  double ICS = model_npn.ICS;
+  double VT = model_npn.VT;
+  double AF = model_npn.AF;
+  double AR = model_npn.AR;
+
+  double gee = (IES/VT)* std::exp(Vbe/VT); 
+  double gce = AF * gee;
+  double gcc = (ICS/VT) * std::exp(Vbc/VT); 
+  double gec = AR * gcc; 
+
+  double ie = (-IES * (std::exp(Vbe/VT) - 1)) + (AR*ICS * (std::exp(Vbc/VT) - 1));
+  double ic = (-ICS * (std::exp(Vbc/VT) - 1)) + (AF*IES * (std::exp(Vbe/VT) - 1));
+
+  double IE = ie + gee*Vbe - gec*Vbc;
+  double IC = ic + gcc*Vbc - gce*Vbe;
+ 
+  // Ree
+  equiv.push_back( Component(RESISTOR, "Ree" + npn.designator, base, emmiter, 1.0/gee ) ); 
+
+  // Rcc
+  equiv.push_back( Component(RESISTOR, "Rcc" + npn.designator, base, collector, 1.0/gcc ) ); 
+
+  // VCCS base-collector
+  equiv.push_back( Component(VCCS, "VCCS_bc_" + npn.designator, collector, base, base, emmiter, gce ) ); 
+
+  // VCCS base-emmiter
+  equiv.push_back( Component(VCCS, "VCCS_be_" + npn.designator, emmiter, base, base, collector, gec ) ); 
+
+  // Current source base-collector
+  equiv.push_back( Component(CURRENT_SOURCE, "IC__" + npn.designator, collector, base, IC ) ); 
+
+  // Current source base-emmiter
+  equiv.push_back( Component(CURRENT_SOURCE, "IE__" + npn.designator, emmiter, base, IE ) ); 
+
+  return equiv;
 }
 
 bool OP_Point_Solver::hasConverged()
