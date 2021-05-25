@@ -11,7 +11,7 @@ DC_Simulator::DC_Simulator(Circuit input_circuit)
   circuit = input_circuit.remove_ground();
 
   uint32_t matrix_size = circuit.nodes.size();
-  std::cout << "Matrix size will be " << matrix_size << std::endl;
+  // std::cout << "Matrix size will be " << matrix_size << std::endl;
   conductance_matrix = std::make_unique<Eigen::MatrixXd>(matrix_size, matrix_size);
   current_vector = std::make_unique<Eigen::VectorXd>(matrix_size);
   unknown_vector = std::make_unique<Eigen::VectorXd>(circuit.num_voltage_sources + matrix_size);
@@ -38,8 +38,9 @@ void DC_Simulator::generate_conductance_matrix()
   {
     for(uint32_t row = 0; row < circuit.nodes.size(); row++ )
     {
-      std::cout << "Row/Col: " << row << " " << col <<std::endl;
-      std::cout << "Row/Col node: " << circuit.nodes[row].name << " " << circuit.nodes[col].name <<std::endl;
+      // TODO: DEBUG PRINT MIGHT BE UNNECESSARY
+      // std::cout << "Row/Col: " << row << " " << col <<std::endl;
+      // std::cout << "Row/Col node: " << circuit.nodes[row].name << " " << circuit.nodes[col].name <<std::endl;
 
       if(col == row)
       {
@@ -95,7 +96,7 @@ void DC_Simulator::generate_D_matrix()
 void DC_Simulator::generate_A_matrix()
 {
   *A_matrix << *conductance_matrix, *B_matrix, *C_matrix, *D_matrix; 
-  std::cout << *A_matrix <<std::endl;
+  // std::cout << *A_matrix <<std::endl;
 }
 
 void DC_Simulator::generate_current_vector()
@@ -117,15 +118,15 @@ void DC_Simulator::generate_e_vector()
 void DC_Simulator::generate_z_vector()
 {
   *z_vector << *current_vector, *e_vector; 
-  std::cout << *z_vector << std::endl;
+  // std::cout << *z_vector << std::endl;
 }
 
 void DC_Simulator::solve()
 {
-  std::cout << std::endl;
-  std::cout<< "unknown vector:" << std::endl;
+  // std::cout << std::endl;
+  // std::cout<< "unknown vector:" << std::endl;
   (*unknown_vector) = (*A_matrix).lu().solve(*z_vector);
-  std::cout << *unknown_vector  << std::endl;
+  // std::cout << *unknown_vector  << std::endl;
 }
 
 std::vector<double> DC_Simulator::get_voltage_vector()
