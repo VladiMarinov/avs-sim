@@ -1,0 +1,8 @@
+* Z:\home\m0rtal\uni\Lab\LTSPICE\Draft1.asc
+Q1 N002 N004 0 NPN
+V1 N001 0 10
+V2 N003 0 2.655
+R1 N004 N003 400k
+R2 N002 N001 5k
+.ac dec 1 1 1
+.end
