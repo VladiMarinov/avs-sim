@@ -2,6 +2,7 @@
 #include "dc_simulator.h"
 #include <cmath>
 #include <vector>
+#include <memory>
 
 class OP_Point_Solver
 {
@@ -9,12 +10,16 @@ public:
 
     Circuit circuit;
     Circuit lin_circuit;
-    DC_Simulator *dc_sim;
+    std::unique_ptr<DC_Simulator> dc_sim;
     const int MAX_ITERATIONS = 500;
-    const double ABS_VTOL = 1e-6;
-    const double IS = 10e-6;
-    const double VT = 0.025;
+    const double ABS_VTOL = 1e-12;
+    const double IS = 1e-14;
+    // const double IS = 2.52e-9;
+    const double VT = 0.026;
     const double initial_V_guess = 0.7;
+
+    std::vector<double> prev_voltages;
+    std::vector<double> curr_voltages;
 
     OP_Point_Solver(Circuit input_circuit);
 
@@ -22,4 +27,6 @@ public:
     void update_lin_circuit();
     std::vector<Component> linearize_diode(double VD, Component diode);
     void solve();
+
+    bool hasConverged();
 };

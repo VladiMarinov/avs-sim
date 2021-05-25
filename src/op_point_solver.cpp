@@ -1,4 +1,7 @@
 #include "op_point_solver.h"
+#include "util.h"
+
+#include <iomanip>
 
 OP_Point_Solver::OP_Point_Solver(Circuit input_circuit)
 {
@@ -13,6 +16,28 @@ void OP_Point_Solver::create_initial_lin_circuit()
         if(component.type == DIODE)
         {
             std::vector<Component> equiv_components = linearize_diode(initial_V_guess, component);
+            lin_components.push_back(equiv_components[0]);
+            lin_components.push_back(equiv_components[1]);
+        }
+        else
+        {
+            lin_components.push_back(component);
+        }
+    }
+
+    lin_circuit = Circuit(lin_components);
+}
+
+
+void OP_Point_Solver::update_lin_circuit()
+{
+    std::vector<Component> lin_components;
+    for(Component component : circuit.circuit_components)
+    {
+        if(component.type == DIODE)
+        {
+            double diode_voltage = util::voltage_across_2T_component(circuit, component, curr_voltages);
+            std::vector<Component> equiv_components = linearize_diode(diode_voltage, component);
             lin_components.push_back(equiv_components[0]);
             lin_components.push_back(equiv_components[1]);
         }
@@ -51,16 +76,44 @@ std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component dio
     return equiv;
 }
 
-void OP_Point_Solver::solve()
+bool OP_Point_Solver::hasConverged()
 {
-    dc_sim = new DC_Simulator(lin_circuit);
-    std::cout << "solving..." << std::endl;
-    for (double voltage : dc_sim->get_voltage_vector())
-    {
-        std::cout << voltage << std::endl;
-    }
-    // for (int i = 0; i < MAX_ITERATIONS; i++)
-    // {
+  for(uint32_t i = 0; i < curr_voltages.size(); i++)
+  {
+    if (std::abs(curr_voltages[i] - prev_voltages[i]) > ABS_VTOL) return false;
+  }
+  return true;
+}
 
-    // }
+void OP_Point_Solver::solve()
+{ 
+    // Initial solve 
+    dc_sim = std::make_unique<DC_Simulator>(lin_circuit);
+    curr_voltages = dc_sim->get_voltage_vector();
+    prev_voltages = std::vector<double>(curr_voltages.size(), 0); // Initialize prev_voltages to vector full of zeroes.
+   
+    int i;
+    for (i = 0; i < MAX_ITERATIONS && !hasConverged(); i++)
+    {
+      // std::cout << "NEWTON RAPHSON ITER: " << i << std::endl;
+      update_lin_circuit();
+      dc_sim = std::make_unique<DC_Simulator>(lin_circuit);
+      prev_voltages = curr_voltages;
+      curr_voltages = dc_sim->get_voltage_vector();
+    }
+  
+    if (hasConverged())
+    {
+      std::cout << "OP POINT SOLVER CONVERGED IN " << i << " ITERATIONS WITH THE FOLLOWING VOLTAGES: " << std::endl;
+      for (double voltage : curr_voltages)
+      {
+        std::cout << std::setprecision(17) <<  voltage << std::endl;
+      }
+    }
+    else
+    {
+      std::cout << " OP POINT SOLVER DID NOT CONVERGE, CHANGE CIRCUIT OR SETTING AND TRY AGAIN..." << std::endl;
+      exit(EXIT_FAILURE);
+    }
+    
 }
