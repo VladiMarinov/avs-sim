@@ -1,3 +1,4 @@
+#pragma once
 #include "circuit.h"
 #include "dc_simulator.h"
 #include <cmath>
@@ -11,8 +12,8 @@ public:
     Circuit circuit;
     Circuit lin_circuit;
     std::unique_ptr<DC_Simulator> dc_sim;
-    const int MAX_ITERATIONS = 1000;
-    const double ABS_VTOL = 1e-6;
+    const int MAX_ITERATIONS = 500;
+    const double ABS_VTOL = 1e-9;
 
     std::vector<double> prev_voltages;
     std::vector<double> curr_voltages;

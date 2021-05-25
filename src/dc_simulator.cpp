@@ -124,15 +124,15 @@ void DC_Simulator::generate_z_vector()
 void DC_Simulator::solve()
 {
   // std::cout << std::endl;
-  // std::cout<< "unknown vector:" << std::endl;
+   // std::cout<< "unknown vector:" << std::endl;
   (*unknown_vector) = (*A_matrix).lu().solve(*z_vector);
-  // std::cout << *unknown_vector  << std::endl;
+   // std::cout << *unknown_vector  << std::endl;
 }
 
 std::vector<double> DC_Simulator::get_voltage_vector()
 {
   std::vector<double> voltage_vector;
-  for (uint32_t i = 0; i < circuit.nodes.size(); i++) //TODO: solve segmentation fault
+  for (uint32_t i = 0; i < circuit.nodes.size(); i++) 
   {
     voltage_vector.push_back((*unknown_vector)(i));
   }

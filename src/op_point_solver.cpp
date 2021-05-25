@@ -36,6 +36,10 @@ void OP_Point_Solver::create_initial_lin_circuit()
     }
 
     lin_circuit = Circuit(lin_components);
+    // for (Component c : lin_circuit.circuit_components)
+    // {
+      // util::printComponent(c);
+    // }
 }
 
 
@@ -55,7 +59,6 @@ void OP_Point_Solver::update_lin_circuit()
         {
             double Vbe = util::voltage_between_nodes(circuit, component.nodes[1], component.nodes[2], curr_voltages);
             double Vbc = util::voltage_between_nodes(circuit, component.nodes[1], component.nodes[0], curr_voltages);
-            std::cout << "DEBUG: Current Vbe guess : " << Vbe << " Vbc : " << Vbc << std::endl;
             std::vector<Component> equiv_components = linearize_NPN(Vbe, Vbc, component);
             for (Component c : equiv_components)
             {
@@ -69,6 +72,10 @@ void OP_Point_Solver::update_lin_circuit()
     }
 
     lin_circuit = Circuit(lin_components);
+    // for (Component c : lin_circuit.circuit_components)
+    // {
+      // util::printComponent(c);
+    // }
 }
 
 std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component diode)
@@ -129,19 +136,21 @@ std::vector<Component> OP_Point_Solver::linearize_NPN(double Vbe, double Vbc, Co
 
   double IE = ie + gee*Vbe - gec*Vbc;
   double IC = ic + gcc*Vbc - gce*Vbe;
- 
-  // Ree
-  equiv.push_back( Component(RESISTOR, "Ree" + npn.designator, base, emmiter, 1.0/gee ) ); 
 
-  // Rcc
-  equiv.push_back( Component(RESISTOR, "Rcc" + npn.designator, base, collector, 1.0/gcc ) ); 
+  // WARNING: the order of the following push_backs is important - DO NOT REORDER
 
   // VCCS base-collector
   equiv.push_back( Component(VCCS, "VCCS_bc_" + npn.designator, collector, base, base, emmiter, gce ) ); 
 
+  // Ree
+  equiv.push_back( Component(RESISTOR, "Ree" + npn.designator, base, emmiter, 1.0/gee ) ); 
+  
   // VCCS base-emmiter
-  equiv.push_back( Component(VCCS, "VCCS_be_" + npn.designator, emmiter, base, base, collector, gec ) ); 
+  equiv.push_back( Component(VCCS, "VCCS_be_" + npn.designator, emmiter, base, base, collector, gec ) );
 
+  // Rcc
+  equiv.push_back( Component(RESISTOR, "Rcc" + npn.designator, base, collector, 1.0/gcc ) ); 
+  
   // Current source base-collector
   equiv.push_back( Component(CURRENT_SOURCE, "IC__" + npn.designator, collector, base, IC ) ); 
 
