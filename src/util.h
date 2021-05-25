@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "circuit.h"
+#include "ac_directive.h"
 
 namespace util
 {
@@ -33,5 +34,40 @@ namespace util
     std::string node_ID_2 = component.nodes[1];
 
     return util::voltage_between_nodes(circuit, node_ID_1, node_ID_2, voltage_vector);
+  }
+
+  void printComponent(Component c)
+  {
+    std::cout <<"----------------------------\n";
+    std::cout << c.designator << std::endl;
+    for(std::string n : c.nodes)
+    {
+      std::cout << n << std::endl;
+    }
+    if (c.value_type == CONSTANT_VAL) std::cout << c.const_value->numeric_value <<std::endl;
+    if (c.value_type == MODEL_VAL) std::cout << c.model_value->model_name <<std::endl;
+    if (c.value_type == FUNCTION_VAL){
+      std::cout << c.function_value->amplitude.numeric_value <<std::endl;
+      std::cout << c.function_value->phase.numeric_value <<std::endl;
+    }
+    std::cout <<"----------------------------\n";
+  }
+  void printACdir(AC_Directive dir)
+  {
+    std::cout <<"----------------------------\n";
+    std::cout << dir.sweep_type << std::endl;
+    std::cout << dir.points_per_dec << std::endl;
+    std::cout << dir.start_freq << std::endl;
+    std::cout << dir.stop_freq << std::endl;
+    std::cout <<"----------------------------\n";
+  }
+
+  void printNode(Node node){
+    std::cout << node.name;
+    for(Component c : node.components)
+    {
+      std::cout << " " << c.designator;
+    }
+    std::cout << std::endl;
   }
 }
