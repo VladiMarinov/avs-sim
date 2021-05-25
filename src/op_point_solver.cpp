@@ -141,6 +141,9 @@ std::vector<Component> OP_Point_Solver::linearize_NPN(double Vbe, double Vbc, Co
   // This is due to the fact that the node order in the components must come up first as CBE.
   // otherwise u risk messing up the order with respect to the parsed circuit.
 
+  // TODO: My intuition screams that adding the base-collector VCCS first should always fix any possible issues, but CHECK THIS AND MAKE SURE.
+  // This is a massive bug opportunity...
+
   // VCCS base-collector
   equiv.push_back( Component(VCCS, "VCCS_bc_" + npn.designator, collector, base, base, emmiter, gce ) ); 
 
