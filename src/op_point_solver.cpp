@@ -138,6 +138,8 @@ std::vector<Component> OP_Point_Solver::linearize_NPN(double Vbe, double Vbc, Co
   double IC = ic + gcc*Vbc - gce*Vbe;
 
   // WARNING: the order of the following push_backs is important - DO NOT REORDER
+  // This is due to the fact that the node order in the components must come up first as CBE.
+  // otherwise u risk messing up the order with respect to the parsed circuit.
 
   // VCCS base-collector
   equiv.push_back( Component(VCCS, "VCCS_bc_" + npn.designator, collector, base, base, emmiter, gce ) ); 
