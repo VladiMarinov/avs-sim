@@ -1,5 +1,7 @@
 # avs-sim
 
+## General References
+
 For LTSpice Netlist format and conventions refer to this article:
  - http://ltwiki.org/index.php?title=A_General_Structure_and_Conventions
 
@@ -10,7 +12,7 @@ NI Multisim articles on linearization and convergence:
  - https://zone.ni.com/reference/en-XX/help/375482B-01/multisim/convergence/#wp264291
  - https://zone.ni.com/reference/en-XX/help/375482B-01/multisim/linearization/#wp1276473
 
-# NI Multisim Semiconductor Large Signal Models and Equations
+## NI Multisim Semiconductor Large Signal Models and Equations
  - Diode
    - https://zone.ni.com/reference/en-XX/help/375482B-01/multisim/diodedevice/#wp461796
    - https://zone.ni.com/reference/en-XX/help/375482B-01/multisim/diodeequations/#wp750112
