@@ -12,15 +12,15 @@ DC_Simulator::DC_Simulator(Circuit input_circuit)
 
   uint32_t matrix_size = circuit.nodes.size();
   // std::cout << "Matrix size will be " << matrix_size << std::endl;
-  conductance_matrix = std::make_unique<Eigen::MatrixXd>(matrix_size, matrix_size);
-  current_vector = std::make_unique<Eigen::VectorXd>(matrix_size);
-  unknown_vector = std::make_unique<Eigen::VectorXd>(circuit.num_voltage_sources + matrix_size);
-  B_matrix = std::make_unique<Eigen::MatrixXd>(matrix_size, circuit.num_voltage_sources);
-  C_matrix = std::make_unique<Eigen::MatrixXd>(circuit.num_voltage_sources, matrix_size);
-  D_matrix = std::make_unique<Eigen::MatrixXd>(circuit.num_voltage_sources, circuit.num_voltage_sources);
-  A_matrix = std::make_unique<Eigen::MatrixXd>(circuit.num_voltage_sources + matrix_size, circuit.num_voltage_sources + matrix_size);
-  e_vector = std::make_unique<Eigen::VectorXd>(circuit.num_voltage_sources);
-  z_vector = std::make_unique<Eigen::VectorXd>(circuit.num_voltage_sources + matrix_size);
+  conductance_matrix =  std::unique_ptr<Eigen::MatrixXd>(new Eigen::MatrixXd(matrix_size, matrix_size));
+  current_vector =      std::unique_ptr<Eigen::VectorXd>(new Eigen::VectorXd(matrix_size));
+  unknown_vector =      std::unique_ptr<Eigen::VectorXd>(new Eigen::VectorXd(circuit.num_voltage_sources + matrix_size));
+  B_matrix =            std::unique_ptr<Eigen::MatrixXd>(new Eigen::MatrixXd(matrix_size, circuit.num_voltage_sources));
+  C_matrix =            std::unique_ptr<Eigen::MatrixXd>(new Eigen::MatrixXd(circuit.num_voltage_sources, matrix_size));
+  D_matrix =            std::unique_ptr<Eigen::MatrixXd>(new Eigen::MatrixXd(circuit.num_voltage_sources, circuit.num_voltage_sources));
+  A_matrix =            std::unique_ptr<Eigen::MatrixXd>(new Eigen::MatrixXd(circuit.num_voltage_sources + matrix_size, circuit.num_voltage_sources + matrix_size));
+  e_vector =            std::unique_ptr<Eigen::VectorXd>(new Eigen::VectorXd(circuit.num_voltage_sources));
+  z_vector =            std::unique_ptr<Eigen::VectorXd>(new Eigen::VectorXd(circuit.num_voltage_sources + matrix_size));
   generate_conductance_matrix();
   generate_B_matrix();
   generate_C_matrix();
@@ -132,7 +132,7 @@ void DC_Simulator::solve()
 std::vector<double> DC_Simulator::get_voltage_vector()
 {
   std::vector<double> voltage_vector;
-  for (uint32_t i = 0; i < circuit.nodes.size(); i++) 
+  for (uint32_t i = 0; i < circuit.nodes.size(); i++) //TODO: solve segmentation fault
   {
     voltage_vector.push_back((*unknown_vector)(i));
   }

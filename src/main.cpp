@@ -15,7 +15,7 @@ int main(int argc, char** argv)
       return EXIT_FAILURE;
     }
     
-    std::unique_ptr<Parser> parser = std::make_unique<Parser>(argv[1]);
+    std::unique_ptr<Parser> parser (new Parser (argv[1]));
     parser->parse();
     // for(Component c : parser->components)
     // {

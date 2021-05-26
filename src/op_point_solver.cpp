@@ -177,7 +177,7 @@ bool OP_Point_Solver::hasConverged()
 void OP_Point_Solver::solve()
 { 
     // Initial solve 
-    dc_sim = std::make_unique<DC_Simulator>(lin_circuit);
+    dc_sim = std::unique_ptr<DC_Simulator>(new DC_Simulator(lin_circuit));
     curr_voltages = dc_sim->get_voltage_vector();
     prev_voltages = std::vector<double>(curr_voltages.size(), 0); // Initialize prev_voltages to vector full of zeroes.
    
@@ -186,7 +186,7 @@ void OP_Point_Solver::solve()
     {
       // std::cout << "NEWTON RAPHSON ITER: " << i << std::endl;
       update_lin_circuit();
-      dc_sim = std::make_unique<DC_Simulator>(lin_circuit);
+      dc_sim = std::unique_ptr<DC_Simulator>(new DC_Simulator(lin_circuit));
       prev_voltages = curr_voltages;
       curr_voltages = dc_sim->get_voltage_vector();
     }
