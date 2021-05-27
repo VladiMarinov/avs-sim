@@ -62,10 +62,10 @@ void OP_Point_Solver::create_initial_lin_circuit()
     }
 
     lin_circuit = Circuit(lin_components);
-    // for (Component c : lin_circuit.circuit_components)
-    // {
-      // util::printComponent(c);
-    // }
+    for (Component c : lin_circuit.circuit_components)
+    {
+      util::printComponent(c);
+    }
 }
 
 
@@ -127,10 +127,10 @@ void OP_Point_Solver::update_lin_circuit()
     }
 
     lin_circuit = Circuit(lin_components);
-    // for (Component c : lin_circuit.circuit_components)
-    // {
-      // util::printComponent(c);
-    // }
+    for (Component c : lin_circuit.circuit_components)
+    {
+      util::printComponent(c);
+    }
 }
 
 std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component diode)
@@ -281,9 +281,12 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   double gm = 0;
   double IEQ = 0;
 
+  std::cout << "DEBUG: Vgs: " << Vgs << " , Vds: " << Vds<< std::endl;
+
   //CUT-OFF REGION
   if (Vgs < Vt)
   {
+    std::cout << "ENTERING CUT-OFF REGION..." << std::endl;
     id = 0;
     Gds = 0;
     gm = 0;
@@ -291,6 +294,7 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   //LINEAR REGION
   if ((Vds >= 0) && (Vds <= Vgs - Vt))
   {
+    std::cout << "ENTERING LINEAR REGION..." << std::endl;
     id = KP * ( 2 * (Vgs - Vt) * Vds - Vds * Vds);
     Gds = 2 * KP * (Vgs - Vt - Vds);
     gm = 2 * KP * Vds; 
@@ -298,6 +302,7 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   //SATURATION REGION
   if ((Vgs - Vt >= 0) && (Vds >= Vgs - Vt))
   {
+    std::cout << "ENTERING SATURATION REGION..." << std::endl;
     id = KP * (Vgs - Vt) * (Vgs - Vt) * (1 + lambda * Vds);
     Gds = KP * lambda * (Vgs - Vt) * (Vgs - Vt);
     gm = 2 * KP * (Vgs - Vt) * (1 + lambda * Vds);
