@@ -23,20 +23,37 @@ void OP_Point_Solver::create_initial_lin_circuit()
         }
         if (component.type == BJT)
         {
-            std::vector<Component> equiv_components;
-            if (component.model_value->model_name == "NPN")
-            {
-              equiv_components = linearize_NPN(models::NPN().initial_Vbe_guess, models::NPN().initial_Vbc_guess, component);
-            }
-            else if (component.model_value->model_name == "PNP")
-            {
-              equiv_components = linearize_PNP(models::PNP().initial_Veb_guess, models::PNP().initial_Vcb_guess, component);
-            }
-            
-            for (Component c : equiv_components)
-            {
-              lin_components.push_back(c);
-            }
+          std::vector<Component> equiv_components;
+          if (component.model_value->model_name == "NPN")
+          {
+            equiv_components = linearize_NPN(models::NPN().initial_Vbe_guess, models::NPN().initial_Vbc_guess, component);
+          }
+          else if (component.model_value->model_name == "PNP")
+          {
+            equiv_components = linearize_PNP(models::PNP().initial_Veb_guess, models::PNP().initial_Vcb_guess, component);
+          }
+          
+          for (Component c : equiv_components)
+          {
+            lin_components.push_back(c);
+          }
+        }
+        if (component.type == MOSFET)
+        {
+          std::vector<Component> equiv_components;
+          if (component.model_value->model_name == "NMOS")
+          {
+            equiv_components = linearize_NMOS(models::NMOS().initial_Vgs_guess, models::NMOS().initial_Vds_guess, component);
+          }
+          else if (component.model_value->model_name == "PMOS")
+          {
+            //equiv_components = linearize_PMOS(models::PMOS().initial_Veb_guess, models::PMOS().initial_Vcb_guess, component);
+          }
+          
+          for (Component c : equiv_components)
+          {
+            lin_components.push_back(c);
+          }
         }
         else
         {
@@ -83,6 +100,25 @@ void OP_Point_Solver::update_lin_circuit()
             {
               lin_components.push_back(c);
             }
+        }
+        if (component.type == MOSFET)
+        {
+          double Vgs = util::voltage_between_nodes(circuit, component.nodes[1], component.nodes[2], curr_voltages);
+          double Vds = util::voltage_between_nodes(circuit, component.nodes[0], component.nodes[2], curr_voltages);
+          std::vector<Component> equiv_components;
+          if (component.model_value->model_name == "NMOS")
+          {
+            equiv_components = linearize_NMOS(Vgs, Vds, component);
+          }
+          else if (component.model_value->model_name == "PMOS")
+          {
+            //equiv_components = linearize_PMOS(models::PMOS().initial_Veb_guess, models::PMOS().initial_Vcb_guess, component);
+          }
+          
+          for (Component c : equiv_components)
+          {
+            lin_components.push_back(c);
+          }
         }
         else
         {
@@ -222,6 +258,67 @@ std::vector<Component> OP_Point_Solver::linearize_PNP(double Veb, double Vcb, Co
 
   // Current source base-emmiter
   equiv.push_back( Component(CURRENT_SOURCE, "IE__" + pnp.designator, base, emmiter, IE ) ); 
+
+  return equiv;
+}
+
+std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, Component nmos)
+{
+  std::vector<Component> equiv;
+
+  models::NMOS model_nmos;
+
+  std::string drain = nmos.nodes[0];
+  std::string gate = nmos.nodes[1];
+  std::string source = nmos.nodes[2];
+
+  double KP = model_nmos.KP;
+  double lambda = model_nmos.lambda;
+  double Vt = model_nmos.Vt;
+
+  double id = 0;
+  double Gds = 0;
+  double gm = 0;
+  double IEQ = 0;
+
+  //CUT-OFF REGION
+  if (Vgs < Vt)
+  {
+    id = 0;
+    Gds = 0;
+    gm = 0;
+  }
+  //LINEAR REGION
+  if ((Vds >= 0) && (Vds <= Vgs - Vt))
+  {
+    id = KP * ( 2 * (Vgs - Vt) * Vds - Vds * Vds);
+    Gds = 2 * KP * (Vgs - Vt - Vds);
+    gm = 2 * KP * Vds; 
+  }
+  //SATURATION REGION
+  if ((Vgs - Vt >= 0) && (Vds >= Vgs - Vt))
+  {
+    id = KP * (Vgs - Vt) * (Vgs - Vt) * (1 + lambda * Vds);
+    Gds = KP * lambda * (Vgs - Vt) * (Vgs - Vt);
+    gm = 2 * KP * (Vgs - Vt) * (1 + lambda * Vds);
+  }
+
+  IEQ = id - (Gds * Vds) - (gm * Vgs);
+
+  //CAPACITOR DRAIN-GATE
+  equiv.push_back( Component(CAPACITOR, "C_dg_" + nmos.designator, drain, gate, 1e-6) );
+
+  //CAPACITOR GATE_SOURCE
+  equiv.push_back( Component(CAPACITOR, "C_gs_" + nmos.designator, gate, source, 1e-6) );
+
+  // VCCS
+  equiv.push_back( Component(VCCS, "VCCS_" + nmos.designator, drain, source, gate, source, gm ) );
+
+  // R
+  equiv.push_back( Component(RESISTOR, "R_" + nmos.designator, drain, source, 1.0/Gds ) ); 
+  
+  // Current source 
+  equiv.push_back( Component(CURRENT_SOURCE, "IEQ__" + nmos.designator, drain, source, IEQ ) ); 
 
   return equiv;
 }

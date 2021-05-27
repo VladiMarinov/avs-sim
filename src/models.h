@@ -34,6 +34,7 @@ struct NPN
   }
 };
 
+/// BASED ON LTSPICE 2N2907
 struct PNP
 {
   const double IS = 1e-14;
@@ -55,6 +56,23 @@ struct PNP
     IES = IS / AF;
     ICS = IS / AR;
   }
+};
+
+/// BASED ON LTSPICE Si7336ADP
+struct NMOS
+{
+ const double KP = 280;
+ const double lambda = 0.01;
+ const double Vt = 2.9;
+
+ //guess saturation
+ const double initial_Vgs_guess = 3;
+ const double initial_Vds_guess = 0.5;
+};
+
+struct PMOS
+{
+
 };
 
 }

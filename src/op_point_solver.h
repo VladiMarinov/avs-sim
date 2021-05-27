@@ -25,6 +25,8 @@ public:
     std::vector<Component> linearize_diode(double VD, Component diode);
     std::vector<Component> linearize_NPN(double Vbe, double Vbc, Component npn);
     std::vector<Component> linearize_PNP(double Veb, double Vcb, Component pnp);
+    std::vector<Component> linearize_NMOS(double Vgs, double Vds, Component nmos);
+    std::vector<Component> linearize_PMOS(double Vgs, double Vds, Component pmos);
     void solve();
 
     bool hasConverged();
