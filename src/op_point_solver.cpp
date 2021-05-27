@@ -110,21 +110,8 @@ std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component dio
     double GD = IS * std::exp(VD/VT) / VT;
     double IEQ = ID - (VD * GD);
 
-    Component R_equiv;
-    R_equiv.type = RESISTOR;
-    R_equiv.designator = "R" + diode.designator;
-    R_equiv.nodes = diode.nodes;
-    R_equiv.value_type = CONSTANT_VAL;
-    R_equiv.const_value = std::make_shared<Const_value>(1/GD);
-    equiv.push_back(R_equiv);
-
-    Component I_equiv;
-    I_equiv.type = CURRENT_SOURCE;
-    I_equiv.designator = "I" + diode.designator;
-    I_equiv.nodes = diode.nodes;
-    I_equiv.value_type = CONSTANT_VAL;
-    I_equiv.const_value = std::make_shared<Const_value>(IEQ);
-    equiv.push_back(I_equiv);
+    equiv.push_back( Component(RESISTOR, "R" + diode.designator, diode.nodes[0], diode.nodes[1], 1/GD));
+    equiv.push_back( Component(CURRENT_SOURCE, "I" + diode.designator, diode.nodes[0], diode.nodes[1], IEQ));
 
     return equiv;
 }
