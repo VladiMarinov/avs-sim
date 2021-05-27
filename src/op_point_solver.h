@@ -24,6 +24,7 @@ public:
     void update_lin_circuit();
     std::vector<Component> linearize_diode(double VD, Component diode);
     std::vector<Component> linearize_NPN(double Vbe, double Vbc, Component npn);
+    std::vector<Component> linearize_PNP(double Veb, double Vcb, Component pnp);
     void solve();
 
     bool hasConverged();

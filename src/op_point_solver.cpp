@@ -23,7 +23,16 @@ void OP_Point_Solver::create_initial_lin_circuit()
         }
         if (component.type == BJT)
         {
-            std::vector<Component> equiv_components = linearize_NPN(models::NPN().initial_Vbe_guess, models::NPN().initial_Vbc_guess, component);
+            std::vector<Component> equiv_components;
+            if (component.model_value->model_name == "NPN")
+            {
+              equiv_components = linearize_NPN(models::NPN().initial_Vbe_guess, models::NPN().initial_Vbc_guess, component);
+            }
+            else if (component.model_value->model_name == "PNP")
+            {
+              equiv_components = linearize_PNP(models::PNP().initial_Veb_guess, models::PNP().initial_Vcb_guess, component);
+            }
+            
             for (Component c : equiv_components)
             {
               lin_components.push_back(c);
@@ -59,7 +68,17 @@ void OP_Point_Solver::update_lin_circuit()
         {
             double Vbe = util::voltage_between_nodes(circuit, component.nodes[1], component.nodes[2], curr_voltages);
             double Vbc = util::voltage_between_nodes(circuit, component.nodes[1], component.nodes[0], curr_voltages);
-            std::vector<Component> equiv_components = linearize_NPN(Vbe, Vbc, component);
+            std::vector<Component> equiv_components;
+            
+            if (component.model_value->model_name == "NPN")
+            {
+              equiv_components = linearize_NPN(Vbe, Vbc, component);
+            }
+            else if (component.model_value->model_name == "PNP")
+            {
+              equiv_components = linearize_PNP(-Vbe, -Vbc, component);
+            }
+
             for (Component c : equiv_components)
             {
               lin_components.push_back(c);
@@ -126,7 +145,7 @@ std::vector<Component> OP_Point_Solver::linearize_NPN(double Vbe, double Vbc, Co
   double AF = model_npn.AF;
   double AR = model_npn.AR;
 
-  double gee = (IES/VT)* std::exp(Vbe/VT); 
+  double gee = (IES/VT) * std::exp(Vbe/VT); 
   double gce = AF * gee;
   double gcc = (ICS/VT) * std::exp(Vbc/VT); 
   double gec = AR * gcc; 
@@ -161,6 +180,61 @@ std::vector<Component> OP_Point_Solver::linearize_NPN(double Vbe, double Vbc, Co
 
   // Current source base-emmiter
   equiv.push_back( Component(CURRENT_SOURCE, "IE__" + npn.designator, emmiter, base, IE ) ); 
+
+  return equiv;
+}
+
+std::vector<Component> OP_Point_Solver::linearize_PNP(double Veb, double Vcb, Component pnp)
+{
+  std::vector<Component> equiv;
+
+  models::NPN model_pnp;
+
+  std::string collector = pnp.nodes[0];
+  std::string base = pnp.nodes[1];
+  std::string emmiter = pnp.nodes[2];
+
+  double IES = model_pnp.IES;
+  double ICS = model_pnp.ICS;
+  double VT = model_pnp.VT;
+  double AF = model_pnp.AF;
+  double AR = model_pnp.AR;
+
+  double gee = (IES/VT) * std::exp(Veb/VT); 
+  double gce = AF * gee;
+  double gcc = (ICS/VT) * std::exp(Vcb/VT); 
+  double gec = AR * gcc; 
+
+  double ie = (IES * (std::exp(Veb/VT) - 1)) - (AR*ICS * (std::exp(Vcb/VT) - 1));
+  double ic = (ICS * (std::exp(Vcb/VT) - 1)) - (AF*IES * (std::exp(Veb/VT) - 1));
+
+  double IE = -ie + gee*Veb - gec*Vcb;
+  double IC = -ic + gcc*Vcb - gce*Veb;
+
+  // WARNING: the order of the following push_backs is important - DO NOT REORDER
+  // This is due to the fact that the node order in the components must come up first as CBE.
+  // otherwise u risk messing up the order with respect to the parsed circuit.
+
+  // TODO: My intuition screams that adding the base-collector VCCS first should always fix any possible issues, but CHECK THIS AND MAKE SURE.
+  // This is a massive bug opportunity...
+
+  // Rcc
+  equiv.push_back( Component(RESISTOR, "Rcc" + pnp.designator, collector, base, 1.0/gcc ) ); 
+
+  // VCCS base-emmiter
+  equiv.push_back( Component(VCCS, "VCCS_eb_" + pnp.designator, base, emmiter, collector, base, gec ) );
+
+  // VCCS base-collector
+  equiv.push_back( Component(VCCS, "VCCS_cb_" + pnp.designator, base, collector, emmiter, base, gce ) ); 
+
+  // Ree
+  equiv.push_back( Component(RESISTOR, "Ree" + pnp.designator, base, emmiter, 1.0/gee ) ); 
+  
+  // Current source base-collector
+  equiv.push_back( Component(CURRENT_SOURCE, "IC__" + pnp.designator, base, collector, IC ) ); 
+
+  // Current source base-emmiter
+  equiv.push_back( Component(CURRENT_SOURCE, "IE__" + pnp.designator, base, emmiter, IE ) ); 
 
   return equiv;
 }
