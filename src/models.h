@@ -58,16 +58,24 @@ struct PNP
   }
 };
 
-/// BASED ON LTSPICE Si7336ADP
+/// BASED ON OWN MODEL OF NMOS
 struct NMOS
 {
- const double KP = 280;
+ const double KP = 0.2;
  const double lambda = 0.01;
- const double Vt = 2.9;
+ const double Vt = 2;
+ const double W = 20;
+ const double L = 8;
 
  //guess saturation
  const double initial_Vgs_guess = 3;
  const double initial_Vds_guess = 0.5;
+
+ double beta;
+ NMOS()
+ {
+   beta = KP * (W/L); //width - length ratio 
+ }
 };
 
 struct PMOS

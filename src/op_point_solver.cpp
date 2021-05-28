@@ -62,10 +62,10 @@ void OP_Point_Solver::create_initial_lin_circuit()
     }
 
     lin_circuit = Circuit(lin_components);
-    for (Component c : lin_circuit.circuit_components)
-    {
-      util::printComponent(c);
-    }
+    // for (Component c : lin_circuit.circuit_components)
+    // {
+    //   util::printComponent(c);
+    // }
 }
 
 
@@ -127,10 +127,10 @@ void OP_Point_Solver::update_lin_circuit()
     }
 
     lin_circuit = Circuit(lin_components);
-    for (Component c : lin_circuit.circuit_components)
-    {
-      util::printComponent(c);
-    }
+    // for (Component c : lin_circuit.circuit_components)
+    // {
+    //   util::printComponent(c);
+    // }
 }
 
 std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component diode)
@@ -272,16 +272,17 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   std::string gate = nmos.nodes[1];
   std::string source = nmos.nodes[2];
 
-  double KP = model_nmos.KP;
+  //double KP = model_nmos.KP;
   double lambda = model_nmos.lambda;
   double Vt = model_nmos.Vt;
+  double beta = model_nmos.beta;
 
   double id = 0;
   double Gds = 0;
   double gm = 0;
   double IEQ = 0;
 
-  std::cout << "DEBUG: Vgs: " << Vgs << " , Vds: " << Vds<< std::endl;
+  //std::cout << "DEBUG: Vgs: " << Vgs << " , Vds: " << Vds<< std::endl;
 
   //CUT-OFF REGION
   if (Vgs < Vt)
@@ -295,18 +296,20 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   if ((Vds >= 0) && (Vds <= Vgs - Vt))
   {
     std::cout << "ENTERING LINEAR REGION..." << std::endl;
-    id = KP * ( 2 * (Vgs - Vt) * Vds - Vds * Vds);
-    Gds = 2 * KP * (Vgs - Vt - Vds);
-    gm = 2 * KP * Vds; 
+    id = beta * ( (Vgs - Vt) * Vds - 0.5 * Vds * Vds) * (1 + lambda * Vds);
+    Gds = 0.5 * beta * lambda * Vds * Vds + beta * (Vgs - Vt - Vds) * (1 + lambda * Vds);
+    gm = beta * Vds * (1 + lambda * Vds); 
   }
   //SATURATION REGION
   if ((Vgs - Vt >= 0) && (Vds >= Vgs - Vt))
   {
     std::cout << "ENTERING SATURATION REGION..." << std::endl;
-    id = KP * (Vgs - Vt) * (Vgs - Vt) * (1 + lambda * Vds);
-    Gds = KP * lambda * (Vgs - Vt) * (Vgs - Vt);
-    gm = 2 * KP * (Vgs - Vt) * (1 + lambda * Vds);
+    id = 0.5 * beta * (Vgs - Vt) * (Vgs - Vt) * (1 + lambda * Vds);
+    Gds = 0.5 * beta * lambda * (Vgs - Vt) * (Vgs - Vt);
+    gm = beta * (Vgs - Vt) * (1 + lambda * Vds);
   }
+
+  //gm = sqrt(2*KP*W/L * id) => K = gm * gm / (2*id)
 
   IEQ = id - (Gds * Vds) - (gm * Vgs);
 
