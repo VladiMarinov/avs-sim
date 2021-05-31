@@ -6,6 +6,7 @@
 #include "dc_simulator.h" 
 #include "circuit.h"
 #include "op_point_solver.h"
+#include "models.h"
 
 int main(int argc, char** argv)
 {

@@ -125,12 +125,11 @@ void OP_Point_Solver::update_lin_circuit()
             lin_components.push_back(component);
         }
     }
-
     lin_circuit = Circuit(lin_components);
-    // for (Component c : lin_circuit.circuit_components)
-    // {
-    //   util::printComponent(c);
-    // }
+    for (Component c : lin_circuit.circuit_components)
+    {
+      util::printComponent(c);
+    }
 }
 
 std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component diode)
@@ -272,6 +271,7 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   std::string gate = nmos.nodes[1];
   std::string source = nmos.nodes[2];
 
+
   //double KP = model_nmos.KP;
   double lambda = model_nmos.lambda;
   double Vt = model_nmos.Vt;
@@ -281,19 +281,22 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   double Gds = 0;
   double gm = 0;
   double IEQ = 0;
+  bool isCutoff = false;
 
-  //std::cout << "DEBUG: Vgs: " << Vgs << " , Vds: " << Vds<< std::endl;
+  std::cout << "DEBUG: Vgs: " << Vgs << " , Vds: " << Vds<< " , Vt: " << Vt << std::endl;
+
 
   //CUT-OFF REGION
   if (Vgs < Vt)
   {
+    isCutoff = true; 
     std::cout << "ENTERING CUT-OFF REGION..." << std::endl;
     id = 0;
     Gds = 0;
     gm = 0;
   }
   //LINEAR REGION
-  if ((Vds >= 0) && (Vds <= Vgs - Vt))
+  if ((Vgs >= Vt) && (Vgs - Vt > Vds)) // think about Vds >=0 
   {
     std::cout << "ENTERING LINEAR REGION..." << std::endl;
     id = beta * ( (Vgs - Vt) * Vds - 0.5 * Vds * Vds) * (1 + lambda * Vds);
@@ -301,7 +304,7 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
     gm = beta * Vds * (1 + lambda * Vds); 
   }
   //SATURATION REGION
-  if ((Vgs - Vt >= 0) && (Vds >= Vgs - Vt))
+  if ((Vgs  >= Vt) && (Vgs - Vt <= Vds))
   {
     std::cout << "ENTERING SATURATION REGION..." << std::endl;
     id = 0.5 * beta * (Vgs - Vt) * (Vgs - Vt) * (1 + lambda * Vds);
@@ -319,15 +322,21 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   //CAPACITOR GATE_SOURCE
   equiv.push_back( Component(CAPACITOR, "C_gs_" + nmos.designator, gate, source, 1e-6) );
 
-  // VCCS
-  equiv.push_back( Component(VCCS, "VCCS_" + nmos.designator, drain, source, gate, source, gm ) );
+  if (!isCutoff){
+    // VCCS
+    equiv.push_back( Component(VCCS, "VCCS_" + nmos.designator, drain, source, gate, source, gm ) );
 
   // R
-  equiv.push_back( Component(RESISTOR, "R_" + nmos.designator, drain, source, 1.0/Gds ) ); 
+    if (Gds != 0.0) // If in cutoff : create infinite resistance by not adding conductance; otherwise : add resistor
+    {
+      std::cout << "Gds : "<< Gds << std::endl;
+      equiv.push_back( Component(RESISTOR, "R_" + nmos.designator, drain, source, 1.0/Gds ) );
+    }
+      
+    // Current source 
+    equiv.push_back( Component(CURRENT_SOURCE, "IEQ__" + nmos.designator, drain, source, IEQ ) ); 
+  }
   
-  // Current source 
-  equiv.push_back( Component(CURRENT_SOURCE, "IEQ__" + nmos.designator, drain, source, IEQ ) ); 
-
   return equiv;
 }
 
