@@ -126,10 +126,10 @@ void OP_Point_Solver::update_lin_circuit()
         }
     }
     lin_circuit = Circuit(lin_components);
-    for (Component c : lin_circuit.circuit_components)
-    {
-      util::printComponent(c);
-    }
+    // for (Component c : lin_circuit.circuit_components)
+    // {
+      // util::printComponent(c);
+    // }
 }
 
 std::vector<Component> OP_Point_Solver::linearize_diode(double VD, Component diode)
@@ -283,14 +283,14 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   double IEQ = 0;
   bool isCutoff = false;
 
-  std::cout << "DEBUG: Vgs: " << Vgs << " , Vds: " << Vds<< " , Vt: " << Vt << std::endl;
+  // std::cout << "DEBUG: Vgs: " << Vgs << " , Vds: " << Vds<< " , Vt: " << Vt << std::endl;
 
 
   //CUT-OFF REGION
   if (Vgs < Vt)
   {
     isCutoff = true; 
-    std::cout << "ENTERING CUT-OFF REGION..." << std::endl;
+    // std::cout << "ENTERING CUT-OFF REGION..." << std::endl;
     id = 0;
     Gds = 0;
     gm = 0;
@@ -298,15 +298,15 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   //LINEAR REGION
   if ((Vgs >= Vt) && (Vgs - Vt > Vds)) // think about Vds >=0 
   {
-    std::cout << "ENTERING LINEAR REGION..." << std::endl;
-    id = beta * ( (Vgs - Vt) * Vds - 0.5 * Vds * Vds) * (1 + lambda * Vds);
-    Gds = 0.5 * beta * lambda * Vds * Vds + beta * (Vgs - Vt - Vds) * (1 + lambda * Vds);
-    gm = beta * Vds * (1 + lambda * Vds); 
+    // std::cout << "ENTERING LINEAR REGION..." << std::endl;
+    id = beta * ( (Vgs - Vt) * Vds - 0.5 * Vds * Vds);
+    Gds = beta * (Vgs - Vt - Vds);
+    gm = beta * Vds; 
   }
   //SATURATION REGION
   if ((Vgs  >= Vt) && (Vgs - Vt <= Vds))
   {
-    std::cout << "ENTERING SATURATION REGION..." << std::endl;
+    // std::cout << "ENTERING SATURATION REGION..." << std::endl;
     id = 0.5 * beta * (Vgs - Vt) * (Vgs - Vt) * (1 + lambda * Vds);
     Gds = 0.5 * beta * lambda * (Vgs - Vt) * (Vgs - Vt);
     gm = beta * (Vgs - Vt) * (1 + lambda * Vds);
@@ -329,7 +329,7 @@ std::vector<Component> OP_Point_Solver::linearize_NMOS(double Vgs, double Vds, C
   // R
     if (Gds != 0.0) // If in cutoff : create infinite resistance by not adding conductance; otherwise : add resistor
     {
-      std::cout << "Gds : "<< Gds << std::endl;
+      // std::cout << "Gds : "<< Gds << std::endl;
       equiv.push_back( Component(RESISTOR, "R_" + nmos.designator, drain, source, 1.0/Gds ) );
     }
       
@@ -344,6 +344,11 @@ bool OP_Point_Solver::hasConverged()
 {
   for(uint32_t i = 0; i < curr_voltages.size(); i++)
   {
+    if (std::isnan(curr_voltages[i]) || std::isinf(curr_voltages[i]))
+    {
+      std::cout << "Newton-Raphson Solver encountered NaN or Infinity... This is most likely due to the supplied circuit being unsolvable in certain conditions. See if any nodes have a very high impedance to ground!" << std::endl;
+      exit(EXIT_FAILURE);
+    }
     if (std::abs(curr_voltages[i] - prev_voltages[i]) > ABS_VTOL) return false;
   }
   return true;

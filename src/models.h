@@ -59,6 +59,8 @@ struct PNP
 };
 
 /// BASED ON OWN MODEL OF NMOS
+/// @note K = KP/2 * W/L
+//  @note K = beta/2
 struct NMOS
 {
  const double KP = 0.2;
@@ -74,13 +76,14 @@ struct NMOS
  double beta;
  NMOS()
  {
-   beta = KP * (W/L); //width - length ratio 
+   // beta = KP * (W/L); //width - length ratio
+   beta = 4; 
  }
 };
 
 struct PMOS
 {
-  const double KP = 0.2;
+  const double KP = 0.1;
   const double lambda = 0.01;
   const double Vt = 2;
   const double W = 20;
