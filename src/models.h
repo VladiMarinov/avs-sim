@@ -76,8 +76,8 @@ struct NMOS
  double beta;
  NMOS()
  {
-   // beta = KP * (W/L); //width - length ratio
-   beta = 4; 
+    beta = KP * (W/L); //width - length ratio
+   // beta = 4;
  }
 };
 
