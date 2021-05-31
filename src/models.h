@@ -83,15 +83,15 @@ struct NMOS
 
 struct PMOS
 {
-  const double KP = 0.1;
+  const double KP = 0.2;
   const double lambda = 0.01;
-  const double Vt = 2;
-  const double W = 20;
-  const double L = 8;
+  const double Vt = -0.8;
+  const double W = 1;
+  const double L = 1;
 
   //guess saturation
-  const double initial_Vgs_guess = 3;
-  const double initial_Vds_guess = 0.5;
+  const double initial_Vgs_guess = -1.0;
+  const double initial_Vds_guess = -2.0;
 
   double beta;
   PMOS()
