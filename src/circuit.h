@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <complex>
 #include "component.h"
 #include "node.h"
 
@@ -50,10 +51,24 @@ public:
   std::vector<Component> get_DC_Equivalent_Components();
 
   /// Calculates the total conductance directly connected to a given node. This is used when calculating the main diagonal entries of the conductance matrix.
-  double total_conductance_into_node(Node node);
+  double DC_total_conductance_into_node(Node node);
   
   /// Calculates the total conductance that directly connects two given nodes. This is used when calculating the non main-diagonal entries of the conductance matrix.
-  double total_conductance_between_nodes(Node node1, Node node2);
+  double DC_total_conductance_between_nodes(Node node1, Node node2);
+
+  /// Calculates the total current coming into the given node from **current sources only**. 
+  double DC_total_current_into_node(Node node);
+
+  /// Calculates the total conductance directly connected to a given node. This is used when calculating the main diagonal entries of the conductance matrix.
+  std::complex<double> AC_total_conductance_into_node(Node node);
+  
+  /// Calculates the total conductance that directly connects two given nodes. This is used when calculating the non main-diagonal entries of the conductance matrix.
+  std::complex<double> AC_total_conductance_between_nodes(Node node1, Node node2);
+
+  /// Calculates the total current coming into the given node from **current sources only**. 
+  std::complex<double> AC_total_current_into_node(Node node);
+
+
 
   /// Returns any conductance due to Voltage-controlled Current sources between the two given nodes.
   double conductance_between_nodes_from_VCCS(Component vccs, Node node1, Node node2);
@@ -61,6 +76,4 @@ public:
   /// Returns whether the given component has any terminal connected to the given node.
   bool is_component_connected_to(Component component, Node node);
 
-  /// Calculates the total current coming into the given node from **current sources only**. 
-  double total_current_into_node(Node node);
-};
+  };

@@ -44,11 +44,11 @@ void DC_Simulator::generate_conductance_matrix()
 
       if(col == row)
       {
-        (*conductance_matrix)(row,col) = circuit.total_conductance_into_node(circuit.nodes[row]);
+        (*conductance_matrix)(row,col) = circuit.DC_total_conductance_into_node(circuit.nodes[row]);
       }
       else
       {
-        (*conductance_matrix)(row,col) = -circuit.total_conductance_between_nodes(circuit.nodes[row],circuit.nodes[col]);
+        (*conductance_matrix)(row,col) = -circuit.DC_total_conductance_between_nodes(circuit.nodes[row],circuit.nodes[col]);
       }
     }
   }
@@ -103,7 +103,7 @@ void DC_Simulator::generate_current_vector()
 {
   for(uint32_t i = 0; i < circuit.nodes.size(); i++)
   {
-    (*current_vector)(i) = circuit.total_current_into_node(circuit.nodes[i]);
+    (*current_vector)(i) = circuit.DC_total_current_into_node(circuit.nodes[i]);
   }
 }
 

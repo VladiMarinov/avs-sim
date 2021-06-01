@@ -11,7 +11,7 @@ Circuit::Circuit(std::vector<Component> input_components)
 {
   circuit_components = input_components;
 
-  num_voltage_sources =0;
+  num_voltage_sources = 0;
   for(Component c : input_components)
   {
     if (c.type == VOLTAGE_SOURCE)
@@ -87,16 +87,21 @@ std::vector<Component> Circuit::get_DC_Equivalent_Components()
 
       dc_equivalent_components.push_back(equiv);
     }
+    else if (c.type == VOLTAGE_SOURCE && c.value_type == FUNCTION_VAL)
+    {
+      dc_equivalent_components.push_back( Component(VOLTAGE_SOURCE, "DC_" + c.designator, c.nodes[0], c.nodes[1], 0));
+    }
     else if (c.type != CAPACITOR)
     {
       dc_equivalent_components.push_back(c);
     }
+
     // CAPACITOR IS IGNORED
   }
   return dc_equivalent_components;
 }
 
-double Circuit::total_conductance_into_node(Node node)
+double Circuit::DC_total_conductance_into_node(Node node)
 {
   double total_conductance = 0.0;
   for(Component component: node.components)
@@ -114,7 +119,7 @@ double Circuit::total_conductance_into_node(Node node)
   return total_conductance;
 }
 
-double Circuit::total_conductance_between_nodes(Node node1, Node node2)
+double Circuit::DC_total_conductance_between_nodes(Node node1, Node node2)
 {
   double total_conductance = 0.0;
   for(Component component: node1.components)
@@ -133,6 +138,28 @@ double Circuit::total_conductance_between_nodes(Node node1, Node node2)
   }
 
   return total_conductance;
+}
+
+double Circuit::DC_total_current_into_node(Node node)
+{
+  double total_current = 0.0;
+  for(Component component : node.components)
+  {
+    if(component.type == CURRENT_SOURCE)
+    {
+      if(component.nodes[0] == node.name)
+      {
+        //current going out
+        total_current -= component.const_value->numeric_value;
+      }
+      else
+      {
+        //current going in
+        total_current += component.const_value->numeric_value;
+      }
+    }
+  }
+  return total_current;
 }
 
 double Circuit::conductance_between_nodes_from_VCCS(Component vccs, Node node1, Node node2)
@@ -156,25 +183,4 @@ bool Circuit::is_component_connected_to(Component component, Node node)
   return false;
 }
 
-double Circuit::total_current_into_node(Node node)
-{
-  double total_current = 0.0;
-  for(Component component : node.components)
-  {
-    if(component.type == CURRENT_SOURCE)
-    {
-      if(component.nodes[0] == node.name)
-      {
-        //current going out
-        total_current -= component.const_value->numeric_value;
-      }
-      else
-      {
-        //current going in
-        total_current += component.const_value->numeric_value;
-      }
-    }
-  }
-  return total_current;
-}
 
