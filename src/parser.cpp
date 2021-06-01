@@ -139,7 +139,7 @@ std::string Parser::parse_next_token()
 void Parser::parse_value(Component &c)
 {
   skip_whitespace();
-  if (!std::isdigit(current_line[curr_pos]))
+  if (!std::isdigit(current_line[curr_pos]) && (current_line[curr_pos] != '-'))
   {
     if (c.type == RESISTOR || c.type == INDUCTOR || c.type == CAPACITOR || c.type == VCCS)
     {
@@ -170,6 +170,14 @@ void Parser::parse_value(Component &c)
       std::cout << current_line << std::endl;
       std::cout << "Component of this type must have a model value - function/constant is not possible...\n";
       exit(EXIT_FAILURE);
+    }
+    if ( (current_line[curr_pos] == '-') && (c.type == RESISTOR || c.type == INDUCTOR || c.type == CAPACITOR) ) // to avoid having negative values for constant value components that can't have them
+    {
+      std::cout << "ERROR at line: \n";
+      std::cout << current_line << std::endl;
+      std::cout << "Commponents of type : " << c.type << " cannot have a negative value \n";
+      exit(EXIT_FAILURE);
+
     }
     std::string nt = parse_next_token();
     c.const_value = std::make_shared<Const_value>(nt);

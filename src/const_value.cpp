@@ -21,7 +21,7 @@ double Const_value::str_to_numeric(std::string str_value)
     for(uint32_t i = 0 ; i < str_value.length(); i++)
     {
         char c = tolower(str_value[i]);
-        if (std::isdigit(c))
+        if ( std::isdigit(c) || c == '-') //added OR
         {
             str_significand += c;
         }
@@ -60,6 +60,7 @@ double Const_value::str_to_numeric(std::string str_value)
     }  
     if (str_significand.empty())
     {
+      std::cout << "error commes here" << std::endl;
       std::cout << "Unexpected value found ->  " << str_value << std::endl;
       exit(EXIT_FAILURE);
     }
