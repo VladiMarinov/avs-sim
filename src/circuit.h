@@ -15,8 +15,12 @@ public:
 
   /// The nodes that consist the circuit. Each node contains all the components connected to it.
   std::vector<Node> nodes;
-  uint32_t num_voltage_sources;
-  std::vector<Component> voltage_sources;
+  
+  uint32_t num_DC_voltage_sources;
+  uint32_t num_AC_voltage_sources;
+  
+  std::vector<Component> DC_voltage_sources;
+  std::vector<Component> AC_voltage_sources;
 
   Circuit();
 
@@ -71,8 +75,6 @@ public:
 
   /// Calculates the total current coming into the given node from **current sources only**. 
   std::complex<double> AC_total_current_into_node(Node node);
-
-
 
   /// Returns any conductance due to Voltage-controlled Current sources between the two given nodes.
   double conductance_between_nodes_from_VCCS(Component vccs, Node node1, Node node2);
