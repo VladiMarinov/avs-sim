@@ -50,6 +50,10 @@ public:
   /// @see get_DC_Equivalent_Circuit()
   std::vector<Component> get_DC_Equivalent_Components();
 
+  Circuit get_AC_Equivalent_Circuit();
+
+  std::vector<Component> get_AC_Equivalent_Components();
+
   /// Calculates the total conductance directly connected to a given node. This is used when calculating the main diagonal entries of the conductance matrix.
   double DC_total_conductance_into_node(Node node);
   
@@ -60,10 +64,10 @@ public:
   double DC_total_current_into_node(Node node);
 
   /// Calculates the total conductance directly connected to a given node. This is used when calculating the main diagonal entries of the conductance matrix.
-  std::complex<double> AC_total_conductance_into_node(Node node);
+  std::complex<double> AC_total_conductance_into_node(Node node, double freq);
   
   /// Calculates the total conductance that directly connects two given nodes. This is used when calculating the non main-diagonal entries of the conductance matrix.
-  std::complex<double> AC_total_conductance_between_nodes(Node node1, Node node2);
+  std::complex<double> AC_total_conductance_between_nodes(Node node1, Node node2, double freq);
 
   /// Calculates the total current coming into the given node from **current sources only**. 
   std::complex<double> AC_total_current_into_node(Node node);
