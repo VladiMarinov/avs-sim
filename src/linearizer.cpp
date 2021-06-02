@@ -147,6 +147,8 @@ std::vector<Component> Linearizer::linearize_NMOS(double Vgs, double Vds, Compon
   double lambda = model_nmos.lambda;
   double Vt = model_nmos.Vt;
   double beta = model_nmos.beta;
+  double Cgd = model_nmos.Cgd;
+  double Cgs = model_nmos.Cgs;
 
   double id = 0;
   double Gds = 0;
@@ -155,7 +157,6 @@ std::vector<Component> Linearizer::linearize_NMOS(double Vgs, double Vds, Compon
   bool isCutoff = false;
 
   // std::cout << "DEBUG: Vgs: " << Vgs << " , Vds: " << Vds<< " , Vt: " << Vt << std::endl;
-
 
   //CUT-OFF REGION
   if (Vgs < Vt)
@@ -183,15 +184,13 @@ std::vector<Component> Linearizer::linearize_NMOS(double Vgs, double Vds, Compon
     gm = beta * (Vgs - Vt) * (1 + lambda * Vds);
   }
 
-  //gm = sqrt(2*KP*W/L * id) => K = gm * gm / (2*id)
-
   IEQ = id - (Gds * Vds) - (gm * Vgs);
 
   //CAPACITOR DRAIN-GATE
-  equiv.push_back( Component(CAPACITOR, "C_dg_" + nmos.designator, drain, gate, 1e-6) );
+  equiv.push_back( Component(CAPACITOR, "C_dg_" + nmos.designator, drain, gate, Cgd) );
 
   //CAPACITOR GATE_SOURCE
-  equiv.push_back( Component(CAPACITOR, "C_gs_" + nmos.designator, gate, source, 1e-6) );
+  equiv.push_back( Component(CAPACITOR, "C_gs_" + nmos.designator, gate, source, Cgs) );
 
   if (!isCutoff){
     // VCCS
@@ -288,4 +287,236 @@ std::vector<Component> Linearizer::linearize_PMOS(double Vgs, double Vds, Compon
   return equiv;
 }
 
+
+
+//--------------------- SMALL SIGNAL ---------------------
+
+
+
+std::vector<Component> Linearizer::small_signal_diode(double VD, Component diode)
+{
+    std::vector<Component> equiv;
+
+    models::D D_;
+    double GD = D_.IS * std::exp(VD/D_.VT) / D_.VT;
+
+    equiv.push_back( Component(RESISTOR, "R" + diode.designator, diode.nodes[0], diode.nodes[1], 1/GD));
+
+    return equiv;
+}
+
+std::vector<Component> Linearizer::small_signal_NPN(double Vbe, double Vbc, Component npn)
+{
+  std::vector<Component> equiv;
+
+  models::NPN model_npn;
+
+  std::string collector = npn.nodes[0];
+  std::string base = npn.nodes[1];
+  std::string emmiter = npn.nodes[2];
+
+  double IES = model_npn.IES;
+  double ICS = model_npn.ICS;
+  double VT = model_npn.VT;
+  double AF = model_npn.AF;
+  double AR = model_npn.AR;
+
+  double gee = (IES/VT) * std::exp(Vbe/VT); 
+  double gce = AF * gee;
+  double gcc = (ICS/VT) * std::exp(Vbc/VT); 
+  double gec = AR * gcc; 
+
+  // WARNING: the order of the following push_backs is important - DO NOT REORDER
+  // This is due to the fact that the node order in the components must come up first as CBE.
+  // otherwise u risk messing up the order with respect to the parsed circuit.
+
+  // VCCS base-collector
+  equiv.push_back( Component(VCCS, "VCCS_bc_" + npn.designator, collector, base, base, emmiter, gce ) ); 
+
+  // Ree
+  equiv.push_back( Component(RESISTOR, "Ree" + npn.designator, base, emmiter, 1.0/gee ) ); 
+  
+  // VCCS base-emmiter
+  equiv.push_back( Component(VCCS, "VCCS_be_" + npn.designator, emmiter, base, base, collector, gec ) );
+
+  // Rcc
+  equiv.push_back( Component(RESISTOR, "Rcc" + npn.designator, base, collector, 1.0/gcc ) ); 
+  
+  return equiv;
+}
+
+std::vector<Component> Linearizer::small_signal_PNP(double Veb, double Vcb, Component pnp)
+{
+  std::vector<Component> equiv;
+
+  models::NPN model_pnp;
+
+  std::string collector = pnp.nodes[0];
+  std::string base = pnp.nodes[1];
+  std::string emmiter = pnp.nodes[2];
+
+  double IES = model_pnp.IES;
+  double ICS = model_pnp.ICS;
+  double VT = model_pnp.VT;
+  double AF = model_pnp.AF;
+  double AR = model_pnp.AR;
+
+  double gee = (IES/VT) * std::exp(Veb/VT); 
+  double gce = AF * gee;
+  double gcc = (ICS/VT) * std::exp(Vcb/VT); 
+  double gec = AR * gcc; 
+
+  // WARNING: the order of the following push_backs is important - DO NOT REORDER
+  // This is due to the fact that the node order in the components must come up first as CBE.
+  // otherwise u risk messing up the order with respect to the parsed circuit.
+
+  // Rcc
+  equiv.push_back( Component(RESISTOR, "Rcc" + pnp.designator, collector, base, 1.0/gcc ) ); 
+
+  // VCCS base-emmiter
+  equiv.push_back( Component(VCCS, "VCCS_eb_" + pnp.designator, base, emmiter, collector, base, gec ) );
+
+  // VCCS base-collector
+  equiv.push_back( Component(VCCS, "VCCS_cb_" + pnp.designator, base, collector, emmiter, base, gce ) ); 
+
+  // Ree
+  equiv.push_back( Component(RESISTOR, "Ree" + pnp.designator, base, emmiter, 1.0/gee ) ); 
+  
+  return equiv;
+}
+
+std::vector<Component> Linearizer::small_signal_NMOS(double Vgs, double Vds, Component nmos)
+{
+  std::vector<Component> equiv;
+
+  models::NMOS model_nmos;
+
+  std::string drain = nmos.nodes[0];
+  std::string gate = nmos.nodes[1];
+  std::string source = nmos.nodes[2];
+
+  double lambda = model_nmos.lambda;
+  double Vt = model_nmos.Vt;
+  double beta = model_nmos.beta;
+  double Cgd = model_nmos.Cgd;
+  double Cgs = model_nmos.Cgs;
+
+  double Gds = 0;
+  double gm = 0;
+  bool isCutoff = false;
+
+  // std::cout << "DEBUG: Vgs: " << Vgs << " , Vds: " << Vds<< " , Vt: " << Vt << std::endl;
+
+  //CUT-OFF REGION
+  if (Vgs < Vt)
+  {
+    isCutoff = true; 
+    // std::cout << "ENTERING CUT-OFF REGION..." << std::endl;
+    Gds = 0;
+    gm = 0;
+  }
+  //LINEAR REGION
+  if ((Vgs >= Vt) && (Vgs - Vt > Vds)) // think about Vds >=0 
+  {
+    // std::cout << "ENTERING LINEAR REGION..." << std::endl;
+    Gds = beta * (Vgs - Vt - Vds);
+    gm = beta * Vds; 
+  }
+  //SATURATION REGION
+  if ((Vgs  >= Vt) && (Vgs - Vt <= Vds))
+  {
+    // std::cout << "ENTERING SATURATION REGION..." << std::endl;
+    Gds = 0.5 * beta * lambda * (Vgs - Vt) * (Vgs - Vt);
+    gm = beta * (Vgs - Vt) * (1 + lambda * Vds);
+  }
+
+  //CAPACITOR DRAIN-GATE
+  equiv.push_back( Component(CAPACITOR, "C_dg_" + nmos.designator, drain, gate, Cgd) );
+
+  //CAPACITOR GATE_SOURCE
+  equiv.push_back( Component(CAPACITOR, "C_gs_" + nmos.designator, gate, source, Cgs) );
+
+  if (!isCutoff){
+    // VCCS
+    equiv.push_back( Component(VCCS, "VCCS_" + nmos.designator, drain, source, gate, source, gm) );
+
+    // R
+    if (Gds != 0.0) // If in cutoff : create infinite resistance by not adding conductance; otherwise : add resistor
+    {
+      // std::cout << "Gds : "<< Gds << std::endl;
+      equiv.push_back( Component(RESISTOR, "R_" + nmos.designator, drain, source, 1.0/Gds) );
+    }
+  }
+  
+  return equiv;
+}
+
+std::vector<Component> Linearizer::small_signal_PMOS(double Vgs, double Vds, Component pmos)
+{
+  std::vector<Component> equiv;
+
+  models::PMOS model_pmos;
+
+  std::string drain = pmos.nodes[0];
+  std::string gate = pmos.nodes[1];
+  std::string source = pmos.nodes[2];
+
+
+  //double KP = model_nmos.KP;
+  double lambda = model_pmos.lambda;
+  double Vt = model_pmos.Vt;
+  double beta = model_pmos.beta;
+  double Cgd = model_pmos.Cgd;
+  double Cgs = model_pmos.Cgs;
+
+  double Gds = 0;
+  double gm = 0;
+  bool isCutoff = false;
+
+  // std::cout << "DEBUG: Vgs: " << Vgs << " , Vds: " << Vds<< " , Vt: " << Vt << std::endl;
+
+
+  //CUT-OFF REGION
+  if (Vgs > Vt)
+  {
+    isCutoff = true; 
+    std::cout << "ENTERING CUT-OFF REGION..." << std::endl;
+    Gds = 0;
+    gm = 0;
+  }
+  //LINEAR REGION
+  if ((Vgs <= Vt) && (Vgs - Vt < Vds)) // think about Vds >=0 
+  {
+    std::cout << "ENTERING LINEAR REGION..." << std::endl;
+    Gds = -beta * (Vgs - Vt - Vds);
+    gm = -beta * Vds; 
+  }
+  //SATURATION REGION
+  if ((Vgs  <= Vt) && (Vgs - Vt >= Vds))
+  {
+    std::cout << "ENTERING SATURATION REGION..." << std::endl;
+    Gds = 0.5 * beta * lambda * (Vgs - Vt) * (Vgs - Vt);
+    gm = -beta * (Vgs - Vt) * (1 + lambda * Vds);
+  }
+
+  //CAPACITOR DRAIN-GATE
+  equiv.push_back( Component(CAPACITOR, "C_dg_" + pmos.designator, drain, gate, Cgd) );
+
+  //CAPACITOR GATE_SOURCE
+  equiv.push_back( Component(CAPACITOR, "C_gs_" + pmos.designator, gate, source, Cgs) );
+
+  if (!isCutoff){
+    // VCCS
+    equiv.push_back( Component(VCCS, "VCCS_" + pmos.designator, drain, source, gate, source, gm ) );
+
+  // R
+    if (Gds != 0.0) // If in cutoff : create infinite resistance by not adding conductance; otherwise : add resistor
+    {
+      // std::cout << "Gds : "<< Gds << std::endl;
+      equiv.push_back( Component(RESISTOR, "R_" + pmos.designator, drain, source, 1.0/Gds ) );
+    }
+  }
+  
+  return equiv;
+}
 

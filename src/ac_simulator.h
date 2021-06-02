@@ -10,8 +10,10 @@
 class AC_Simulator
 {
 public:
-  Circuit circuit;
+  Circuit large_signal_circuit;
+  Circuit small_signal_circuit;
   double sim_freq;
+  std::vector<double> op_voltages;
 
   std::unique_ptr<Eigen::MatrixXcd> conductance_matrix;
   std::unique_ptr<Eigen::VectorXcd> current_vector;
@@ -28,7 +30,10 @@ public:
 
   /// Create a DC Simulator to simulate the given circuit.
   /// @warning The circuit that is passed to the constructor **must** not contain a ground node.
-  AC_Simulator(Circuit input_circuit, double input_freq);
+  AC_Simulator(Circuit input_circuit, std::vector<double> input_op_voltages, double input_freq);
+
+  /// Generated small signal circuit from the original large_signal_circuit
+  void generate_small_signal_circuit();
 
   /// Generates the conductance matrix for the given circuit.
   void generate_conductance_matrix();

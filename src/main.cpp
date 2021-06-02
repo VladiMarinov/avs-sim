@@ -33,15 +33,14 @@ int main(int argc, char** argv)
       // printNode(node);
     // }
 
-    // Circuit DC_Circuit = circuit.get_DC_Equivalent_Circuit().remove_ground();
-    // DC_Simulator sim(DC_Circuit);
+    Circuit DC_Circuit = circuit.get_DC_Equivalent_Circuit().remove_ground();
+
+    OP_Point_Solver op_point_solver(DC_Circuit);
+    op_point_solver.create_initial_lin_circuit();
+    op_point_solver.solve();
 
     Circuit AC_Circuit = circuit.get_AC_Equivalent_Circuit().remove_ground();
-    AC_Simulator sim(AC_Circuit, 4870);
-
-    // OP_Point_Solver op_point_solver(DC_Circuit);
-    // op_point_solver.create_initial_lin_circuit();
-    // op_point_solver.solve();
+    AC_Simulator sim(AC_Circuit, op_point_solver.curr_voltages, 4870);
     // for (Component c : op_point_solver.lin_circuit.circuit_components)
     // {
       // printComponent(c);
