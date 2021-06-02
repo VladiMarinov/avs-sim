@@ -62,5 +62,5 @@ public:
   /// Solves the circuit for the unknown vector.
   void solve();
 
-  std::vector<std::complex<double>> get_voltage_vector();
+  std::vector<std::complex<double> > get_voltage_vector();
 };
