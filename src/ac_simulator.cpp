@@ -1,5 +1,7 @@
+#define _USE_MATH_DEFINES
+
 #include "ac_simulator.h"
-#include <iostream> 
+#include <iostream>
 
 AC_Simulator::AC_Simulator()
 {
