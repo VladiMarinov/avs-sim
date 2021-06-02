@@ -5,7 +5,7 @@
 
 namespace util
 {
-  double voltage_between_nodes(Circuit circuit, std::string n1, std::string n2, std::vector<double> voltage_vector)
+  inline double voltage_between_nodes(Circuit circuit, std::string n1, std::string n2, std::vector<double> voltage_vector)
   {
     circuit = circuit.remove_ground(); // Just in case we are passed a circuit with a ground node.
     double voltage_at_node_1;
@@ -28,7 +28,7 @@ namespace util
 
   /// Calculate the voltage across the given component.
   /// @warning Only intended for two-terminal components
-  double voltage_across_2T_component(Circuit circuit, Component component, std::vector<double> voltage_vector)
+  inline double voltage_across_2T_component(Circuit circuit, Component component, std::vector<double> voltage_vector)
   {
     std::string node_ID_1 = component.nodes[0];
     std::string node_ID_2 = component.nodes[1];
@@ -36,7 +36,7 @@ namespace util
     return util::voltage_between_nodes(circuit, node_ID_1, node_ID_2, voltage_vector);
   }
 
-  void printComponent(Component c)
+  inline void printComponent(Component c)
   {
     std::cout <<"----------------------------\n";
     std::cout << c.designator << std::endl;
@@ -52,7 +52,8 @@ namespace util
     }
     std::cout <<"----------------------------\n";
   }
-  void printACdir(AC_Directive dir)
+  
+  inline void printACdir(AC_Directive dir)
   {
     std::cout <<"----------------------------\n";
     std::cout << dir.sweep_type << std::endl;
@@ -62,7 +63,7 @@ namespace util
     std::cout <<"----------------------------\n";
   }
 
-  void printNode(Node node){
+  inline void printNode(Node node){
     std::cout << node.name;
     for(Component c : node.components)
     {
