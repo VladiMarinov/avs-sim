@@ -18,9 +18,31 @@ double Const_value::str_to_numeric(std::string str_value)
     std::string str_significand; 
     bool has_found_decimal_point = false;
     std::string multiplier; 
+
     for(uint32_t i = 0 ; i < str_value.length(); i++)
     {
-        char c = tolower(str_value[i]);
+        char c;
+
+        if (i < (str_value.length() - 1) ) //If to avoid overflow
+        { // takes two ascii character - associated with a unicode character
+            int unicode_pt1 = str_value[i]; 
+            int unicode_pt2 = str_value[i+1];  
+            if (unicode_pt1 == -62 && unicode_pt2 == -75) //check if we have µ
+            {
+                std::cout << "DEBUG : entered if" << std::endl; //TODO : delete this line
+                c = 'u';
+            } 
+            else
+            {
+                c = tolower(str_value[i]);
+            }       
+        }
+        else 
+        {
+            c = tolower(str_value[i]);
+        }
+        std::cout << "c is " << c << std::endl;
+        
         if ( std::isdigit(c) || c == '-') //added OR
         {
             str_significand += c;
