@@ -60,7 +60,6 @@ double Const_value::str_to_numeric(std::string str_value)
     }  
     if (str_significand.empty())
     {
-      std::cout << "error commes here" << std::endl;
       std::cout << "Unexpected value found ->  " << str_value << std::endl;
       exit(EXIT_FAILURE);
     }
