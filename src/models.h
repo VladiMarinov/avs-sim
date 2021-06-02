@@ -68,6 +68,8 @@ struct NMOS
  const double Vt = 2;
  const double W = 20;
  const double L = 8;
+ const double Cgd = 0;
+ const double Cgs = 0; 
 
  //guess saturation
  const double initial_Vgs_guess = 3;
@@ -77,7 +79,6 @@ struct NMOS
  NMOS()
  {
     beta = KP * (W/L); //width - length ratio
-   // beta = 4;
  }
 };
 
@@ -88,6 +89,8 @@ struct PMOS
   const double Vt = -0.8;
   const double W = 1;
   const double L = 1;
+  const double Cgd = 0;
+  const double Cgs = 0; 
 
   //guess saturation
   const double initial_Vgs_guess = -1.0;
