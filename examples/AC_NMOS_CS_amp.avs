@@ -1,0 +1,13 @@
+* Z:\home\m0rtal\uni\Lab\LTSPICE\Draft1.asc
+V1 N002 0 AC 1 0
+M1 N005 N003 N004 NMOS
+C1 N003 N002 10u
+R1 N001 N003 1.8k
+R2 N003 0 800
+R3 N001 N005 5k
+V2 N001 0 10
+R4 N004 0 1k
+.ac dec 1 1 1
+.op
+.end
+
