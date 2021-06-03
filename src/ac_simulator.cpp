@@ -18,17 +18,19 @@ AC_Simulator::AC_Simulator(Circuit input_circuit, std::vector<double> input_op_v
   generate_small_signal_circuit();
   small_signal_circuit = small_signal_circuit.remove_ground();
 
+  int total_voltage_sources = small_signal_circuit.num_AC_voltage_sources + small_signal_circuit.num_DC_voltage_sources;
+
   uint32_t matrix_size = small_signal_circuit.nodes.size();
   std::cout << "Matrix size will be " << matrix_size << std::endl;
   conductance_matrix =  std::unique_ptr<Eigen::MatrixXcd>(new Eigen::MatrixXcd(matrix_size, matrix_size));
   current_vector = std::unique_ptr<Eigen::VectorXcd>(new Eigen::VectorXcd(matrix_size));
-  unknown_vector = std::unique_ptr<Eigen::VectorXcd>(new Eigen::VectorXcd(small_signal_circuit.num_AC_voltage_sources + matrix_size));
-  B_matrix = std::unique_ptr<Eigen::MatrixXcd>(new Eigen::MatrixXcd(matrix_size, small_signal_circuit.num_AC_voltage_sources));
-  C_matrix = std::unique_ptr<Eigen::MatrixXcd>(new Eigen::MatrixXcd(small_signal_circuit.num_AC_voltage_sources, matrix_size));
-  D_matrix = std::unique_ptr<Eigen::MatrixXcd>(new Eigen::MatrixXcd(small_signal_circuit.num_AC_voltage_sources, small_signal_circuit.num_AC_voltage_sources));
-  A_matrix = std::unique_ptr<Eigen::MatrixXcd>(new Eigen::MatrixXcd(small_signal_circuit.num_AC_voltage_sources + matrix_size, small_signal_circuit.num_AC_voltage_sources + matrix_size));
-  e_vector = std::unique_ptr<Eigen::VectorXcd>(new Eigen::VectorXcd(small_signal_circuit.num_AC_voltage_sources));
-  z_vector = std::unique_ptr<Eigen::VectorXcd>(new Eigen::VectorXcd(small_signal_circuit.num_AC_voltage_sources + matrix_size));
+  unknown_vector = std::unique_ptr<Eigen::VectorXcd>(new Eigen::VectorXcd(total_voltage_sources + matrix_size));
+  B_matrix = std::unique_ptr<Eigen::MatrixXcd>(new Eigen::MatrixXcd(matrix_size, total_voltage_sources));
+  C_matrix = std::unique_ptr<Eigen::MatrixXcd>(new Eigen::MatrixXcd(total_voltage_sources, matrix_size));
+  D_matrix = std::unique_ptr<Eigen::MatrixXcd>(new Eigen::MatrixXcd(total_voltage_sources, total_voltage_sources));
+  A_matrix = std::unique_ptr<Eigen::MatrixXcd>(new Eigen::MatrixXcd(total_voltage_sources + matrix_size,  total_voltage_sources+ matrix_size));
+  e_vector = std::unique_ptr<Eigen::VectorXcd>(new Eigen::VectorXcd(total_voltage_sources));
+  z_vector = std::unique_ptr<Eigen::VectorXcd>(new Eigen::VectorXcd(matrix_size + total_voltage_sources));
   generate_conductance_matrix();
   generate_B_matrix();
   generate_C_matrix();
@@ -149,6 +151,27 @@ void AC_Simulator::generate_B_matrix()
       }
     }
   }
+  for (uint32_t col = 0; col < small_signal_circuit.num_DC_voltage_sources; col ++)
+  {
+    for (uint32_t row = 0 ; row < small_signal_circuit.nodes.size() ; row++)
+    {
+      if (small_signal_circuit.is_component_connected_to(small_signal_circuit.DC_voltage_sources[col], small_signal_circuit.nodes[row]))
+      {
+        if (small_signal_circuit.nodes[row].name == small_signal_circuit.DC_voltage_sources[col].nodes[0])
+        {
+          (*B_matrix)(row, col+ small_signal_circuit.num_AC_voltage_sources) = 1;
+        }
+        else if (small_signal_circuit.nodes[row].name == small_signal_circuit.DC_voltage_sources[col].nodes[1])
+        {
+          (*B_matrix)(row, col + small_signal_circuit.num_AC_voltage_sources ) = -1;
+        }
+      }
+      else
+      {
+        (*B_matrix)(row, col + small_signal_circuit.num_AC_voltage_sources) = 0;
+      }
+    }
+  }
 }
 
 void AC_Simulator::generate_C_matrix()
@@ -158,7 +181,8 @@ void AC_Simulator::generate_C_matrix()
 
 void AC_Simulator::generate_D_matrix()
 {
-  *D_matrix = Eigen::MatrixXcd::Zero(small_signal_circuit.num_AC_voltage_sources, small_signal_circuit.num_AC_voltage_sources);
+  int total_voltage_sources = small_signal_circuit.num_AC_voltage_sources + small_signal_circuit.num_DC_voltage_sources;
+  *D_matrix = Eigen::MatrixXcd::Zero(total_voltage_sources, total_voltage_sources);
 }
 
 void AC_Simulator::generate_A_matrix()
@@ -171,7 +195,7 @@ void AC_Simulator::generate_current_vector()
 {
   for(uint32_t i = 0; i < small_signal_circuit.nodes.size(); i++)
   {
-    (*current_vector)(i) = small_signal_circuit.DC_total_current_into_node(small_signal_circuit.nodes[i]);
+    (*current_vector)(i) = small_signal_circuit.AC_total_current_into_node(small_signal_circuit.nodes[i]);
   }
 }
 
@@ -185,6 +209,11 @@ void AC_Simulator::generate_e_vector()
     std::complex<double> phasor = A * std::exp(std::complex<double>(0,phase));
 
     (*e_vector)(i) = phasor;
+  }
+  for (uint32_t i = small_signal_circuit.num_AC_voltage_sources; i < small_signal_circuit.num_AC_voltage_sources + small_signal_circuit.num_DC_voltage_sources; i++)
+  {
+    // DC sources in an AC sim will always have a value of 0 -> short circuits.
+    (*e_vector)(i) = 0;
   }
 }
 

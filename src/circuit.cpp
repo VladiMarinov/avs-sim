@@ -188,7 +188,8 @@ double Circuit::DC_total_current_into_node(Node node)
   double total_current = 0.0;
   for(Component component : node.components)
   {
-    if(component.type == CURRENT_SOURCE)
+    // Check if DC current source -> AC current sources are ignored
+    if(component.type == CURRENT_SOURCE && component.value_type == CONSTANT_VAL)
     {
       if(component.nodes[0] == node.name)
       {
@@ -282,7 +283,7 @@ std::complex<double> Circuit::AC_total_conductance_between_nodes(Node node1, Nod
   return total_conductance;
 }
 
-std::complex<double> AC_total_current_into_node(Node node)
+std::complex<double> Circuit::AC_total_current_into_node(Node node)
 {
   std::complex<double> total_current = std::complex<double>(0,0);
   for(Component component : node.components)
