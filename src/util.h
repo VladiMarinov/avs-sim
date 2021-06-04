@@ -5,6 +5,11 @@
 
 namespace util
 {
+  /// Calculates the voltage between any two given nodes in a circuit.
+  /// @param The circuit to find voltage in.
+  /// @param The Node ID of the first node.
+  /// @param The Node ID of the second node.
+  /// @param The voltage vector from which to look up relevant voltages.
   inline double voltage_between_nodes(Circuit circuit, std::string n1, std::string n2, std::vector<double> voltage_vector)
   {
     circuit = circuit.remove_ground(); // Just in case we are passed a circuit with a ground node.
@@ -36,6 +41,7 @@ namespace util
     return util::voltage_between_nodes(circuit, node_ID_1, node_ID_2, voltage_vector);
   }
 
+  /// Prints a component in a readable way -> FOR DEBUGGING
   inline void printComponent(Component c)
   {
     std::cout <<"----------------------------\n";
@@ -53,6 +59,7 @@ namespace util
     std::cout <<"----------------------------\n";
   }
   
+  /// Prints an AC Directive in a readable way -> FOR DEBUGGING
   inline void printACdir(AC_Directive dir)
   {
     std::cout <<"----------------------------\n";
@@ -63,6 +70,7 @@ namespace util
     std::cout <<"----------------------------\n";
   }
 
+  /// Prints the designators of all components connected to the node -> FOR DEBUGGING
   inline void printNode(Node node){
     std::cout << node.name;
     for(Component c : node.components)

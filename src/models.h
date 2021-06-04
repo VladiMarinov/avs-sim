@@ -1,8 +1,10 @@
 #pragma once
 
+/// All supported non-linear component models.
 namespace models
 {
 
+/// Contains model values for a D diode.
 struct D
 {
   const double IS = 1e-14;
@@ -10,7 +12,7 @@ struct D
   const double initial_V_guess = 0.7;
 };
 
-/// BASED ON LTSPICE 2N2222
+/// Contains model values for a NPN BJT -  VALUES BASED ON LTSPICE 2N2222
 struct NPN
 {
   const double IS = 1e-14;
@@ -34,7 +36,7 @@ struct NPN
   }
 };
 
-/// BASED ON LTSPICE 2N2907
+/// Contains model values for a PNP BJT - BASED ON LTSPICE 2N2907
 struct PNP
 {
   const double IS = 1e-14;
@@ -58,7 +60,7 @@ struct PNP
   }
 };
 
-/// BASED ON OWN MODEL OF NMOS
+/// Contains model values for N-channel MOSFTET - BASED ON OWN MODEL OF NMOS
 /// @note K = KP/2 * W/L
 //  @note K = beta/2
 struct NMOS
@@ -82,6 +84,9 @@ struct NMOS
  }
 };
 
+/// Contains model values for P-channel MOSFTET - BASED ON OWN MODEL OF PMOS
+/// @note K = KP/2 * W/L
+//  @note K = beta/2
 struct PMOS
 {
   const double KP = 0.2;

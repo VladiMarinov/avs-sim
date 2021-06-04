@@ -62,5 +62,6 @@ public:
   /// Solves the circuit for the unknown vector.
   void solve();
 
+  /// Returns the (real) voltages at each node of the solved circuit.
   std::vector<double> get_voltage_vector();
 };

@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 
+/// Simulates a given circuit in Small-signal AC at a given frequency, using the provided quiescent op. point.
 class AC_Simulator
 {
 public:
@@ -25,11 +26,13 @@ public:
   std::unique_ptr<Eigen::VectorXcd> e_vector;
   std::unique_ptr<Eigen::VectorXcd> z_vector;
 
-  /// Default DC Sim constructor.
+  /// Default AC Sim constructor -> EMPTY.
   AC_Simulator();
 
-  /// Create a DC Simulator to simulate the given circuit.
-  /// @warning The circuit that is passed to the constructor **must** not contain a ground node.
+  /// Create a AC Simulator to simulate the given circuit.
+  /// @param The circuit to be simulated
+  /// @param The quiescent operating voltages for the circuit ( these usually come from an OP_Point_Solver)
+  /// @param The (natural) frequency at which the circuit will be simulated.
   AC_Simulator(Circuit input_circuit, std::vector<double> input_op_voltages, double input_freq);
 
   /// Generated small signal circuit from the original large_signal_circuit
@@ -62,5 +65,6 @@ public:
   /// Solves the circuit for the unknown vector.
   void solve();
 
+  /// Get the complex voltages for each node in the solved circuit.
   std::vector<std::complex<double> > get_voltage_vector();
 };

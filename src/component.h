@@ -37,6 +37,7 @@ public:
   /// @note Might be null/random if the value type of this component is Constant or Function.
   std::shared_ptr<Model_value> model_value;
 
+  /// Default constructor -> EMPTY.
   Component();
 
   /// 2-terminal constructor

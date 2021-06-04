@@ -46,7 +46,6 @@ public:
   /// Capacitors are discarded - they are open circuits in Steady-state DC.
   /// Inductors are modeled as 0V voltage sources - this is the easiest way to model a short circuit.
   /// Resistors, Voltage sources, and Current sources are left as is.
-  /// @note Non-linear components aren't supported yet - they will be left as is.
   Circuit get_DC_Equivalent_Circuit();
 
   /// Returns the Steady-state DC equivalent components for this circuit.
@@ -54,26 +53,31 @@ public:
   /// @see get_DC_Equivalent_Circuit()
   std::vector<Component> get_DC_Equivalent_Components();
 
+
+  /// Returns the circuit, with all DC sources set to 0 -> Voltage sources are transformed into 0V short circuits, while Current sources are discarded as they are open circuit.
   Circuit get_AC_Equivalent_Circuit();
 
+  /// Returns a copy of the component vector, but with all sources set to 0.
+  /// This is used to construct the AC_equivalent_circuit.
+  /// @see get_AC_Equivalent_Circuit())
   std::vector<Component> get_AC_Equivalent_Components();
 
-  /// Calculates the total conductance directly connected to a given node. This is used when calculating the main diagonal entries of the conductance matrix.
+  /// Calculates the total DC conductance directly connected to a given node. This is used when calculating the main diagonal entries of the conductance matrix.
   double DC_total_conductance_into_node(Node node);
   
-  /// Calculates the total conductance that directly connects two given nodes. This is used when calculating the non main-diagonal entries of the conductance matrix.
+  /// Calculates the total DC conductance that directly connects two given nodes. This is used when calculating the non main-diagonal entries of the conductance matrix.
   double DC_total_conductance_between_nodes(Node node1, Node node2);
 
-  /// Calculates the total current coming into the given node from **current sources only**. 
+  /// Calculates the total DC current coming into the given node from **current sources only**. 
   double DC_total_current_into_node(Node node);
 
-  /// Calculates the total conductance directly connected to a given node. This is used when calculating the main diagonal entries of the conductance matrix.
+  /// Calculates the total AC conductance directly connected to a given node. This is used when calculating the main diagonal entries of the conductance matrix.
   std::complex<double> AC_total_conductance_into_node(Node node, double freq);
   
-  /// Calculates the total conductance that directly connects two given nodes. This is used when calculating the non main-diagonal entries of the conductance matrix.
+  /// Calculates the total AC conductance that directly connects two given nodes. This is used when calculating the non main-diagonal entries of the conductance matrix.
   std::complex<double> AC_total_conductance_between_nodes(Node node1, Node node2, double freq);
 
-  /// Calculates the total current coming into the given node from **current sources only**. 
+  /// Calculates the total AC current coming into the given node from **current sources only**. 
   std::complex<double> AC_total_current_into_node(Node node);
 
   /// Returns any conductance due to Voltage-controlled Current sources between the two given nodes.
