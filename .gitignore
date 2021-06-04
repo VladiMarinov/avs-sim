@@ -38,3 +38,6 @@ avs-sim
 
 #Docs
 /doc
+
+#Transfer function output file
+output.txt
