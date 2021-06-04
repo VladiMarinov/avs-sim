@@ -1,9 +1,8 @@
 * A test circuit to demonstrate SPICE syntax
-V1 N003 0 AC(1 0)
+V1 N003 0 AC 1 0
 R1 N001 N003 1k
 C1 N001 0 1u
 I1 0 N004 0.1
-
 D1 N004 N002 D
 L1 N002 N001 1m
 R12 N002 N001 1Meg
