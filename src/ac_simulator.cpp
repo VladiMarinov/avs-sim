@@ -21,7 +21,7 @@ AC_Simulator::AC_Simulator(Circuit input_circuit, std::vector<double> input_op_v
   int total_voltage_sources = small_signal_circuit.num_AC_voltage_sources + small_signal_circuit.num_DC_voltage_sources;
 
   uint32_t matrix_size = small_signal_circuit.nodes.size();
-  std::cout << "Matrix size will be " << matrix_size << std::endl;
+  //std::cout << "Matrix size will be " << matrix_size << std::endl;
   conductance_matrix =  std::unique_ptr<Eigen::MatrixXcd>(new Eigen::MatrixXcd(matrix_size, matrix_size));
   current_vector = std::unique_ptr<Eigen::VectorXcd>(new Eigen::VectorXcd(matrix_size));
   unknown_vector = std::unique_ptr<Eigen::VectorXcd>(new Eigen::VectorXcd(total_voltage_sources + matrix_size));
@@ -188,7 +188,7 @@ void AC_Simulator::generate_D_matrix()
 void AC_Simulator::generate_A_matrix()
 {
   *A_matrix << *conductance_matrix, *B_matrix, *C_matrix, *D_matrix; 
-  std::cout << *A_matrix <<std::endl;
+  //std::cout << *A_matrix <<std::endl;
 }
 
 void AC_Simulator::generate_current_vector()
@@ -225,10 +225,10 @@ void AC_Simulator::generate_z_vector()
 
 void AC_Simulator::solve()
 {
-  std::cout << std::endl;
-  std::cout<< "unknown vector:" << std::endl;
+  // std::cout << std::endl;
+  // std::cout<< "unknown vector:" << std::endl;
   (*unknown_vector) = (*A_matrix).lu().solve(*z_vector);
-  std::cout << *unknown_vector  << std::endl;
+  //std::cout << *unknown_vector  << std::endl;
 }
 
 std::vector<std::complex<double>> AC_Simulator::get_voltage_vector()

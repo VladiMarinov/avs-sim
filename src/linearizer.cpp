@@ -239,7 +239,7 @@ std::vector<Component> Linearizer::linearize_PMOS(double Vgs, double Vds, Compon
   if (Vgs > Vt)
   {
     isCutoff = true; 
-    std::cout << "ENTERING CUT-OFF REGION..." << std::endl;
+    //std::cout << "ENTERING CUT-OFF REGION..." << std::endl;
     id = 0;
     Gds = 0;
     gm = 0;
@@ -247,7 +247,7 @@ std::vector<Component> Linearizer::linearize_PMOS(double Vgs, double Vds, Compon
   //LINEAR REGION
   if ((Vgs <= Vt) && (Vgs - Vt < Vds)) // think about Vds >=0 
   {
-    std::cout << "ENTERING LINEAR REGION..." << std::endl;
+    //std::cout << "ENTERING LINEAR REGION..." << std::endl;
     id =  -beta * ( (Vgs - Vt) * Vds - 0.5 * Vds * Vds);
     Gds = -beta * (Vgs - Vt - Vds);
     gm = -beta * Vds; 
@@ -255,7 +255,7 @@ std::vector<Component> Linearizer::linearize_PMOS(double Vgs, double Vds, Compon
   //SATURATION REGION
   if ((Vgs  <= Vt) && (Vgs - Vt >= Vds))
   {
-    std::cout << "ENTERING SATURATION REGION..." << std::endl;
+    //std::cout << "ENTERING SATURATION REGION..." << std::endl;
     id =  -0.5 * beta * (Vgs - Vt) * (Vgs - Vt) * (1 + lambda * Vds);
     Gds = 0.5 * beta * lambda * (Vgs - Vt) * (Vgs - Vt);
     gm = -beta * (Vgs - Vt) * (1 + lambda * Vds);

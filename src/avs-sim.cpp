@@ -1,4 +1,5 @@
 #include "avs-sim.h"
+#include "util.h"
 
 AVS_sim::AVS_sim(std::string inputfile_name)
 {
@@ -30,15 +31,14 @@ void AVS_sim::itterate_over_ac()
         current_frequency = std::pow(10.0,  ((double)n) / points_per_decade );
         if (current_frequency > stop_frequency)
         {
-            std::cout << stop_frequency <<std::endl;    //TODO : solve at stop_freq
-        }
-        else
-        {
-            std::cout << " at step n = "<< n << " freq is = " << current_frequency << std::endl; //TODO : solve at freq
+            current_frequency = stop_frequency;
         }
         
+        AC_Simulator ac_sim(circuit->get_AC_Equivalent_Circuit(), DC_voltages, current_frequency);
+        std::cout << "current freq " << current_frequency << std::endl;
+        std::cout << 20*std::log10(abs(util::voltage_at_node(*circuit, "out", ac_sim.get_voltage_vector()))); 
+        std::cout << std::endl;
     }
-
 }
 
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <complex>
 #include "circuit.h"
 #include "ac_directive.h"
 
@@ -29,6 +30,21 @@ namespace util
     }
     
       return voltage_at_node_1 - voltage_at_node_2;
+  }
+
+  inline std::complex<double> voltage_at_node(Circuit circuit, std::string n, std::vector<std::complex<double> > voltage_vector)
+  {
+    circuit = circuit.remove_ground(); // Just in case we are passed a circuit with a ground node.
+
+    for(uint32_t i = 0; i < circuit.nodes.size(); i++)
+    {
+      if (circuit.nodes[i].name == n)
+      {
+        return voltage_vector[i];
+      }
+    }
+    std::cout << "node " << n << " doesn't exist" <<std::endl;
+    exit(EXIT_FAILURE);
   }
 
   /// Calculate the voltage across the given component.
