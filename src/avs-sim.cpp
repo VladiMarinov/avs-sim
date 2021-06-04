@@ -1,5 +1,6 @@
 #include "avs-sim.h"
 #include "util.h"
+#include <iomanip>
 
 AVS_sim::AVS_sim(std::string inputfile_name)
 {
@@ -20,6 +21,9 @@ void AVS_sim::simulate()
 
 void AVS_sim::itterate_over_ac()
 {
+    std::ofstream output_file;
+    output_file.open("output.txt");
+
     int decades = (int) std::log10(stod(ac_dir.start_freq)/stod(ac_dir.start_freq));
     int points_per_decade = stoi(ac_dir.points_per_dec);
     double current_frequency = 0;
@@ -35,10 +39,13 @@ void AVS_sim::itterate_over_ac()
         }
         
         AC_Simulator ac_sim(circuit->get_AC_Equivalent_Circuit(), DC_voltages, current_frequency);
-        std::cout << current_frequency << ", ";
-        std::cout << 20*std::log10(abs(util::voltage_at_node(*circuit, "out", ac_sim.get_voltage_vector()))); 
-        std::cout << std::endl;
+        output_file << std::setprecision(15);
+        output_file << current_frequency << ", ";
+        output_file << 20*std::log10(abs(util::voltage_at_node(*circuit, "out", ac_sim.get_voltage_vector()))); 
+        output_file << std::endl;
     }
+    
+    output_file.close();
 }
 
 
