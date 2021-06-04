@@ -15,12 +15,18 @@
 
 
 
+/// The main class of the program - runs the neccessary simulations, and writes to the output file.
 class AVS_sim
 {
 public: 
+    
+    /// Run the simulator with the given netlist
     AVS_sim(std::string inputfile_name);
 
+    /// Starts the neccessary simulations
     void simulate(); 
+
+    /// Does the AC Sweep iterations
     void itterate_over_ac();
 
 private: 
@@ -29,7 +35,4 @@ private:
     std::unique_ptr<Circuit> circuit;
     std::vector<double> DC_voltages;
     AC_Directive ac_dir; 
-
-
-
 };
