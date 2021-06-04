@@ -98,10 +98,10 @@ void AC_Simulator::generate_small_signal_circuit()
       }
   }
   small_signal_circuit = Circuit(small_signal_components);
-  for (Component c : small_signal_circuit.circuit_components)
-  {
-    util::printComponent(c);
-  }
+  // for (Component c : small_signal_circuit.circuit_components)
+  // {
+  //   //util::printComponent(c);
+  // }
 }
 
 void AC_Simulator::generate_conductance_matrix()

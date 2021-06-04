@@ -35,7 +35,7 @@ void AVS_sim::itterate_over_ac()
         }
         
         AC_Simulator ac_sim(circuit->get_AC_Equivalent_Circuit(), DC_voltages, current_frequency);
-        std::cout << "current freq " << current_frequency << std::endl;
+        std::cout << current_frequency << ", ";
         std::cout << 20*std::log10(abs(util::voltage_at_node(*circuit, "out", ac_sim.get_voltage_vector()))); 
         std::cout << std::endl;
     }
