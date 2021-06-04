@@ -33,7 +33,7 @@ remove:
 
 run:
 	@make -s 
-	@./avs-sim examples/example1.avs
+	@./avs-sim $(netlist) 
 
 .PHONY: mem_check
 mem_check:
