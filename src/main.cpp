@@ -8,6 +8,7 @@
 #include "circuit.h"
 #include "op_point_solver.h"
 #include "models.h"
+#include "avs-sim.h"
 
 int main(int argc, char** argv)
 {
@@ -17,34 +18,10 @@ int main(int argc, char** argv)
       return EXIT_FAILURE;
     }
     
-    std::unique_ptr<Parser> parser (new Parser (argv[1]));
-    parser->parse();
-    // for(Component c : parser->components)
-    // {
-      // printComponent(c);
-    // }
-    // printACdir(parser->ac_dir);
-//
-    // std::cout <<"\n----------------------------\n";
+  AVS_sim avs_sim(argv[1]);
+  avs_sim.simulate();
 
-    Circuit circuit(parser->components);
-    // for(Node node : circuit.nodes)
-    // {
-      // printNode(node);
-    // }
 
-    Circuit DC_Circuit = circuit.get_DC_Equivalent_Circuit().remove_ground();
-
-    OP_Point_Solver op_point_solver(DC_Circuit);
-    op_point_solver.create_initial_lin_circuit();
-    op_point_solver.solve();
-
-    Circuit AC_Circuit = circuit.get_AC_Equivalent_Circuit().remove_ground();
-    AC_Simulator sim(AC_Circuit, op_point_solver.curr_voltages, 4870);
-    // for (Component c : op_point_solver.lin_circuit.circuit_components)
-    // {
-      // printComponent(c);
-    // }
 
     return 0;
 }

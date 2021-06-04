@@ -9,7 +9,9 @@
 
 OP_Point_Solver::OP_Point_Solver(Circuit input_circuit)
 {
-    circuit = input_circuit;
+    circuit = input_circuit.remove_ground();
+    create_initial_lin_circuit();
+
 }
 
 void OP_Point_Solver::create_initial_lin_circuit()
