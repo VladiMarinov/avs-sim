@@ -55,3 +55,7 @@ docs:
 .PHONY: cloc
 cloc:
 	@cloc . --exclude-dir='Eigen','doc'
+
+.PHONY: plot
+plot:
+	@python3 plot/plot.py $(data)
