@@ -59,3 +59,7 @@ cloc:
 .PHONY: plot
 plot:
 	@python3 plot/plot.py $(data)
+
+.PHONY: test
+test:
+	@python3 test/test.py
