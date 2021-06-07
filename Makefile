@@ -8,8 +8,13 @@ objects = $(sources:.cpp=.o)
 # Set CC to clang++ for MACOS, g++ for Windows/Linux
 ifeq ($(uname_S), Darwin)
     CC = clang++
+		PY = python3
+else ifeq ($(uname_S), Linux)
+		CC = g++
+		PY = python3
 else
 	 	CC = g++
+		PY = py
 endif
 
 flags = -g -Wall -Wpedantic -Wextra -std=c++17
@@ -45,7 +50,7 @@ rv:
 	@./avs-sim examples/example1.avs
 
 compiler_info:
-	@echo "Makefile autodetected environment as " $(uname_S)"... Using " $(CC) 
+	@echo "Makefile autodetected environment as " $(uname_S)"... Using " $(CC) " and " $(PY)
 
 .PHONY: docs
 docs:
@@ -58,10 +63,10 @@ cloc:
 
 .PHONY: plot
 plot:
-	@python3 plot/plot.py $(data)
+	@$(PY) plot/plot.py $(data)
 
 .PHONY: test
 test:
 	@make -s
-	@python3 test/test.py
+	@$(PY) test/test.py
 
