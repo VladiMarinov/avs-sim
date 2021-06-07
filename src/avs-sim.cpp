@@ -24,6 +24,8 @@ void AVS_sim::itterate_over_ac()
     std::ofstream output_file;
     output_file.open("output.txt");
 
+    output_file << "Freq, Value\n";
+
     int decades = (int) std::log10(stod(ac_dir.start_freq)/stod(ac_dir.start_freq));
     int points_per_decade = stoi(ac_dir.points_per_dec);
     double current_frequency = 0;
