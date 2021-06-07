@@ -21,7 +21,7 @@ int main(int argc, char** argv)
     
 
     {
-      benchmark::Timer timer("SIMULATION FINISHED IN: ");
+      benchmark::Timer timer;
 
       AVS_sim avs_sim(argv[1]);
       avs_sim.simulate();
