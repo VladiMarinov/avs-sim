@@ -32,7 +32,6 @@ void Parser::parse()
   {
     std::getline(input_file_stream, current_line);
     curr_pos = 0;
-    std::cout << current_line << std::endl;
     parse_line();
   }
 
