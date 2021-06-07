@@ -1,13 +1,4 @@
 #include <iostream>
-// #include <vector>
-// #include <memory>
-// #include <string>
-// #include "parser.h"
-// #include "dc_simulator.h"
-// #include "ac_simulator.h"
-// #include "circuit.h"
-// #include "op_point_solver.h"
-// #include "models.h"
 #include "avs-sim.h"
 #include "timer.h"
 
