@@ -62,4 +62,6 @@ plot:
 
 .PHONY: test
 test:
+	@make -s
 	@python3 test/test.py
+
