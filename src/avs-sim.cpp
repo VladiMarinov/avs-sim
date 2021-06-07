@@ -9,7 +9,7 @@ AVS_sim::AVS_sim(std::string inputfile_name)
     circuit = std::unique_ptr<Circuit> (new Circuit (parser->components));
     ac_dir = parser->ac_dir;
     
-};
+}
 
 void AVS_sim::simulate()
 {
@@ -26,10 +26,8 @@ void AVS_sim::itterate_over_ac()
 
     output_file << "Freq, Value\n";
 
-    int decades = (int) std::log10(stod(ac_dir.start_freq)/stod(ac_dir.start_freq));
     int points_per_decade = stoi(ac_dir.points_per_dec);
     double current_frequency = 0;
-    double start_frequency = stod(ac_dir.start_freq);
     double stop_frequency = stod(ac_dir.stop_freq);
 
     for (int n = 0; current_frequency < stop_frequency; n++ )
