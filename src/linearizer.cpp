@@ -81,7 +81,7 @@ std::vector<Component> Linearizer::linearize_PNP(double Veb, double Vcb, Compone
 {
   std::vector<Component> equiv;
 
-  models::NPN model_pnp;
+  models::PNP model_pnp;
 
   std::string collector = pnp.nodes[0];
   std::string base = pnp.nodes[1];
@@ -349,7 +349,7 @@ std::vector<Component> Linearizer::small_signal_PNP(double Veb, double Vcb, Comp
 {
   std::vector<Component> equiv;
 
-  models::NPN model_pnp;
+  models::PNP model_pnp;
 
   std::string collector = pnp.nodes[0];
   std::string base = pnp.nodes[1];
