@@ -1,6 +1,12 @@
 #include "const_value.h"
 #include <iostream>
 
+Const_value::Const_value()
+{
+    str_value = "";
+    numeric_value = 0;
+}
+
 Const_value::Const_value(double input_value)
 {
     str_value = "";

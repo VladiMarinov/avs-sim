@@ -81,8 +81,8 @@ namespace util
     std::cout <<"----------------------------\n";
     std::cout << dir.sweep_type << std::endl;
     std::cout << dir.points_per_dec << std::endl;
-    std::cout << dir.start_freq << std::endl;
-    std::cout << dir.stop_freq << std::endl;
+    std::cout << dir.start_freq.numeric_value << std::endl;
+    std::cout << dir.stop_freq.numeric_value << std::endl;
     std::cout <<"----------------------------\n";
   }
 

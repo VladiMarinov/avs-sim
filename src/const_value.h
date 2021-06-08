@@ -12,6 +12,9 @@ public:
 
     /// The numeric value of constant -> e.g. "10k" is 10000
     double numeric_value;
+
+    /// Default construct sets numeric value to 0.
+    Const_value();
     
     /// Construct a constant value from given double.
     Const_value(double input_value);

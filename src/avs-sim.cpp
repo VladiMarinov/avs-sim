@@ -29,13 +29,14 @@ void AVS_sim::itterate_over_ac()
 
     output_file << "Freq, Value\n";
 
-    int points_per_decade = stoi(ac_dir.points_per_dec);
+    uint32_t points_per_decade = ac_dir.points_per_dec;
     double current_frequency = 0;
-    double stop_frequency = stod(ac_dir.stop_freq);
+    double start_freq = ac_dir.start_freq.numeric_value;
+    double stop_frequency = ac_dir.stop_freq.numeric_value;
 
     for (int n = 0; current_frequency < stop_frequency; n++ )
     {
-        current_frequency = std::pow(10.0,  ((double)n) / points_per_decade );
+        current_frequency = std::pow(10.0,  ((double)n) / points_per_decade ) * start_freq ;
         if (current_frequency > stop_frequency)
         {
             current_frequency = stop_frequency;

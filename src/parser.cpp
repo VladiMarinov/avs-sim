@@ -201,9 +201,9 @@ void Parser::parse_directive()
     if (!AC_directiveFound)
     {
       ac_dir.sweep_type = parse_next_token();
-      ac_dir.points_per_dec = parse_next_token();
-      ac_dir.start_freq = parse_next_token();
-      ac_dir.stop_freq = parse_next_token();
+      ac_dir.points_per_dec = std::stoi(parse_next_token());
+      ac_dir.start_freq = Const_value(parse_next_token());
+      ac_dir.stop_freq = Const_value(parse_next_token());
       AC_directiveFound = true;
     }
     else
