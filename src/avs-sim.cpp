@@ -8,7 +8,7 @@ AVS_sim::AVS_sim(std::string inputfile_name)
     parser->parse();
     circuit = std::unique_ptr<Circuit> (new Circuit (parser->components));
     ac_dir = parser->ac_dir;
-    
+    has_AC_directive = parser->has_found_AC_directive() ;
 }
 
 void AVS_sim::simulate()
@@ -16,7 +16,10 @@ void AVS_sim::simulate()
     OP_Point_Solver op_point_solver(circuit->get_DC_Equivalent_Circuit());
     op_point_solver.solve();
     DC_voltages = op_point_solver.curr_voltages;
-    itterate_over_ac();
+    if (has_AC_directive)
+    {
+      itterate_over_ac();
+    }
 }
 
 void AVS_sim::itterate_over_ac()

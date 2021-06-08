@@ -12,7 +12,8 @@ private:
   std::string input_file;
   std::string current_line;
   uint32_t curr_pos;
-  bool directiveFound = false;
+  bool AC_directiveFound = false;
+  bool OP_directiveFound = false;
   bool endFound = false;
 public:
   std::vector<Component> components; // TODO: make private after testing
@@ -57,4 +58,6 @@ public:
 
   /// Parses a directive (any line beginning with a '.') . If the directive is an '.ac' directive it is assigned to the ac_dir member object.
   void parse_directive();
+
+  bool has_found_AC_directive();
 };

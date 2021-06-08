@@ -37,9 +37,9 @@ void Parser::parse()
 
   input_file_stream.close();
 
-  if (!directiveFound)
+  if (!OP_directiveFound && !AC_directiveFound)
   {
-    std::cout << "ERROR: No AC directive found...." << std::endl;
+    std::cout << "ERROR: No directives found...." << std::endl;
     exit(EXIT_FAILURE);
   }
 }
@@ -192,15 +192,19 @@ void Parser::parse_directive()
   {
     endFound = true;
   }
+  if (next_token == ".op")
+  {
+    OP_directiveFound = true;
+  }
   if (next_token == ".ac")
   {
-    if (!directiveFound)
+    if (!AC_directiveFound)
     {
       ac_dir.sweep_type = parse_next_token();
       ac_dir.points_per_dec = parse_next_token();
       ac_dir.start_freq = parse_next_token();
       ac_dir.stop_freq = parse_next_token();
-      directiveFound = true;
+      AC_directiveFound = true;
     }
     else
     {
@@ -208,4 +212,9 @@ void Parser::parse_directive()
       exit(EXIT_FAILURE);
     }
   }
+}
+
+bool Parser::has_found_AC_directive()
+{
+  return AC_directiveFound;
 }

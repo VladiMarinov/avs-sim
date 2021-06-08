@@ -34,5 +34,7 @@ private:
     std::unique_ptr<Parser> parser;
     std::unique_ptr<Circuit> circuit;
     std::vector<double> DC_voltages;
+    bool has_AC_directive;
     AC_Directive ac_dir; 
+    
 };
