@@ -7,7 +7,7 @@ R2 N003 0 800
 R3 N001 out 5k
 V2 N001 0 10
 R4 N004 0 1k
-.ac dec 10 10 1000
+.ac dec 100 10 10k
 .op
 .end
 

@@ -7,5 +7,6 @@ R2 N004 0 1k
 R3 N001 N003 4k
 R4 N003 0 800
 C1 N003 N002 10u
+.op
 .ac dec 100 10 10k
 .end
