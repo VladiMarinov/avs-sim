@@ -17,5 +17,5 @@ public:
   Const_value phase;
 
   /// Create a new function value with the given type, amplitude, and phase.
-  Function_value(std::string itype, const std::string& iamp, const std::string& iphase);
+  Function_value(std::string itype, std::string iamp, std::string iphase);
 };
