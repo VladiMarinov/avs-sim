@@ -72,5 +72,5 @@ test:
 
 .PHONY: tidy
 tidy:
-	@clang-tidy -p -check=* $(sources)
+	@run-clang-tidy -checks='*' -header-filter=*
 
