@@ -1,0 +1,237 @@
+[
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/model_value.o",
+            "src/model_value.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/model_value.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/avs-sim.o",
+            "src/avs-sim.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/avs-sim.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/ac_simulator.o",
+            "src/ac_simulator.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/ac_simulator.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/ac_directive.o",
+            "src/ac_directive.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/ac_directive.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/parser.o",
+            "src/parser.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/parser.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/node.o",
+            "src/node.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/node.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/circuit.o",
+            "src/circuit.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/circuit.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/linearizer.o",
+            "src/linearizer.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/linearizer.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/function_value.o",
+            "src/function_value.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/function_value.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/dc_simulator.o",
+            "src/dc_simulator.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/dc_simulator.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/const_value.o",
+            "src/const_value.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/const_value.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/component.o",
+            "src/component.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/component.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/op_point_solver.o",
+            "src/op_point_solver.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/op_point_solver.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-g",
+            "-Wall",
+            "-Wpedantic",
+            "-Wextra",
+            "-std=c++17",
+            "-o",
+            "src/timer.o",
+            "src/timer.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/timer.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-o",
+            "src/main.o",
+            "src/main.cpp"
+        ],
+        "directory": "/home/m0rtal/dev/cpp/avs-sim",
+        "file": "src/main.cpp"
+    }
+]

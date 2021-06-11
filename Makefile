@@ -70,3 +70,7 @@ test:
 	@make -s
 	@$(PY) test/test.py
 
+.PHONY: tidy
+tidy:
+	@clang-tidy -p -check=* $(sources)
+
