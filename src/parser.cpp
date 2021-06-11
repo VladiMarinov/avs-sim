@@ -218,6 +218,7 @@ void Parser::parse_directive()
     }
     else
     {
+      curr_pos -= 3;
       error(AVS_ERROR::MULTIPLE_AC_DIRECTIVE);
     }
   }
