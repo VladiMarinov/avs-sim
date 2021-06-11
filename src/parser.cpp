@@ -1,11 +1,17 @@
 #include "parser.h"
 #include <iostream>
+#include "error.h"
 #include <cctype>
 #include <fstream>
 
 Parser::Parser(std::string i)
 {
   input_file = i;
+}
+
+void Parser::error(AVS_ERROR::ParserError error)
+{
+  AVS_ERROR::parser_error(error, input_file, current_line, line_count, curr_pos);
 }
 
 void Parser::skip_whitespace()
@@ -24,14 +30,14 @@ void Parser::parse()
 
   if (!input_file_stream.is_open())
   {
-    std::cout << "Failed to open specified file..." << std::endl;
-    exit(EXIT_FAILURE);
+    error(AVS_ERROR::FAILED_FILE_OPEN);
   }
 
   while (!endFound && input_file_stream)
   {
     std::getline(input_file_stream, current_line);
     curr_pos = 0;
+    line_count++;
     parse_line();
   }
 
@@ -39,8 +45,7 @@ void Parser::parse()
 
   if (!OP_directiveFound && !AC_directiveFound)
   {
-    std::cout << "ERROR: No directives found...." << std::endl;
-    exit(EXIT_FAILURE);
+    error(AVS_ERROR::NO_DIRECTIVES);
   }
 }
 
@@ -80,8 +85,8 @@ Component Parser::parse_component()
   if (current_line[curr_pos] == 'G')
     return parse_four_terminal();
 
-  std::cout << "Component Designator Letter not recognized..." << std::endl;
-  exit(EXIT_FAILURE);
+  error(AVS_ERROR::UNKNOWN_COMPONENT_DESIGNATOR);
+  exit(EXIT_FAILURE); // This is not needed as error will exit, but this silences an unnneeded warning...
 }
 
 Component Parser::parse_two_terminal()
@@ -142,10 +147,7 @@ void Parser::parse_value(Component &c)
   {
     if (c.type == RESISTOR || c.type == INDUCTOR || c.type == CAPACITOR || c.type == VCCS)
     {
-      std::cout << "ERROR at line: \n";
-      std::cout << current_line << std::endl;
-      std::cout << "Component of this type must have a constant numeric value - function/model is not possible...\n";
-      exit(EXIT_FAILURE);
+      error(AVS_ERROR::EXPECTED_CONST_VAL);
     }
     if (c.type == VOLTAGE_SOURCE || c.type == CURRENT_SOURCE)
     {
@@ -165,18 +167,11 @@ void Parser::parse_value(Component &c)
   {
     if (c.type == DIODE || c.type == MOSFET || c.type == BJT)
     {
-      std::cout << "ERROR at line: \n";
-      std::cout << current_line << std::endl;
-      std::cout << "Component of this type must have a model value - function/constant is not possible...\n";
-      exit(EXIT_FAILURE);
+      error(AVS_ERROR::EXPECTED_MODEL_VAL);
     }
     if ( (current_line[curr_pos] == '-') && (c.type == RESISTOR || c.type == INDUCTOR || c.type == CAPACITOR) ) // to avoid having negative values for constant value components that can't have them
     {
-      std::cout << "ERROR at line: \n";
-      std::cout << current_line << std::endl;
-      std::cout << "Commponents of type : " << c.type << " cannot have a negative value \n";
-      exit(EXIT_FAILURE);
-
+      error(AVS_ERROR::UNEXPECTED_NEGATIVE_VAL);
     }
     std::string nt = parse_next_token();
     c.const_value = std::make_shared<Const_value>(nt);
@@ -208,8 +203,7 @@ void Parser::parse_directive()
     }
     else
     {
-      std::cout << "ERROR: Multiple AC directives found..." << std::endl;
-      exit(EXIT_FAILURE);
+      error(AVS_ERROR::MULTIPLE_AC_DIRECTIVE);
     }
   }
 }

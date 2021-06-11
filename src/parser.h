@@ -3,6 +3,7 @@
 #include <vector>
 #include "component.h"
 #include "ac_directive.h"
+#include "error.h"
 #include "const_value.h"
 
 /// The Parser class parses a SPICE-based Nelist file into a vector of components and directives containing the simulation details.
@@ -12,6 +13,7 @@ private:
   std::string input_file;
   std::string current_line;
   uint32_t curr_pos;
+  uint32_t line_count = 0;
   bool AC_directiveFound = false;
   bool OP_directiveFound = false;
   bool endFound = false;
@@ -22,6 +24,8 @@ public:
   /// Construct a Parser
   /// @param input_file The path to the file to be parsed.
   Parser(std::string input_file);
+  
+  void error(AVS_ERROR::ParserError error);
 
   /// Moves curr_pos to the next non-whitespace character in the line. 
   void skip_whitespace();
