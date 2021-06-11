@@ -41,10 +41,10 @@ public:
   Component();
 
   /// 2-terminal constructor
-  Component(ComponentType type_, std::string designator_, std::string n1_, std::string n2_, double val_);
+  Component(ComponentType type_, std::string designator_, const std::string& n1_, const std::string& n2_, double val_);
   
   /// 4-terminal constructor
-  Component(ComponentType type_, std::string designator_, std::string n1_, std::string n2_, std::string n3_, std::string n4_, double val_);
+  Component(ComponentType type_, std::string designator_, const std::string& n1_, const std::string& n2_, const std::string& n3_, const std::string& n4_, double val_);
 
   /// Sets the type of the component, by looking at the first letter of the designator.
   void findType();

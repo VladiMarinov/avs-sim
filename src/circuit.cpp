@@ -10,14 +10,14 @@ Circuit::Circuit()
 {
 }
 
-Circuit::Circuit(std::vector<Component> input_components)
+Circuit::Circuit(const std::vector<Component>& input_components)
 {
   circuit_components = input_components;
 
   num_AC_voltage_sources = 0;
   num_DC_voltage_sources = 0;
 
-  for(Component c : input_components)
+  for(const Component& c : input_components)
   {
     if (c.type == VOLTAGE_SOURCE )
     {
@@ -32,7 +32,7 @@ Circuit::Circuit(std::vector<Component> input_components)
         AC_voltage_sources.push_back(c);
       }
     }
-    for(std::string node_id : c.nodes)
+    for(const std::string& node_id : c.nodes)
     {
       if(!node_exists(node_id))
       {
@@ -43,9 +43,9 @@ Circuit::Circuit(std::vector<Component> input_components)
   }
 }
 
-bool Circuit::node_exists(std::string node_id)
+bool Circuit::node_exists(const std::string& node_id)
 {
-  for(Node n : nodes)
+  for(const Node& n : nodes)
   {
     if(n.name == node_id)
     {
@@ -55,7 +55,7 @@ bool Circuit::node_exists(std::string node_id)
   return false;
 }
 
-void Circuit::add_component(std::string node_id, Component component)
+void Circuit::add_component(const std::string& node_id, const Component& component)
 {
   for(Node& n : nodes)
   {
@@ -144,10 +144,10 @@ std::vector<Component> Circuit::get_AC_Equivalent_Components()
 }
 
 
-double Circuit::DC_total_conductance_into_node(Node node)
+double Circuit::DC_total_conductance_into_node(const Node& node)
 {
   double total_conductance = 0.0;
-  for(Component component: node.components)
+  for(const Component& component: node.components)
   {
     if(component.type == RESISTOR)
     {
@@ -162,10 +162,10 @@ double Circuit::DC_total_conductance_into_node(Node node)
   return total_conductance;
 }
 
-double Circuit::DC_total_conductance_between_nodes(Node node1, Node node2)
+double Circuit::DC_total_conductance_between_nodes(const Node& node1, const Node& node2)
 {
   double total_conductance = 0.0;
-  for(Component component: node1.components)
+  for(const Component& component: node1.components)
   {
     if (is_component_connected_to(component, node2))
     {
@@ -183,7 +183,7 @@ double Circuit::DC_total_conductance_between_nodes(Node node1, Node node2)
   return total_conductance;
 }
 
-double Circuit::DC_total_current_into_node(Node node)
+double Circuit::DC_total_current_into_node(const Node& node)
 {
   double total_current = 0.0;
   for(Component component : node.components)
@@ -206,7 +206,7 @@ double Circuit::DC_total_current_into_node(Node node)
   return total_current;
 }
 
-double Circuit::conductance_between_nodes_from_VCCS(Component vccs, Node node1, Node node2)
+double Circuit::conductance_between_nodes_from_VCCS(Component vccs, const Node& node1, const Node& node2)
 {
   // VCCS node order: 0 N+ | 1 N-| 2 NC+ | 3 NC- |
   if (node1.name == vccs.nodes[0] && node2.name == vccs.nodes[2]) return vccs.const_value->numeric_value;
@@ -217,21 +217,21 @@ double Circuit::conductance_between_nodes_from_VCCS(Component vccs, Node node1, 
   return 0.0;
 }
 
-bool Circuit::is_component_connected_to(Component component, Node node)
+bool Circuit::is_component_connected_to(const Component& component, const Node& node)
 {
   std::string target_node_ID = node.name;
-  for(std::string current_node_ID : component.nodes)
+  for(const std::string& current_node_ID : component.nodes)
   {
     if(current_node_ID == target_node_ID) return true; 
   }
   return false;
 }
 
-std::complex<double> Circuit::AC_total_conductance_into_node(Node node, double freq)
+std::complex<double> Circuit::AC_total_conductance_into_node(const Node& node, double freq)
 {
   std::complex<double> total_conductance = std::complex<double>(0,0);
 
-  for(Component component: node.components)
+  for(const Component& component: node.components)
   {
     if(component.type == RESISTOR)
     {
@@ -255,10 +255,10 @@ std::complex<double> Circuit::AC_total_conductance_into_node(Node node, double f
 
 }
   
-std::complex<double> Circuit::AC_total_conductance_between_nodes(Node node1, Node node2, double freq)
+std::complex<double> Circuit::AC_total_conductance_between_nodes(const Node& node1, const Node& node2, double freq)
 {
   std::complex<double> total_conductance = std::complex<double>(0,0);
-  for(Component component: node1.components)
+  for(const Component& component: node1.components)
   {
     if (is_component_connected_to(component, node2))
     {
@@ -283,7 +283,7 @@ std::complex<double> Circuit::AC_total_conductance_between_nodes(Node node1, Nod
   return total_conductance;
 }
 
-std::complex<double> Circuit::AC_total_current_into_node(Node node)
+std::complex<double> Circuit::AC_total_current_into_node(const Node& node)
 {
   std::complex<double> total_current = std::complex<double>(0,0);
   for(Component component : node.components)

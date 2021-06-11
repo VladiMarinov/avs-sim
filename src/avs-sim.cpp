@@ -1,10 +1,12 @@
 #include "avs-sim.h"
 #include "util.h"
 #include <iomanip>
+#include <utility>
+
 
 AVS_sim::AVS_sim(std::string inputfile_name)
 {
-    parser = std::unique_ptr<Parser> (new Parser (inputfile_name));
+    parser = std::unique_ptr<Parser> (new Parser (std::move(inputfile_name)));
     parser->parse();
     circuit = std::unique_ptr<Circuit> (new Circuit (parser->components));
     ac_dir = parser->ac_dir;

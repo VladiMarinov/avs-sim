@@ -2,6 +2,8 @@
 
 #include "ac_simulator.h"
 #include <iostream>
+#include <utility>
+
 #include "util.h"
 #include "linearizer.h"
 
@@ -14,7 +16,7 @@ AC_Simulator::AC_Simulator(Circuit input_circuit, std::vector<double> input_op_v
 {
   large_signal_circuit = input_circuit.remove_ground();
   sim_freq = input_freq;
-  op_voltages = input_op_voltages;
+  op_voltages = std::move(input_op_voltages);
   generate_small_signal_circuit();
   small_signal_circuit = small_signal_circuit.remove_ground();
 
@@ -68,7 +70,7 @@ void AC_Simulator::generate_small_signal_circuit()
             equiv_components = Linearizer::small_signal_PNP(-Vbe, -Vbc, component);
           }
 
-          for (Component c : equiv_components)
+          for (const Component& c : equiv_components)
           {
             small_signal_components.push_back(c);
           }
@@ -87,7 +89,7 @@ void AC_Simulator::generate_small_signal_circuit()
           equiv_components = Linearizer::small_signal_PMOS(Vgs, Vds, component);
         }
         
-        for (Component c : equiv_components)
+        for (const Component& c : equiv_components)
         {
           small_signal_components.push_back(c);
         }

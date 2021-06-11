@@ -20,7 +20,7 @@ public:
     Const_value(double input_value);
 
     /// Construct a constant value from the given literal. 
-    Const_value(std::string input_str_value);
+    Const_value(const std::string& input_str_value);
 
     /// Returns the numeric value of the given literal as a double.
     double str_to_numeric(std::string input_str_value);
@@ -31,5 +31,5 @@ public:
     bool is_single_character_multipler(char c);
 
     /// Returns the numeric value of the passed multiplier literal. For example 10k -> 10^3.
-    double str_to_multiplier(std::string multiplier);
+    double str_to_multiplier(const std::string& multiplier);
 };

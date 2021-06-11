@@ -13,7 +13,7 @@ Const_value::Const_value(double input_value)
     numeric_value = input_value;
 }
 
-Const_value::Const_value(std::string input_str_value)
+Const_value::Const_value(const std::string& input_str_value)
 {
     str_value = input_str_value;
     numeric_value = str_to_numeric(input_str_value);
@@ -79,7 +79,7 @@ bool Const_value::is_single_character_multipler(char c)
     return false;
 }
 
-double Const_value::str_to_multiplier(std::string multiplier)
+double Const_value::str_to_multiplier(const std::string& multiplier)
 {
   if (multiplier == "p")   return 0.000000000001;
   if (multiplier == "n")   return 0.000000001;

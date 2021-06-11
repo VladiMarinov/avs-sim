@@ -17,7 +17,7 @@ OP_Point_Solver::OP_Point_Solver(Circuit input_circuit)
 void OP_Point_Solver::create_initial_lin_circuit()
 {
     std::vector<Component> lin_components;
-    for(Component component : circuit.circuit_components)
+    for(const Component& component : circuit.circuit_components)
     {
         if(component.type == DIODE)
         {
@@ -37,7 +37,7 @@ void OP_Point_Solver::create_initial_lin_circuit()
             equiv_components = Linearizer::linearize_PNP(models::PNP().initial_Veb_guess, models::PNP().initial_Vcb_guess, component);
           }
           
-          for (Component c : equiv_components)
+          for (const Component& c : equiv_components)
           {
             lin_components.push_back(c);
           }
@@ -54,7 +54,7 @@ void OP_Point_Solver::create_initial_lin_circuit()
             equiv_components = Linearizer::linearize_PMOS(models::PMOS().initial_Vgs_guess, models::PMOS().initial_Vds_guess, component);
           }
           
-          for (Component c : equiv_components)
+          for (const Component& c : equiv_components)
           {
             lin_components.push_back(c);
           }
@@ -100,7 +100,7 @@ void OP_Point_Solver::update_lin_circuit()
               equiv_components = Linearizer::linearize_PNP(-Vbe, -Vbc, component);
             }
 
-            for (Component c : equiv_components)
+            for (const Component& c : equiv_components)
             {
               lin_components.push_back(c);
             }
@@ -119,7 +119,7 @@ void OP_Point_Solver::update_lin_circuit()
             equiv_components = Linearizer::linearize_PMOS(Vgs, Vds, component);
           }
           
-          for (Component c : equiv_components)
+          for (const Component& c : equiv_components)
           {
             lin_components.push_back(c);
           }

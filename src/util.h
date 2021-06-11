@@ -1,4 +1,6 @@
 #pragma once
+#include <utility>
+
 #include <vector>
 #include <complex>
 #include "circuit.h"
@@ -11,7 +13,7 @@ namespace util
   /// @param The Node ID of the first node.
   /// @param The Node ID of the second node.
   /// @param The voltage vector from which to look up relevant voltages.
-  inline double voltage_between_nodes(Circuit circuit, std::string n1, std::string n2, std::vector<double> voltage_vector)
+  inline double voltage_between_nodes(Circuit circuit, const std::string& n1, const std::string& n2, std::vector<double> voltage_vector)
   {
     circuit = circuit.remove_ground(); // Just in case we are passed a circuit with a ground node.
     double voltage_at_node_1;
@@ -32,7 +34,7 @@ namespace util
       return voltage_at_node_1 - voltage_at_node_2;
   }
 
-  inline std::complex<double> voltage_at_node(Circuit circuit, std::string n, std::vector<std::complex<double> > voltage_vector)
+  inline std::complex<double> voltage_at_node(Circuit circuit, const std::string& n, std::vector<std::complex<double> > voltage_vector)
   {
     circuit = circuit.remove_ground(); // Just in case we are passed a circuit with a ground node.
 
@@ -54,15 +56,15 @@ namespace util
     std::string node_ID_1 = component.nodes[0];
     std::string node_ID_2 = component.nodes[1];
 
-    return util::voltage_between_nodes(circuit, node_ID_1, node_ID_2, voltage_vector);
+    return util::voltage_between_nodes(std::move(circuit), node_ID_1, node_ID_2, std::move(voltage_vector));
   }
 
   /// Prints a component in a readable way -> FOR DEBUGGING
-  inline void printComponent(Component c)
+  inline void printComponent(const Component& c)
   {
     std::cout <<"----------------------------\n";
     std::cout << c.designator << std::endl;
-    for(std::string n : c.nodes)
+    for(const std::string& n : c.nodes)
     {
       std::cout << n << std::endl;
     }
@@ -76,7 +78,7 @@ namespace util
   }
   
   /// Prints an AC Directive in a readable way -> FOR DEBUGGING
-  inline void printACdir(AC_Directive dir)
+  inline void printACdir(const AC_Directive& dir)
   {
     std::cout <<"----------------------------\n";
     std::cout << dir.sweep_type << std::endl;
@@ -87,9 +89,9 @@ namespace util
   }
 
   /// Prints the designators of all components connected to the node -> FOR DEBUGGING
-  inline void printNode(Node node){
+  inline void printNode(const Node& node){
     std::cout << node.name;
-    for(Component c : node.components)
+    for(const Component& c : node.components)
     {
       std::cout << " " << c.designator;
     }

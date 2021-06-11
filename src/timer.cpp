@@ -1,12 +1,16 @@
 #include "timer.h"
 
+
+#include <utility>
+
+
 benchmark::Timer::Timer(){
     finished_message = ""; // Default name is empty string
     start_time_point = std::chrono::high_resolution_clock::now();
 }
 
 benchmark::Timer::Timer( std::string i_finished_message ){
-    finished_message = i_finished_message;
+    finished_message = std::move(i_finished_message);
     start_time_point = std::chrono::high_resolution_clock::now();
 }
 

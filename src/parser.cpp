@@ -1,12 +1,14 @@
 #include "parser.h"
-#include <iostream>
 #include "error.h"
 #include <cctype>
 #include <fstream>
+#include <iostream>
+#include <utility>
+
 
 Parser::Parser(std::string i)
 {
-  input_file = i;
+  input_file = std::move(i);
 }
 
 void Parser::error(AVS_ERROR::ParserError error)
@@ -16,7 +18,7 @@ void Parser::error(AVS_ERROR::ParserError error)
 
 void Parser::check_redefinition(const std::string& designator)
 {
-  for(Component component : components)
+  for(const Component& component : components)
   {
     if (component.designator == designator)
     {

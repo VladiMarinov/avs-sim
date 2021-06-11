@@ -1,4 +1,8 @@
 #include "component.h"
+
+
+#include <utility>
+
 #include "type.h"
 #include "node.h"
 
@@ -7,10 +11,10 @@ Component::Component()
 
 }
 
-Component::Component(ComponentType type_, std::string designator_, std::string n1_, std::string n2_, double val_)
+Component::Component(ComponentType type_, std::string designator_, const std::string& n1_, const std::string& n2_, double val_)
 {
   type = type_;
-  designator = designator_;
+  designator = std::move(designator_);
   nodes.push_back(n1_);
   nodes.push_back(n2_);
   value_type = CONSTANT_VAL;
@@ -18,10 +22,10 @@ Component::Component(ComponentType type_, std::string designator_, std::string n
 
 }
 
-Component::Component(ComponentType type_, std::string designator_, std::string n1_, std::string n2_, std::string n3_, std::string n4_, double val_)
+Component::Component(ComponentType type_, std::string designator_, const std::string& n1_, const std::string& n2_, const std::string& n3_, const std::string& n4_, double val_)
 {
   type = type_;
-  designator = designator_;
+  designator = std::move(designator_);
   nodes.push_back(n1_);
   nodes.push_back(n2_);
   nodes.push_back(n3_);

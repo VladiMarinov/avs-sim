@@ -26,17 +26,17 @@ public:
 
   /// Create a new circuit, given the vector of parsed components.
   /// @param parsed_components A vector of all components that make up the circuit. Those are expected to be read from the input file by the parser.
-  Circuit(std::vector<Component> parsed_components);
+  Circuit(const std::vector<Component>& parsed_components);
 
   /// Checks if a node with a given ID has already been created and added to the vector of nodes.
   /// @param node_id The node ID to check
   /// @returns Does the node with the given ID exist in the vector.
-  bool node_exists(std::string node_id);
+  bool node_exists(const std::string& node_id);
 
   /// Add a component to a node in the vector of nodes.
   /// @param node_id The ID of the node to which the component should be added.
   /// @param component The component to add.
-  void add_component(std::string node_id, Component component);
+  void add_component(const std::string& node_id, const Component& component);
 
   /// Returns a copy of this circuit, with the ground node removed from the nodes vector.
   /// @note Both the AC_Simulator and DC_Simulator expect no ground node in the circuit they are passed.
@@ -63,27 +63,27 @@ public:
   std::vector<Component> get_AC_Equivalent_Components();
 
   /// Calculates the total DC conductance directly connected to a given node. This is used when calculating the main diagonal entries of the conductance matrix.
-  double DC_total_conductance_into_node(Node node);
+  double DC_total_conductance_into_node(const Node& node);
   
   /// Calculates the total DC conductance that directly connects two given nodes. This is used when calculating the non main-diagonal entries of the conductance matrix.
-  double DC_total_conductance_between_nodes(Node node1, Node node2);
+  double DC_total_conductance_between_nodes(const Node& node1, const Node& node2);
 
   /// Calculates the total DC current coming into the given node from **current sources only**. 
-  double DC_total_current_into_node(Node node);
+  double DC_total_current_into_node(const Node& node);
 
   /// Calculates the total AC conductance directly connected to a given node. This is used when calculating the main diagonal entries of the conductance matrix.
-  std::complex<double> AC_total_conductance_into_node(Node node, double freq);
+  std::complex<double> AC_total_conductance_into_node(const Node& node, double freq);
   
   /// Calculates the total AC conductance that directly connects two given nodes. This is used when calculating the non main-diagonal entries of the conductance matrix.
-  std::complex<double> AC_total_conductance_between_nodes(Node node1, Node node2, double freq);
+  std::complex<double> AC_total_conductance_between_nodes(const Node& node1, const Node& node2, double freq);
 
   /// Calculates the total AC current coming into the given node from **current sources only**. 
-  std::complex<double> AC_total_current_into_node(Node node);
+  std::complex<double> AC_total_current_into_node(const Node& node);
 
   /// Returns any conductance due to Voltage-controlled Current sources between the two given nodes.
-  double conductance_between_nodes_from_VCCS(Component vccs, Node node1, Node node2);
+  double conductance_between_nodes_from_VCCS(Component vccs, const Node& node1, const Node& node2);
 
   /// Returns whether the given component has any terminal connected to the given node.
-  bool is_component_connected_to(Component component, Node node);
+  bool is_component_connected_to(const Component& component, const Node& node);
 
   };

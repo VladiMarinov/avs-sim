@@ -1,16 +1,18 @@
 #include "node.h"
 #include <iostream>
+#include <utility>
+
 
 Node::Node(std::string iname) 
 {
-  name = iname;
+  name = std::move(iname);
   
 }
 
-void Node::addComponent(Component c)
+void Node::addComponent(const Component& c)
 {
   bool alreadyExists = false;
-  for (Component check_c : components)
+  for (const Component& check_c : components)
   {
     if (check_c.designator == c.designator) alreadyExists = true;
   }
