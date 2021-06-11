@@ -27,6 +27,8 @@ public:
   
   void error(AVS_ERROR::ParserError error);
 
+  void check_redefinition(const std::string& designator);
+
   /// Moves curr_pos to the next non-whitespace character in the line. 
   void skip_whitespace();
 

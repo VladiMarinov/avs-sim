@@ -8,6 +8,7 @@ namespace AVS_ERROR
   
   enum ParserError
   {
+    COMPONENT_REDEFINITION,
     FAILED_FILE_OPEN,
     NO_DIRECTIVES,
     UNKNOWN_COMPONENT_DESIGNATOR,
@@ -17,20 +18,23 @@ namespace AVS_ERROR
     MULTIPLE_AC_DIRECTIVE
   };
 
-  void print_parser_info(const std::string& filename, const std::string& line, uint32_t line_num, uint32_t col)
+  inline void print_parser_info(const std::string& filename, const std::string& line, uint32_t line_num, uint32_t col)
   {
     std::cout << "In netlist " << filename << " on line " << line_num << ":\n";
-    std::cout << "\t" << line_num << "| " << line <<"\n";
-    
-    for(uint32_t i = 0; i < col; i++ ) std::cout <<"";
-    std::cout << "^\n\n";
+    std::cout << "  " << line_num << "| " << line <<"\n";
+   
+    uint32_t needed_white_space = col + std::to_string(line_num).size();
+    std::cout << "   " << "|";
+    for(uint32_t i = 0; i < needed_white_space; i++ ) std::cout <<" ";
+    std::cout << "^\n";
   }
 
-  void print_error_message(ParserError error)
+  inline void print_error_message(ParserError error)
   {
     std::string err_msg;
     switch (error)
     {
+      case COMPONENT_REDEFINITION:        err_msg = "A component with the same designator already exists... Component designators must be unique!"; break; 
       case FAILED_FILE_OPEN:              err_msg = "Could not open specified netlist, check if the file exists..."; break; 
       case NO_DIRECTIVES:                 err_msg = "Found no simulation directives... Nothing to simulate..."; break; 
       case UNKNOWN_COMPONENT_DESIGNATOR:  err_msg = "Unrecognized component designator letter."; break; 
@@ -43,7 +47,7 @@ namespace AVS_ERROR
     std::cout << err_msg;
   }
 
-  void parser_error(ParserError error,const std::string& filename, const std::string& line,  uint32_t line_num, uint32_t col)
+  inline void parser_error(ParserError error,const std::string& filename, const std::string& line,  uint32_t line_num, uint32_t col)
   {
     std::cout << "PARSER ERROR: ";
     if (error != FAILED_FILE_OPEN && error != NO_DIRECTIVES)

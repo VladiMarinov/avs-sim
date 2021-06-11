@@ -14,6 +14,18 @@ void Parser::error(AVS_ERROR::ParserError error)
   AVS_ERROR::parser_error(error, input_file, current_line, line_count, curr_pos);
 }
 
+void Parser::check_redefinition(const std::string& designator)
+{
+  for(Component component : components)
+  {
+    if (component.designator == designator)
+    {
+      curr_pos = curr_pos - 1 - designator.size();
+      error(AVS_ERROR::COMPONENT_REDEFINITION);
+    }
+  }
+}
+
 void Parser::skip_whitespace()
 {
   while (current_line[curr_pos] == ' ' || current_line[curr_pos] == '\t'
@@ -93,6 +105,7 @@ Component Parser::parse_two_terminal()
 {
   Component component;
   component.designator = parse_next_token();
+  check_redefinition(component.designator);
   component.findType();
   component.nodes.push_back(parse_next_token());
   component.nodes.push_back(parse_next_token());
@@ -104,6 +117,7 @@ Component Parser::parse_three_terminal()
 {
   Component component;
   component.designator = parse_next_token();
+  check_redefinition(component.designator);
   component.findType();
   component.nodes.push_back(parse_next_token());
   component.nodes.push_back(parse_next_token());
@@ -116,6 +130,7 @@ Component Parser::parse_four_terminal()
 {
   Component component;
   component.designator = parse_next_token();
+  check_redefinition(component.designator);
   component.findType();
   component.nodes.push_back(parse_next_token());
   component.nodes.push_back(parse_next_token());
