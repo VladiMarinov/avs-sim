@@ -1,0 +1,11 @@
+* CE amplifier example
+Q1 out N003 N004 NPN
+R1 N001 out 5k
+R2 N004 0 1k
+V1 N001 0 10
+V2 N002 0 AC 1 0
+R3 0 N003 800
+R4 N003 N001 4k
+C1 N003 N002 10u
+.ac dec 100 10 10k
+.end
