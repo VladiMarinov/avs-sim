@@ -17,7 +17,7 @@ else
 		PY = py
 endif
 
-flags = -g -Wall -Wpedantic -Wextra -std=c++17
+flags = -O2 -Wall -Wpedantic -Wextra -std=c++17
 
 $(exec): $(objects)
 	$(CC) $(objects) $(flags) -o $(exec)
