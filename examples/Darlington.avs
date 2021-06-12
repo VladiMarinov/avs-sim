@@ -1,0 +1,11 @@
+* Darlington Pair
+Q1 N001 N003 out NPN
+Q2 N001 N004 N003 NPN
+R1 N001 N004 1k
+R3 out 0 5k
+R2 N004 0 1k
+V1 N001 0 5
+C1 N004 N002 10u
+V2 N002 0 AC 1 90
+.ac dec 10 10 10k
+.end
