@@ -7,5 +7,5 @@ R2 N004 0 1k
 V1 N001 0 5
 C1 N004 N002 10u
 V2 N002 0 AC 1 90
-.ac dec 10 10 10k
+.ac dec 100 10 10k
 .end
